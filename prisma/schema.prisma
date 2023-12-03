@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,10 +7,62 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// TODO: Review address problem, if we will just create how a column or create a table with this data separing
+// the information and just throw there or apply 3FN that we will need to create more tables like a state table?
 
+// TODO: Review how access system will be.
 model users {
-  id               String             @id @default(uuid())
-  email            String             @unique
-  password         String
-  name             String
+  id       String @id @default(uuid())
+  email    String @unique
+  password String
+  name     String
 }
+
+// TODO: customer needs address.
+model customers {
+  id             String  @id @default(uuid())
+  name           String
+  status         Int
+  phone          String
+  cel_number     String
+  email          String
+  store_name     String
+  deliver        Boolean
+  pontalti       Boolean
+  secondary_line Boolean
+  cpf            String?
+  cnpj           String?
+}
+
+
+// TODO: employee needs address.
+// TODO: Some doubts in how classification will works and confirm if phone and cel_number will be required.
+model employees {
+  id String @id @default(uuid())
+  name String
+  phone String
+  cel_number String
+  cpf String
+  classification String
+  admission DateTime
+  salary Float?
+  dismissal_date DateTime?
+}
+
+// TODO: employee needs address.
+// TODO: Study better the "Faturamento na compra" implementation
+model vendors {
+  id String @id @default(uuid())
+  name String
+  store_name String
+  cnpj String
+  status Int
+  phone String
+  cel_number String
+  deliver Boolean
+  volume_purchases Float
+  purchases Float
+  billing Float
+}
+
+// TODO: needs to study "Material produtivo" implementation
