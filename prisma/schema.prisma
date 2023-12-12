@@ -12,7 +12,7 @@ datasource db {
 
 // TODO: Review how access system will be.
 model users {
-  id       String @id @default(uuid())
+  id       Int    @id @default(autoincrement())
   email    String @unique
   password String
   name     String
@@ -20,12 +20,12 @@ model users {
 
 // TODO: customer needs address.
 model customers {
-  id             String  @id @default(uuid())
+  id             Int     @id @default(autoincrement())
   name           String
   status         Int
   phone          String
   cel_number     String
-  email          String
+  email          String  @unique
   store_name     String
   deliver        Boolean
   pontalti       Boolean
@@ -34,35 +34,34 @@ model customers {
   cnpj           String?
 }
 
-
 // TODO: employee needs address.
 // TODO: Some doubts in how classification will works and confirm if phone and cel_number will be required.
 model employees {
-  id String @id @default(uuid())
-  name String
-  phone String
-  cel_number String
-  cpf String
+  id             Int       @id @default(autoincrement())
+  name           String
+  phone          String
+  cel_number     String
+  cpf            String    @unique
   classification String
-  admission DateTime
-  salary Float?
+  admission      DateTime
+  salary         Float?
   dismissal_date DateTime?
 }
 
 // TODO: employee needs address.
 // TODO: Study better the "Faturamento na compra" implementation
 model vendors {
-  id String @id @default(uuid())
-  name String
-  store_name String
-  cnpj String
-  status Int
-  phone String
-  cel_number String
-  deliver Boolean
+  id               Int     @id @default(autoincrement())
+  name             String
+  store_name       String
+  cnpj             String  @unique
+  status           Int
+  phone            String
+  cel_number       String
+  deliver          Boolean
   volume_purchases Float
-  purchases Float
-  billing Float
+  purchases        Float
+  billing          Float
 }
 
 // TODO: needs to study "Material produtivo" implementation
