@@ -18,3 +18,7 @@ export type Customer = {
   cnpj?: string;
 }
 
+export type CustomerRequest = {
+  page: number;
+  perPage: number;
+}
