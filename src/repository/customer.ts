@@ -35,7 +35,7 @@ const updatePartialCustomer = async (id: number, data: any) => {
     },
   });
 
-  return await prisma.customers.update({ where: { id }, data });
+  return updatedCustomer;
 }
 
 const deleteCustomer = async (id: number) => {
