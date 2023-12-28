@@ -14,11 +14,12 @@ export type Customer = {
   deliver: boolean;
   pontalti: boolean;
   secondary_line: boolean;
+  credit_limit: number;
   cpf?: string;
   cnpj?: string;
-}
+};
 
 export type CustomerRequest = {
   page: number;
   perPage: number;
-}
+};
