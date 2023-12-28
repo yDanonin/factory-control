@@ -21,8 +21,10 @@ model users {
 // TODO: customer needs address.
 model customers {
   id             Int     @id @default(autoincrement())
-  name           String
   status         Int
+  addressId      Int
+  credit_limit   Float
+  name           String
   phone          String
   cel_number     String
   email          String  @unique
@@ -32,6 +34,23 @@ model customers {
   secondary_line Boolean
   cpf            String?
   cnpj           String?
+
+
+  address adresses @relation(fields: [addressId], references: [id])
+}
+
+//TODO: to use "viacep" api to search for a new address if we haven't in our db
+// viacep: https://viacep.com.br
+model adresses {
+  id           Int @id @default(autoincrement())
+  cep          String @unique
+  logradouro   String
+  bairro       String
+  public_place String
+  city         String
+  state        String
+
+  customers customers[]
 }
 
 // TODO: employee needs address.
