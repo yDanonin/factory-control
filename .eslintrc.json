@@ -10,16 +10,17 @@
     "prettier/prettier": [
       "error",
       {
-        "printWidth": 80,
+        "printWidth": 120,
         "tabWidth": 2,
         "singleQuote": false,
-        "trailingComma": "all",
+        "trailingComma": "none",
         "arrowParens": "always",
         "semi": true,
         "endOfLine": "auto"
       }
     ],
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "import/no-anonymous-default-export": "off"
   },
   "settings": {
     "react": {
