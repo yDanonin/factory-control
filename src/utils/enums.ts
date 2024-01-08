@@ -1,7 +1,7 @@
-import { Status } from "@/types/customer.types"
+import { Status } from "@/types/customer.types";
 
 export const getCustomersStatus = (status: Status): string => {
-  switch(status) {
+  switch (status) {
     case Status.operacional:
       return "Operacional";
     case Status.suspenso:
@@ -9,4 +9,4 @@ export const getCustomersStatus = (status: Status): string => {
     default:
       return "";
   }
-}
+};

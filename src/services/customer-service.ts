@@ -1,6 +1,6 @@
-import { Customer } from "@/types/customer.types"
+import { Customer } from "@/types/customer.types";
 import { CustomerRequest } from "@/types/customer.types";
-import repository from "@/repository/customer"
+import repository from "@/repository/customer";
 
 const createCustomer = async (data: Customer) => {
   return repository.createCustomer(data);
@@ -14,7 +14,7 @@ const getCustomerById = async (id: number) => {
   return repository.getCustomer(id);
 };
 
-const updatePartialCustomer = async (id: number, data: any) =>{
+const updatePartialCustomer = async (id: number, data: unknown) => {
   return repository.updatePartialCustomer(id, data);
 };
 
