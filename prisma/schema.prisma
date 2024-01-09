@@ -35,17 +35,15 @@ model customers {
   cpf            String?
   cnpj           String?
 
-
   address adresses @relation(fields: [addressId], references: [id])
 }
 
 //TODO: to use "viacep" api to search for a new address if we haven't in our db
 // viacep: https://viacep.com.br
 model adresses {
-  id           Int @id @default(autoincrement())
-  cep          String @unique
-  logradouro   String
-  bairro       String
+  id           Int    @id @default(autoincrement())
+  zip_code     String @unique
+  neighborhood String
   public_place String
   city         String
   state        String
@@ -61,7 +59,7 @@ model employees {
   phone          String
   cel_number     String
   cpf            String    @unique
-  classification String
+  classification Int
   admission      DateTime
   salary         Float?
   dismissal_date DateTime?
