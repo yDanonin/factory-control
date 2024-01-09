@@ -8,13 +8,15 @@
     "start": "next start",
     "lint": "next lint",
     "prisma": "npx prisma migrate reset --force && npx prisma db push",
-    "prisma:format": "npx prisma format"
+    "prisma:format": "npx prisma format",
+    "seed": "ts-node ./src/tasks/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "5.6.0",
     "next": "14.0.3",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@types/node": "^20",

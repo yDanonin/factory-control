@@ -1,6 +1,6 @@
 export enum Status {
-  operacional = 1,
-  suspenso = 2
+  suspenso,
+  operacional
 }
 
 export type Customer = {
@@ -9,6 +9,7 @@ export type Customer = {
   status: Status;
   phone: string;
   cel_number: string;
+  addressId: number;
   email: string;
   store_name: string;
   deliver: boolean;
@@ -17,9 +18,4 @@ export type Customer = {
   credit_limit: number;
   cpf?: string;
   cnpj?: string;
-};
-
-export type CustomerRequest = {
-  page: number;
-  perPage: number;
 };

@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { CommonRequest } from "@/types/common.types";
-import customerService from "@/services/customer-service";
+import employeeService from "@/services/employee-service";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const data = { ...body };
 
-  return NextResponse.json(await customerService.createCustomer(data));
+  return NextResponse.json(await employeeService.createEmployee(data));
 }
 
 export async function GET(req: NextRequest) {
@@ -20,5 +20,5 @@ export async function GET(req: NextRequest) {
     perPage: perPage ? Number(perPage) : 10
   } as CommonRequest;
 
-  return NextResponse.json(await customerService.getAllCustomers(filters));
+  return NextResponse.json(await employeeService.getAllEmployees(filters));
 }

@@ -1,25 +1,39 @@
-import { Customer } from "@/types/customer.types";
-import { CustomerRequest } from "@/types/customer.types";
+import { Customer, Status } from "@/types/customer.types";
+import { CommonRequest } from "@/types/common.types";
 import repository from "@/repository/customer";
 
-const createCustomer = async (data: Customer) => {
-  return repository.createCustomer(data);
+const handleCustomer = (c: Customer | Customer[]) => {
+  if (Array.isArray(c)) {
+    const response = c.map((data: Customer) => {
+      const { status, ...customer } = data;
+      return { ...customer, status: Status[status] };
+    });
+    return response;
+  }
+
+  const { status, ...customer } = c;
+  return { ...customer, status: Status[status] };
 };
 
-const getAllCustomers = async (filters: CustomerRequest) => {
-  return repository.getCustomers(filters);
+const createCustomer = async (data: Customer) => {
+  return handleCustomer((await repository.createCustomer(data)) as Customer);
+};
+
+const getAllCustomers = async (filters: CommonRequest) => {
+  return handleCustomer((await repository.getCustomers(filters)) as Customer[]);
 };
 
 const getCustomerById = async (id: number) => {
-  return repository.getCustomer(id);
+  return handleCustomer((await repository.getCustomer(id)) as Customer);
 };
 
-const updatePartialCustomer = async (id: number, data: unknown) => {
-  return repository.updatePartialCustomer(id, data);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const updatePartialCustomer = async (id: number, data: any) => {
+  return handleCustomer((await repository.updatePartialCustomer(id, data)) as Customer);
 };
 
 const deleteCustomer = async (id: number) => {
-  return repository.deleteCustomer(id);
+  return handleCustomer((await repository.deleteCustomer(id)) as Customer);
 };
 
 export default {
