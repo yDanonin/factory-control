@@ -18,27 +18,7 @@ model users {
   name     String
 }
 
-// TODO: customer needs address.
-model customers {
-  id             Int     @id @default(autoincrement())
-  status         Int
-  addressId      Int
-  credit_limit   Float
-  name           String
-  phone          String
-  cel_number     String
-  email          String  @unique
-  store_name     String
-  deliver        Boolean
-  pontalti       Boolean
-  secondary_line Boolean
-  cpf            String?
-  cnpj           String?
-
-  address adresses @relation(fields: [addressId], references: [id])
-}
-
-//TODO: to use "viacep" api to search for a new address if we haven't in our db
+//TODO: to use "viacep" api to search for a new address if we haven't it in our db
 // viacep: https://viacep.com.br
 model adresses {
   id           Int    @id @default(autoincrement())
@@ -49,6 +29,28 @@ model adresses {
   state        String
 
   customers customers[]
+}
+
+model customers {
+  id                Int     @id @default(autoincrement())
+  status            Int
+  addressId         Int
+  deliver           Int
+  credit_limit      Float
+  name              String
+  phone             String
+  cel_number        String
+  email             String  @unique
+  store_name        String
+  // review this attr bellow, because don't make sense deliver to be a customer's attr.
+  // collect/deliveries, should be a request's attr.
+  collect           Boolean
+  pontalti          Boolean
+  secondary_line    Boolean
+  cpf               String?
+  cnpj              String?
+
+  address adresses @relation(fields: [addressId], references: [id])
 }
 
 // TODO: employee needs address.
