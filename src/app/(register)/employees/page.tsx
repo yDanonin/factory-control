@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <div className="flex">
       <Header />
-      <h1>Olá</h1>
+      <h1>Employees</h1>
     </div>
   );
 }
