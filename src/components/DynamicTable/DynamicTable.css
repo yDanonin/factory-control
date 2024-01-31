@@ -1,0 +1,25 @@
+.dynamic-table {
+  @apply
+  overflow-x-auto
+  overflow-y-auto
+}
+
+.table {
+  @apply
+  w-full
+  table-auto;
+}
+
+.table th,
+.table td {
+  @apply
+  border
+  px-4
+  py-2;
+}
+
+.table-container {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+}

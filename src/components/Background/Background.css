@@ -1,0 +1,20 @@
+.background {
+  @apply
+  fixed
+  top-0
+  left-0
+  w-full
+  h-full
+  bg-white
+  bg-opacity-70
+  flex
+  justify-center
+  items-center
+  -z-10;
+}
+
+.logo {
+  @apply
+  opacity-20
+  -z-10;
+}

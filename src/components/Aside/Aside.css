@@ -1,0 +1,91 @@
+  .aside {
+    @apply
+    bg-customBlue
+    h-screen
+    p-4
+    flex
+    flex-col
+    items-center
+    text-customWhite
+    transition-width duration-500 ease-out;
+  }
+
+  .aside-feet {
+    @apply
+      flex
+      items-center
+      justify-center
+      text-lg
+  }
+
+  .aside-feet a {
+    @apply
+      flex
+      items-center
+      space-x-0;
+  }
+
+  .nav {
+    @apply
+    h-full
+    flex
+    flex-col
+    justify-center
+    items-start
+    text-lg
+    mt-20
+  }
+
+  .item {
+    @apply
+    flex
+    items-center
+    py-2
+    text-gray-400
+  }
+
+  .item:hover {
+    @apply
+    text-customWhite
+  }
+
+  .icons {
+    @apply
+    w-[30px]
+    h-[30px]
+    px-1
+  }
+
+  .title {
+    @apply
+    font-bold
+    text-2xl
+  }
+
+  .bar-icon {
+    @apply
+    mx-auto
+    px-1
+    w-[50px]
+    h-[50px]
+    cursor-pointer
+  }
+
+  .selected {
+    @apply
+    text-customWhite;
+  }
+
+  .item span[hidden] {
+    @apply hidden;
+  }
+
+  .aside-head {
+    @apply
+    fixed
+    h-40
+    flex
+    flex-col
+    justify-between
+    select-none
+  }
