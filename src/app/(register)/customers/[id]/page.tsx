@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 
 import { Customer } from "@/types/customer.types";
-import Header from "@/components/Header";
+import Header from "@/components/Aside";
 
 export default function Page({ params }: { params: { id: string } }) {
   const [customer, setCustomer] = useState<Customer>();

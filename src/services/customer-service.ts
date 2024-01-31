@@ -27,7 +27,6 @@ const getCustomerById = async (id: number) => {
   return handleCustomer((await repository.getCustomer(id)) as Customer);
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const updatePartialCustomer = async (id: number, data: any) => {
   return handleCustomer((await repository.updatePartialCustomer(id, data)) as Customer);
 };

@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { Customer } from "@/types/customer.types";
-import Header from "@/components/Header";
+import Aside from "@/components/Aside";
+import Background from "@/components/Background";
 import "./Customers.css";
 
 export default function Page() {
@@ -24,7 +25,8 @@ export default function Page() {
 
   return (
     <div className="flex">
-      <Header />
+      <Background />
+      <Aside />
       <table className="table">
         <thead>
           <tr>
