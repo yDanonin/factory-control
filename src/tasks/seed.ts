@@ -25,18 +25,17 @@ async function seed() {
     phone: "11968901260",
     cel_number: "11968901260",
     store_name: "Magalu",
-    deliver: 1,
+    deliver: true,
     pontalti: false,
     secondary_line: true,
     cpf: "52910452808",
     credit_limit: 1000,
-    addressId: 1,
-    collect: false
+    addressId: 1
   };
 
   for (let i = 0; i < 10; i++) {
     customerData.email = `email${i}@gmail.com`;
-    customerData.name = `customer${i}`;
+    customerData.name = `John Snow ${i}`;
 
     await dbClient.customers.create({
       data: customerData
@@ -46,7 +45,7 @@ async function seed() {
 
 seed()
   .catch((error) => {
-    throw error;
+    console.log(error);
   })
   .finally(async () => {
     await dbClient.$disconnect();

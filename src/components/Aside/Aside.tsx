@@ -40,8 +40,9 @@ const Aside: React.FC = () => {
         )}
       </div>
 
+      {/* TODO: Remove this "Links" because this primaries buttons will be just a drop down */}
       <div className="nav">
-        <Link href="/customers">
+        <Link href="customers">
           <div className="item">
             <PencilSquareIcon className="icons" />
             <span hidden={menuSize}>Cadastro</span>
