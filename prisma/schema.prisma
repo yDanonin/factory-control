@@ -32,23 +32,22 @@ model adresses {
 }
 
 model customers {
-  id                Int     @id @default(autoincrement())
-  status            Int
-  addressId         Int
-  deliver           Int
-  credit_limit      Float
-  name              String
-  phone             String
-  cel_number        String
-  email             String  @unique
-  store_name        String
+  id             Int     @id @default(autoincrement())
+  status         Int
+  addressId      Int
+  credit_limit   Float
+  name           String
+  phone          String
+  cel_number     String
+  email          String  @unique
+  store_name     String
   // review this attr bellow, because don't make sense deliver to be a customer's attr.
   // collect/deliveries, should be a request's attr.
-  collect           Boolean
-  pontalti          Boolean
-  secondary_line    Boolean
-  cpf               String?
-  cnpj              String?
+  deliver        Boolean
+  pontalti       Boolean
+  secondary_line Boolean
+  cpf            String?
+  cnpj           String?
 
   address adresses @relation(fields: [addressId], references: [id])
 }
@@ -69,6 +68,7 @@ model employees {
 
 // TODO: employee needs address.
 // TODO: Study better the "Faturamento na compra" implementation
+// TODO: Study better vendors business rules
 model vendors {
   id               Int     @id @default(autoincrement())
   name             String
@@ -80,7 +80,38 @@ model vendors {
   deliver          Boolean
   volume_purchases Float
   purchases        Float
-  billing          Float
+  invoicing        Float
 }
 
-// TODO: needs to study "Material produtivo" implementation
+// TODO: Study better vendors business rules
+model products {
+  id           Int    @id @default(autoincrement())
+  status       Int
+  volume_sales Float
+  sales        Float
+  invoicing    Float
+  name         String
+  model        String
+  size         String
+  character    String
+  moldes       Int
+  equivalency  Float
+}
+
+// TODO: Study better vendors business rules
+model machines {
+  id              Int    @id @default(autoincrement())
+  model           String
+  machine_number  Int
+  status          Int
+  location        String
+  location_status Int
+}
+
+// TODO: Study better vendors business rules
+model procedures {
+  id           Int    @id @default(autoincrement())
+  process_name String
+  status       Int
+  workers      Int
+}

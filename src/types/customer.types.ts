@@ -1,7 +1,4 @@
-export enum Status {
-  suspenso,
-  operacional
-}
+import { Status } from "./common.types";
 
 export type Customer = {
   id: number;
