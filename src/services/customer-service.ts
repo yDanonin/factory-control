@@ -1,5 +1,5 @@
-import { Customer, Status } from "@/types/customer.types";
-import { CommonRequest } from "@/types/common.types";
+import { Customer } from "@/types/customer.types";
+import { CommonRequest, Status } from "@/types/common.types";
 import repository from "@/repository/customer";
 
 const handleCustomer = (c: Customer | Customer[]) => {
