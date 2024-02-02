@@ -118,7 +118,7 @@ export default function Page() {
                     <label htmlFor="name" className="h-6 text-sm text-gray-600">
                       Nome
                     </label>
-                    <Fieldsei s
+                    <Field
                       id="name"
                       name="name"
                       type="text"
