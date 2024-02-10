@@ -22,11 +22,13 @@ model users {
 // viacep: https://viacep.com.br
 model adresses {
   id           Int    @id @default(autoincrement())
-  zip_code     String @unique
+  zip_code     String
   neighborhood String
   public_place String
   city         String
   state        String
+  complement   String
+  number       Int
 
   customers customers[]
 }
@@ -46,8 +48,7 @@ model customers {
   deliver        Boolean
   pontalti       Boolean
   secondary_line Boolean
-  cpf            String?
-  cnpj           String?
+  document       String  @unique
 
   address adresses @relation(fields: [addressId], references: [id])
 }
