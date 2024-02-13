@@ -21,14 +21,14 @@ model users {
 //TODO: to use "viacep" api to search for a new address if we haven't it in our db
 // viacep: https://viacep.com.br
 model adresses {
-  id           Int    @id @default(autoincrement())
-  zip_code     String
-  neighborhood String
-  public_place String
-  city         String
-  state        String
-  complement   String
-  number       Int
+  id             Int    @id @default(autoincrement())
+  zip_code       String
+  neighborhood   String
+  public_place   String
+  city           String
+  state          String
+  complement     String
+  address_number Int
 
   customers customers[]
 }

@@ -9,10 +9,9 @@ export type Customer = {
   addressId: number;
   email: string;
   store_name: string;
-  deliver: boolean;
+  deliver: boolean | number;
   pontalti: boolean;
   secondary_line: boolean;
   credit_limit: number;
-  cpf?: string;
-  cnpj?: string;
+  document: string;
 };
