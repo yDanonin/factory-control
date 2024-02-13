@@ -13,6 +13,7 @@ import Background from "@/components/Background";
 import Button from "@/components/Button";
 import Modal from "@/components/Modal";
 import "./Customers.css";
+import Spinner from "@/components/Spinner";
 
 enum FORM_STEPS {
   STEP_1,
@@ -24,6 +25,7 @@ enum FORM_STEPS {
 export default function Page() {
   const [alert, setAlert] = useState<{ kind: string; title?: string; message: string }>({ kind: "", message: "" });
   const [customers, setCustomers] = useState([]);
+  const [processing, setProcessing] = useState(false)
   const [formCurrentStep, setFormCurrentStep] = useState<FORM_STEPS>(FORM_STEPS.STEP_1);
   const [showAddCustomerModal, setShowAddCustomerModal] = useState<boolean>(false);
   const router = useRouter();
@@ -101,6 +103,7 @@ export default function Page() {
               if (formCurrentStep === FORM_STEPS.STEP_2) setFormCurrentStep(FORM_STEPS.STEP_3);
               if (formCurrentStep === FORM_STEPS.STEP_3) setFormCurrentStep(FORM_STEPS.STEP_4);
               if (formCurrentStep === FORM_STEPS.STEP_4) {
+                setProcessing(true)
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 document.getElementById("saveButton").disabled = true;
@@ -124,12 +127,14 @@ export default function Page() {
                 axios
                   .post("/api/customers/", body)
                   .then(() => {
+                    setProcessing(false)
                     showSuccess("Customer registered successfully");
                     setTimeout(() => {
                       location.reload();
                     }, 2000);
                   })
                   .catch((e: Error) => {
+                    setProcessing(false)
                     showError(e.message);
                   })
                   .finally(() => {
@@ -598,6 +603,7 @@ export default function Page() {
           </tbody>
         </table>
       </div>
+      <Spinner visible={processing} message="Processando"/>
     </div>
   );
 }
