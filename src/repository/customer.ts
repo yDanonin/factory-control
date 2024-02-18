@@ -13,10 +13,12 @@ const getCustomer = async (id: number) => {
 const getCustomers = async (filters: CommonRequest) => {
   const { page, perPage } = filters;
   const skip = page !== 1 ? (page - 1) * perPage : undefined;
+
   const customers = await prisma.customers.findMany({
     take: perPage,
     skip: skip
   });
+  
   return customers;
 };
 
