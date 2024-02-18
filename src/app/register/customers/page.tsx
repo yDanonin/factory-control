@@ -122,37 +122,29 @@ export default function Page() {
                   complement: value.complement
                 };
 
-                axios
-                  .post("/api/adresses/", address)
-                  .then((res) => {
-                    const body = {
-                      name: value.name,
-                      status: value.status,
-                      phone: value.phone,
-                      cel_number: value.cel_number,
-                      email: value.email,
-                      store_name: value.store_name,
-                      deliver: Boolean(value.deliver),
-                      pontalti: value.pontalti,
-                      secondary_line: value.secondary_line,
-                      credit_limit: Number(value.credit_limit),
-                      document: value.document,
-                      addressId: res.data.id
-                    };
+                const body = {
+                  name: value.name,
+                  status: value.status,
+                  phone: value.phone,
+                  cel_number: value.cel_number,
+                  email: value.email,
+                  store_name: value.store_name,
+                  deliver: Boolean(value.deliver),
+                  pontalti: value.pontalti,
+                  secondary_line: value.secondary_line,
+                  credit_limit: Number(value.credit_limit),
+                  document: value.document,
+                  address: address
+                };
 
-                    axios
-                      .post("/api/customers/", body)
-                      .then(() => {
-                        setProcessing(false);
-                        showSuccess("Cliente foi registrado com sucesso :)");
-                        setTimeout(() => {
-                          location.reload();
-                        }, 2000);
-                      })
-                      .catch((e: Error) => {
-                        setProcessing(false);
-                        showError(e.message);
-                      });
+                axios
+                  .post("/api/customers/", body)
+                  .then(() => {
+                    setProcessing(false);
+                    showSuccess("Cliente foi registrado com sucesso :)");
+                    setTimeout(() => {
+                      location.reload();
+                    }, 2000);
                   })
                   .catch((e: Error) => {
                     setProcessing(false);
@@ -623,7 +615,6 @@ export default function Page() {
               <th className="tableh">CPF/CNPJ</th>
               <th className="tableh">Whatsapp</th>
               <th className="tableh">Telefone Fixo</th>
-              <th className="tableh">Endereço</th>
               <th className="tableh">Nome da Loja</th>
               <th className="tableh">Outros</th>
             </tr>
@@ -636,7 +627,6 @@ export default function Page() {
                 <td className="tabled">{customer.document}</td>
                 <td className="tabled">{customer.cel_number}</td>
                 <td className="tabled">{customer.phone}</td>
-                <td className="tabled">{customer.addressId}</td>
                 <td className="tabled">{customer.store_name}</td>
                 <td className="tabled">
                   <Button onClick={() => router.push(`/register/customers/${customer.id}`)}>Ver Mais</Button>

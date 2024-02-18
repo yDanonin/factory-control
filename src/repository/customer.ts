@@ -1,25 +1,103 @@
-import { Customer } from "@/types/customer.types";
-import { CommonRequest } from "@/types/common.types";
+import { Customer, CustomerRegister, CustomerRequest } from "@/types/customer.types";
 import prisma from "@/lib/prisma";
+import { PaginationResponse } from "@/types/common.types";
 
-const createCustomer = async (data: Customer) => {
-  return await prisma.customers.create({ data });
+const defaultSelectedFieldForCustomers = {
+  id: true,
+  status: true,
+  addressId: true,
+  credit_limit: true,
+  name: true,
+  phone: true,
+  cel_number: true,
+  email: true,
+  store_name: true,
+  deliver: true,
+  pontalti: true,
+  secondary_line: true,
+  document: true,
+  address: {
+    select: {
+      id: true,
+      zip_code: true,
+      neighborhood: true,
+      public_place: true,
+      city: true,
+      state: true,
+      complement: true,
+      address_number: true
+    }
+  }
+};
+
+const createCustomer = async (data: CustomerRegister) => {
+  const { address, ...customerData } = data;
+  return await prisma.customers.create({
+    data: {
+      ...customerData,
+      address: {
+        create: address
+      }
+    },
+    include: {
+      address: true
+    }
+  });
 };
 
 const getCustomer = async (id: number) => {
   return await prisma.customers.findUnique({ where: { id } });
 };
 
-const getCustomers = async (filters: CommonRequest) => {
-  const { page, perPage } = filters;
+const getCustomers = async (filters: CustomerRequest) => {
+  const { page, perPage, id, name, document, store_name, cel_number, phone, pontalti, status, deliver } = filters;
   const skip = page !== 1 ? (page - 1) * perPage : undefined;
 
-  const customers = await prisma.customers.findMany({
+  // prettier-ignore
+  const whereClause = id ? { id } : {
+    name: { contains: name },
+    document: { contains: document },
+    store_name: { contains: store_name },
+    cel_number: { contains: cel_number },
+    phone: { contains: phone },
+    pontalti: pontalti,
+    status: status,
+    deliver: deliver
+  };
+
+  const result = await prisma.customers.findMany({
+    where: whereClause,
+    select: defaultSelectedFieldForCustomers,
     take: perPage,
     skip: skip
   });
-  
-  return customers;
+
+  const totalRecords = await prisma.customers.count({
+    where: whereClause
+  });
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const customers = result.map((item: any) => {
+    return { ...item } as Customer;
+  });
+
+  const hasMoreItems = await prisma.customers.count({
+    where: {
+      id: {
+        gt: customers[customers.length - 1]?.id || 0
+      }
+    }
+  });
+
+  const nextPage = hasMoreItems ? page! + 1 : undefined;
+
+  return {
+    data: customers,
+    totalRecord: totalRecords,
+    page: page ?? 1,
+    perPage: perPage,
+    nextPage: nextPage ? `/api/customer?page=${nextPage}` : undefined
+  } as PaginationResponse<Customer>;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
