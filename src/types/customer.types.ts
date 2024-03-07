@@ -23,3 +23,5 @@ export type CustomerRequest = Partial<Omit<Customer, "credit_limit">> & {
   page: number;
   perPage: number;
 };
+
+export type CustomerStatusString = Omit<Customer, "status"> & { status: string };

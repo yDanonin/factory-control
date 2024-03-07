@@ -23,24 +23,70 @@ enum FORM_STEPS {
   STEP_3
 }
 
+interface SearchFields {
+  [key: string]: string | undefined;
+}
+
 export default function Page() {
   const [alert, setAlert] = useState<{ kind: string; title?: string; message: string }>({ kind: "", message: "" });
   const [customers, setCustomers] = useState([]);
   const [processing, setProcessing] = useState(false);
   const [formCurrentStep, setFormCurrentStep] = useState<FORM_STEPS>(FORM_STEPS.STEP_1);
   const [showAddCustomerModal, setShowAddCustomerModal] = useState<boolean>(false);
+  const [searchFields, setSearchFields] = useState<SearchFields>();
   const router = useRouter();
 
   useEffect(() => {
     const fetchCustomers = async () => {
       const response = await fetch("/api/customers");
-      const data = await response.json();
-      console.log(data);
-      setCustomers(data);
+      const value = await response.json();
+      console.log(value);
+      setCustomers(value.data);
     };
 
     fetchCustomers();
   }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    console.log(e.target);
+    const { name, value } = e.target;
+    console.log(name);
+    console.log(value);
+    setSearchFields((prevSearchFields) => ({
+      ...prevSearchFields,
+      [name]: value
+    }));
+  };
+
+  const getCustomerWithParams = () => {
+    const handleStatus = {
+      ...searchFields,
+      status: searchFields?.status !== "2" ? searchFields?.status : ""
+    };
+    let query = handleStatus
+      ? Object.entries(handleStatus)
+          .map(([key, value]) => `${key}=${value}`)
+          .join("&")
+      : "";
+    if (query.length > 0) query = "&" + query;
+
+    fetch("/api/customers?page=1&perPage=10" + query)
+      .then((res) => {
+        res
+          .json()
+          .then((value) => {
+            const { data } = value;
+            setCustomers(data);
+            showSuccess("Cliente(s) encontrado(s) com sucesso");
+          })
+          .catch((e) => {
+            showError("Erro: " + e.message);
+          });
+      })
+      .catch((e) => {
+        showError("Erro: " + e.message);
+      });
+  };
 
   const showSuccess = (message: string) => {
     setAlert({
@@ -90,11 +136,114 @@ export default function Page() {
       <Background />
       <Aside />
       <div className="flex-col w-full h-full">
-        <Button>Buscar</Button>
-        <Button>Limpar</Button>
-        <Button>Imprimir</Button>
-        {/* TODO: pass styling to css file */}
-        <Button onClick={() => setShowAddCustomerModal(true)}>Cadastrar</Button>
+        <div className="p-12 w-2/3">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+            <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
+              <label htmlFor="id" className="h-6 text-sm">
+                ID
+              </label>
+              <input
+                type="text"
+                name="id"
+                className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
+                value={searchFields?.id || ""}
+                onChange={handleChange}
+                placeholder="Input..."
+              />
+            </div>
+
+            <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
+              <label htmlFor="name" className="h-6 text-sm">
+                Nome
+              </label>
+              <input
+                type="text"
+                name="name"
+                className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
+                value={searchFields?.name || ""}
+                onChange={handleChange}
+                placeholder="Input..."
+              />
+            </div>
+
+            <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
+              <label htmlFor="document" className="h-6 text-sm">
+                CPF/CNPJ
+              </label>
+              <input
+                type="text"
+                name="document"
+                className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
+                value={searchFields?.document || ""}
+                onChange={handleChange}
+                placeholder="Input..."
+              />
+            </div>
+
+            <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
+              <label htmlFor="store_name" className="h-6 text-sm">
+                Nome da Loja
+              </label>
+              <input
+                type="text"
+                name="store_name"
+                className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
+                value={searchFields?.store_name || ""}
+                onChange={handleChange}
+                placeholder="Input..."
+              />
+            </div>
+
+            <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
+              <label htmlFor="cel_number" className="h-6 text-sm">
+                Whatsapp/Telegram
+              </label>
+              <input
+                type="text"
+                name="cel_number"
+                className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
+                value={searchFields?.cel_number || ""}
+                onChange={handleChange}
+                placeholder="Input..."
+              />
+            </div>
+
+            <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
+              <label htmlFor="phone" className="h-6 text-sm">
+                Telefone Fixo
+              </label>
+              <input
+                type="text"
+                name="phone"
+                className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
+                value={searchFields?.phone || ""}
+                onChange={handleChange}
+                placeholder="Input..."
+              />
+            </div>
+            <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
+              <label htmlFor="status" className="h-6 text-sm">
+                Status
+              </label>
+              <select
+                id="status"
+                name="status"
+                // value={searchFields?.store_name || ""}
+                onChange={handleChange}
+                className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
+              >
+                <option value={2}>Nenhum</option>
+                <option value={0}>Suspenso</option>
+                <option value={1}>Operacional</option>
+              </select>
+            </div>
+          </div>
+          <Button onClick={() => getCustomerWithParams()}>Buscar</Button>
+          <Button>Limpar</Button>
+          <Button>Imprimir</Button>
+          {/* TODO: pass styling to css file */}
+          <Button onClick={() => setShowAddCustomerModal(true)}>Cadastrar</Button>
+        </div>
 
         <Modal visible={showAddCustomerModal} closeModal={() => setShowAddCustomerModal(false)}>
           <Formik
@@ -206,7 +355,7 @@ export default function Page() {
 
                           {/* Status */}
                           <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-                            <label htmlFor="document" className="h-6 text-sm text-gray-600">
+                            <label htmlFor="status" className="h-6 text-sm text-gray-600">
                               Status
                             </label>
                             <Field
