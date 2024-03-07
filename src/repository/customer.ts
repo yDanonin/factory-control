@@ -46,11 +46,24 @@ const createCustomer = async (data: CustomerRegister) => {
 };
 
 const getCustomer = async (id: number) => {
-  return await prisma.customers.findUnique({ where: { id } });
+  return await prisma.customers.findUnique({ where: { id }, select: defaultSelectedFieldForCustomers });
 };
 
 const getCustomers = async (filters: CustomerRequest) => {
-  const { page, perPage, id, name, document, store_name, cel_number, phone, pontalti, status, deliver } = filters;
+  const {
+    page,
+    perPage,
+    id,
+    name,
+    document,
+    store_name,
+    cel_number,
+    phone,
+    pontalti,
+    status,
+    deliver,
+    secondary_line
+  } = filters;
   const skip = page !== 1 ? (page - 1) * perPage : undefined;
 
   // prettier-ignore
@@ -62,7 +75,8 @@ const getCustomers = async (filters: CustomerRequest) => {
     phone: { contains: phone },
     pontalti: pontalti,
     status: status,
-    deliver: deliver
+    deliver: deliver,
+    secondary_line: secondary_line
   };
 
   const result = await prisma.customers.findMany({
@@ -96,7 +110,7 @@ const getCustomers = async (filters: CustomerRequest) => {
     totalRecord: totalRecords,
     page: page ?? 1,
     perPage: perPage,
-    nextPage: nextPage ? `/api/customer?page=${nextPage}` : undefined
+    nextPage: nextPage ? `/api/customers?page=${nextPage}` : undefined
   } as PaginationResponse<Customer>;
 };
 
@@ -115,14 +129,15 @@ const updatePartialCustomer = async (id: number, data: any) => {
     data: {
       ...existingCustomer,
       ...data
-    }
+    },
+    select: defaultSelectedFieldForCustomers
   });
 
   return updatedCustomer;
 };
 
 const deleteCustomer = async (id: number) => {
-  return await prisma.customers.delete({ where: { id } });
+  return await prisma.customers.delete({ where: { id }, select: defaultSelectedFieldForCustomers });
 };
 
 export default {
