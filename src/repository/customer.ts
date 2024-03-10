@@ -15,7 +15,8 @@ const defaultSelectedFieldForCustomers = {
   deliver: true,
   pontalti: true,
   secondary_line: true,
-  document: true,
+  cpf: true,
+  cnpj: true,
   address: {
     select: {
       id: true,
@@ -55,7 +56,8 @@ const getCustomers = async (filters: CustomerRequest) => {
     perPage,
     id,
     name,
-    document,
+    cpf,
+    cnpj,
     store_name,
     cel_number,
     phone,
@@ -69,7 +71,8 @@ const getCustomers = async (filters: CustomerRequest) => {
   // prettier-ignore
   const whereClause = id ? { id } : {
     name: { contains: name },
-    document: { contains: document },
+    cpf: { contains: cpf },
+    cnpj: { contains: cnpj },
     store_name: { contains: store_name },
     cel_number: { contains: cel_number },
     phone: { contains: phone },

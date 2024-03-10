@@ -1,5 +1,5 @@
 import { Address } from "@/types/address.types";
-import { CommonRequest } from "@/types/common.types";
+import { CommonAddressRequest } from "@/types/address.types";
 import prisma from "@/lib/prisma";
 
 const createAddress = async (data: Address) => {
@@ -10,7 +10,7 @@ const getAddress = async (id: number) => {
   return await prisma.adresses.findUnique({ where: { id } });
 };
 
-const getAdresses = async (filters: CommonRequest) => {
+const getAdresses = async (filters: CommonAddressRequest) => {
   const { page, perPage } = filters;
   const skip = page !== 1 ? (page - 1) * perPage : undefined;
   const adresses = await prisma.adresses.findMany({

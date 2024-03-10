@@ -72,6 +72,7 @@ export class InternalServerError extends errorBasis {
 
 export const notFoundCustomer = new Error("costumer not found");
 export const customerFieldsEmpty = new Error("no valid field to update in customer");
+export const needADocument = new BadRequestError("at least one document required");
 
 export const isError = (error: Error) => {
   return error instanceof Error;

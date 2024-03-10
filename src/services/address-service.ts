@@ -1,13 +1,13 @@
 import { Address } from "@/types/address.types";
-import { CommonRequest } from "@/types/common.types";
+import { CommonAddressRequest } from "@/types/address.types";
 import repository from "@/repository/address";
 
-type Filters = CommonRequest & {
+type Filters = CommonAddressRequest & {
   cep: string;
-}
+};
 
 const handleAddress = (c: Address | Address[]) => {
-  return c
+  return c;
 };
 
 const createAddress = async (data: Address) => {
@@ -22,7 +22,7 @@ const getAddressById = async (id: number) => {
   return handleAddress((await repository.getAddress(id)) as Address);
 };
 
-const updatePartialAddress = async (id: number, data: any) => {
+const updatePartialAddress = async (id: number, data: unknown) => {
   return handleAddress((await repository.updatePartialAddress(id, data)) as Address);
 };
 

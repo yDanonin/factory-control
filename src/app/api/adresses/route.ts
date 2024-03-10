@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { CommonRequest } from "@/types/common.types";
+import { CommonAddressRequest } from "@/types/address.types";
 import addressService from "@/services/address-service";
 
 export async function POST(req: NextRequest) {
@@ -14,12 +14,12 @@ export async function GET(req: NextRequest) {
 
   const page = params.get("page");
   const perPage = params.get("perPage");
-  const cep = params.get("cep") || ""
+  const cep = params.get("cep") || "";
 
   const filters = {
     page: page ? Number(page) : 1,
     perPage: perPage ? Number(perPage) : 10
-  } as CommonRequest;
+  } as CommonAddressRequest;
 
-  return NextResponse.json(await addressService.getAllAdresses({...filters, cep }));
+  return NextResponse.json(await addressService.getAllAdresses({ ...filters, cep }));
 }
