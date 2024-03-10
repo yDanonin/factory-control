@@ -8,3 +8,8 @@ export type Address = {
   complement: string;
   address_number: number;
 };
+
+export type CommonAddressRequest = {
+  page: number;
+  perPage: number;
+};

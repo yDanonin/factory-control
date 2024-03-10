@@ -1,5 +1,6 @@
 import { Customer, CustomerRequest, CustomerStatusString } from "@/types/customer.types";
 import { PaginationResponse, Status } from "@/types/common.types";
+import { BadRequestError, needADocument } from "@/utils/errors.utils";
 import repository from "@/repository/customer";
 
 const handleStatusInCustomer = (c: Customer | PaginationResponse<Customer>) => {
@@ -19,10 +20,11 @@ const handleStatusInCustomer = (c: Customer | PaginationResponse<Customer>) => {
 
 const createCustomer = async (data: Customer) => {
   try {
+    if (data.cpf == null && data.cnpj == null) throw new BadRequestError("don't have any documents", needADocument);
     return handleStatusInCustomer((await repository.createCustomer(data)) as Customer);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
-    throw new Error(e.message);
+    throw e;
   }
 };
 

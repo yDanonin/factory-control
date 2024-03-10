@@ -13,8 +13,9 @@ export type Customer = {
   pontalti: boolean;
   secondary_line: boolean;
   credit_limit: number;
-  document: string;
   address: Address;
+  cpf: string;
+  cnpj: string;
 };
 
 export type CustomerRegister = Omit<Customer, "id">;

@@ -48,7 +48,8 @@ model customers {
   deliver        Boolean
   pontalti       Boolean
   secondary_line Boolean
-  document       String  @unique
+  cpf            String?  @unique
+  cnpj           String?  @unique
 
   address adresses @relation(fields: [addressId], references: [id])
 }

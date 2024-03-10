@@ -1,12 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import customerService from "@/services/customer-service";
 import { CustomerRequest } from "@/types/customer.types";
+import createHttpErrors from "http-errors";
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const data = { ...body };
+  try {
+    const body = await req.json();
+    const data = { ...body };
 
-  return NextResponse.json(await customerService.createCustomer(data));
+    return NextResponse.json(await customerService.createCustomer(data), { status: 201 });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (e: any) {
+    const httpError = createHttpErrors(e);
+    console.error(httpError);
+    return NextResponse.json(httpError.message, { status: httpError.status, statusText: httpError.name });
+  }
 }
 
 export async function GET(req: NextRequest) {
@@ -23,7 +31,8 @@ export async function GET(req: NextRequest) {
     deliver: searchParams.get("deliver") ? Boolean(searchParams.get("deliver")) : undefined,
     pontalti: searchParams.get("pontalti") ? Boolean(searchParams.get("pontalti")) : undefined,
     secondary_line: searchParams.get("secondary_line") ? Boolean(searchParams.get("secondary_line")) : undefined,
-    document: searchParams.get("document") ?? undefined,
+    cpf: searchParams.get("cpf") ?? undefined,
+    cnpj: searchParams.get("cnpj") ?? undefined,
     page: searchParams.get("page") ? Number(searchParams.get("page")) : 1,
     perPage: searchParams.get("perPage") ? Number(searchParams.get("perPage")) : 10
   } as CustomerRequest;

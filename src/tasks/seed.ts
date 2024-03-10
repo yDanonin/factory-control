@@ -37,7 +37,7 @@ async function seed() {
   for (let i = 0; i < 10; i++) {
     customerData.email = `${i}email${i}@gmail.com`;
     customerData.name = `John Snow ${i}`;
-    customerData.document = `1555555555${i}`;
+    customerData.cpf = `1555555555${i}`;
 
     await dbClient.customers.create({
       data: customerData
