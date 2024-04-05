@@ -1,23 +1,7 @@
 import Aside from "@/components/Aside";
-import Background from "@/components/Background";
 import DynamicTable from "@/components/DynamicTable";
 
 const columns = [
-  { header: "Nome", accessor: "name" },
-  { header: "Idade", accessor: "age" },
-  { header: "Cidade", accessor: "city" },
-  { header: "Nome", accessor: "name" },
-  { header: "Idade", accessor: "age" },
-  { header: "Cidade", accessor: "city" },
-  { header: "Nome", accessor: "name" },
-  { header: "Idade", accessor: "age" },
-  { header: "Cidade", accessor: "city" },
-  { header: "Nome", accessor: "name" },
-  { header: "Idade", accessor: "age" },
-  { header: "Cidade", accessor: "city" },
-  { header: "Nome", accessor: "name" },
-  { header: "Idade", accessor: "age" },
-  { header: "Cidade", accessor: "city" },
   { header: "Nome", accessor: "name" },
   { header: "Idade", accessor: "age" },
   { header: "Cidade", accessor: "city" }
@@ -46,11 +30,15 @@ const data = [
 
 export default function Page() {
   return (
-    <div className="flex">
-      <Background />
-      <Aside />
-      <DynamicTable columns={columns} data={data} />
-      <h1>Olá</h1>
+    <div className="grid grid-cols-8 gap-4 h-screen overflow-x-hidden break-all relative sm:max-2xl:flex sm:max-2xl:flex-row">
+      <div className="col-span-1 sm:max-2xl:w-1/2 sm:max-2xl:col-auto">
+        <div className="sticky top-0">
+          <Aside />
+        </div>
+      </div>
+      <div className="col-span-7 overflow-y-auto">
+        <DynamicTable columns={columns} data={data} />
+      </div>
     </div>
   );
 }
