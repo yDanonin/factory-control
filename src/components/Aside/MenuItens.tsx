@@ -2,7 +2,7 @@ export const menuItensCadastro = [
   {
     id: 0,
     item: "Clientes",
-    route: "/blabla"
+    route: "/register/customers"
   },
   {
     id: 1,

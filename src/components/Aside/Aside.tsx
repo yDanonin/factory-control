@@ -1,9 +1,7 @@
 "use client";
 import React from "react";
-// import Link from "next/link";
 
 import "./Aside.css";
-// import { Button } from "@/components/button";
 import {
   menuItensCadastro,
   menuItensControle,
