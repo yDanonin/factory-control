@@ -2,6 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+.page-layout {
+  @apply
+    grid 
+    grid-cols-8 
+    gap-4 
+    h-screen 
+    overflow-x-hidden 
+    break-all 
+    relative 
+    sm:max-2xl:flex 
+    sm:max-2xl:flex-row
+}
+
+.aside-layout {
+  @apply
+    sticky 
+    top-0 
+    col-span-1 
+    sm:max-2xl:w-1/2 
+    sm:max-2xl:col-auto
+}
+
+.main-layout {
+  @apply
+    col-span-7 
+    overflow-y-auto
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
