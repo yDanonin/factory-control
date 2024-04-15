@@ -3,10 +3,12 @@
 import React, { useState } from "react";
 
 import "./DynamicTable.css";
-import { Customer } from "@/types/customer.types";
+import { ChevronDown } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { TableColumn } from "@/models/TableColumn";
 import {
   ColumnFiltersState,
-  Row,
   SortingState,
   VisibilityState,
   flexRender,
@@ -16,36 +18,28 @@ import {
   getSortedRowModel,
   useReactTable
 } from "@tanstack/react-table";
-import { ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
+  DropdownMenuCheckboxItem
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+import Modal from "@/components/Modal/Modal";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-interface TableColumn {
-  id?: string;
-  cell?: ({ row }: { row: Row<Customer> }) => JSX.Element;
-  enableHiding?: boolean;
-  header?: string;
-  accessorKey?: string;
-}
+import { AlertDialog } from "@/components/ui/alert-dialog";
 
 interface TableProps {
   columns: TableColumn[];
-  data: Customer[];
-  filterField: string;
+  data: never[];
+  filterFields: TableColumn[];
 }
 
-const DynamicTable: React.FC<TableProps> = ({ columns, data, filterField }) => {
+const DynamicTable: React.FC<TableProps> = ({ columns, data, filterFields = [] }) => {
+  const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
     data,
@@ -67,18 +61,31 @@ const DynamicTable: React.FC<TableProps> = ({ columns, data, filterField }) => {
   });
 
   return (
-    <div className="w-full">
-      <div className="flex items-center py-4">
-        {filterField && (
-          <Input
-            placeholder={"Filtrar " + filterField + "..."}
-            value={(table.getColumn(filterField || "")?.getFilterValue() as string) ?? ""}
-            onChange={(event) => table.getColumn(filterField || "")?.setFilterValue(event.target.value)}
-            className="max-w-sm"
-          />
+    <div className="w-full p-4">
+      <div className="flex items-center py-4 gap-4 flex-wrap">
+        {filterFields && (
+          <div className="w-full grid grid-cols-4 gap-4">
+            {filterFields.map((filterField, index) => (
+              <div key={index} className="">
+                <Input
+                  placeholder={"Filtrar " + filterField.header?.toLocaleLowerCase() + "..."}
+                  value={(table.getColumn(filterField.accessorKey || "")?.getFilterValue() as string) ?? ""}
+                  onChange={(event) =>
+                    table.getColumn(filterField.accessorKey || "")?.setFilterValue(event.target.value)
+                  }
+                  className="max-w-sm"
+                />
+              </div>
+            ))}
+          </div>
         )}
+        <div className="w-1/2 flex justify-between">
+          <AlertDialog>
+            <Modal type="CREATE" nameModal="usuário" />
+          </AlertDialog>
+        </div>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger asChild className="px-3">
             <Button variant="outline" className="ml-auto">
               Colunas <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
