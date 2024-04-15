@@ -6,10 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "prisma": "npx prisma migrate reset --force && npx prisma db push",
-    "prisma:format": "npx prisma format",
-    "seed": "ts-node ./src/tasks/seed.ts"
+    "lint": "next lint"
   },
   "dependencies": {
     "@heroicons/react": "^2.1.1",
