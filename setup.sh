@@ -16,7 +16,7 @@ fi
 RUNNING=$(docker inspect --format="{{.State.Running}}" $CONTAINER 2> /dev/null)
 
 if [ $? -eq 1 ]; then
-  docker run --detach --name $CONTAINER -p 5432:5432 --env POSTGRES_DATABASE=factory-db --env POSTGRES_USER=factory-user --env POSTGRES_PASSWORD=password --env POSTGRES_ROOT_PASSWORD=rootpassword -d postgres
+  docker run --detach --name $CONTAINER -p 5432:5432 --env POSTGRES_DATABASE=factorydb --env POSTGRES_USER=factory-user --env POSTGRES_PASSWORD=password --env POSTGRES_ROOT_PASSWORD=rootpassword -d postgres
 elif [ "$RUNNING" == "false" ]; then
   docker start $CONTAINER
 fi

@@ -1,16 +1,16 @@
-  .aside {
-    @apply
-    bg-customBlue
-    h-screen
-    p-4
-    flex
-    flex-col
-    items-center
-    text-customWhite
-    transition-width duration-500 ease-out;
-  }
+.aside {
+  @apply 
+      h-screen
+      py-5
+      flex
+      flex-col
+      content-center
+      items-center
+      border-r
+      border-zinc-800;
+}
 
-  .aside-feet {
+/* .aside-feet {
     @apply
       flex
       items-center
@@ -88,4 +88,4 @@
     flex-col
     justify-between
     select-none
-  }
+  } */

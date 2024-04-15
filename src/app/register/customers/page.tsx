@@ -1,791 +1,144 @@
 "use client";
+import { useState, useEffect } from "react";
 
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import axios from "axios";
-
-import { Step_1_Schema, Step_2_Schema, Step_3_Schema } from "@/validations/customer.validation";
-import { Customer } from "@/types/customer.types";
-import { RegisterCustomer } from "@/types/form.types";
-import Alert from "@/components/Alert";
-import Aside from "@/components/Aside";
-import Background from "@/components/Background";
-import Button from "@/components/Button";
-import Modal from "@/components/Modal";
 import "./Customers.css";
-import Spinner from "@/components/Spinner";
-import { Status } from "@/types/common.types";
-
-enum FORM_STEPS {
-  STEP_1,
-  STEP_2,
-  STEP_3
-}
-
-interface SearchFields {
-  [key: string]: string | undefined;
-}
+import axios from "axios";
+import Aside from "@/components/Aside";
+import { useRouter } from "next/navigation";
+import { Row } from "@tanstack/react-table";
+import { MoreHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Customer } from "@/types/customer.types";
+import { TableColumn } from "@/models/TableColumn";
+import DynamicTable from "@/components/DynamicTable";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
+import Modal from "@/components/Modal/Modal";
+import { AlertDialog } from '@radix-ui/react-alert-dialog';
 
 export default function Page() {
-  const [alert, setAlert] = useState<{ kind: string; title?: string; message: string }>({ kind: "", message: "" });
-  const [customers, setCustomers] = useState([]);
-  const [processing, setProcessing] = useState(false);
-  const [formCurrentStep, setFormCurrentStep] = useState<FORM_STEPS>(FORM_STEPS.STEP_1);
-  const [showAddCustomerModal, setShowAddCustomerModal] = useState<boolean>(false);
-  const [searchFields, setSearchFields] = useState<SearchFields>();
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchCustomers = async () => {
-      const response = await fetch("/api/customers");
-      const value = await response.json();
-      console.log(value);
-      setCustomers(value.data);
-    };
+  const editCustomer = async (customer: Customer) => {
+    try {
+      const test = await axios.patch(`/api/customer/${customer.id}`);
+      console.log(test);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-    fetchCustomers();
+  const deleteCustomer = async (customer: Customer) => {
+    console.log(customer);
+  };
+
+  const columns = [
+    {
+      header: "Nome",
+      accessorKey: "name"
+    },
+    {
+      header: "Status",
+      accessorKey: "status"
+    },
+    {
+      header: "Num. telefone",
+      accessorKey: "phone"
+    },
+    {
+      header: "Num. celular",
+      accessorKey: "cel_number"
+    },
+    {
+      header: "Email",
+      accessorKey: "email"
+    },
+    {
+      header: "Loja",
+      accessorKey: "store_name"
+    },
+    {
+      header: "Cpf/Cnpj",
+      accessorKey: "cpf"
+    },
+    {
+      header: "Entrega/Retirada",
+      accessorKey: "deliver"
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }: { row: Row<Customer> }) => {
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Ver mais</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={() => router.push(`/register/customers/${row.original.id}`)}
+              >
+                Ver detalhes do cliente
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
+                <AlertDialog>
+                  <Modal type="EDIT" nameModal="cliente" typeInformation={row.original} />
+                </AlertDialog>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
+                <AlertDialog>
+                  <Modal type="DELETE" nameModal="cliente" typeInformation={row.original} />
+                </AlertDialog>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      }
+    }
+  ];
+
+  const arrayFilterFieldsByAcessorKey = columns.reduce((acc: TableColumn[], column) => {
+    if (column.accessorKey && column.header) {
+      acc.push({ header: column.header, accessorKey: column.accessorKey });
+    }
+    return acc;
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    console.log(e.target);
-    const { name, value } = e.target;
-    console.log(name);
-    console.log(value);
-    setSearchFields((prevSearchFields) => ({
-      ...prevSearchFields,
-      [name]: value
-    }));
-  };
-
-  const getCustomerWithParams = () => {
-    const handleStatus = {
-      ...searchFields,
-      status: searchFields?.status !== "2" ? searchFields?.status : ""
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const resp = await axios.get("/api/customers");
+        setData(resp.data.data);
+      } catch (err) {
+        console.error(err);
+      }
     };
-    let query = handleStatus
-      ? Object.entries(handleStatus)
-          .map(([key, value]) => `${key}=${value}`)
-          .join("&")
-      : "";
-    if (query.length > 0) query = "&" + query;
 
-    fetch("/api/customers?page=1&perPage=10" + query)
-      .then((res) => {
-        res
-          .json()
-          .then((value) => {
-            const { data } = value;
-            setCustomers(data);
-            showSuccess("Cliente(s) encontrado(s) com sucesso");
-          })
-          .catch((e) => {
-            showError("Erro: " + e.message);
-          });
-      })
-      .catch((e) => {
-        showError("Erro: " + e.message);
-      });
-  };
-
-  const showSuccess = (message: string) => {
-    setAlert({
-      kind: "success",
-      message: message,
-      title: "Nice"
-    });
-  };
-
-  const showError = (message: string) => {
-    setAlert({
-      kind: "danger",
-      message: message,
-      title: "Ops!"
-    });
-  };
-
-  const choosingTheValidationScheme = () => {
-    if (formCurrentStep === FORM_STEPS.STEP_1) return Step_1_Schema;
-    if (formCurrentStep === FORM_STEPS.STEP_2) return Step_2_Schema;
-    if (formCurrentStep === FORM_STEPS.STEP_3) return Step_3_Schema;
-  };
-
-  const initialValues: RegisterCustomer = {
-    name: "",
-    status: Status.suspenso,
-    phone: "",
-    cel_number: "",
-    email: "",
-    zip_code: "",
-    neighborhood: "",
-    public_place: "",
-    city: "",
-    state: "",
-    address_number: undefined,
-    complement: "",
-    store_name: "",
-    deliver: 0,
-    pontalti: false,
-    secondary_line: false,
-    credit_limit: undefined,
-    document: ""
-  };
+    fetchData();
+  }, []);
 
   return (
-    <div className="flex">
-      <Background />
-      <Aside />
-      <div className="flex-col w-full h-full">
-        <div className="p-12 w-2/3">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-            <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-              <label htmlFor="id" className="h-6 text-sm">
-                ID
-              </label>
-              <input
-                type="text"
-                name="id"
-                className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
-                value={searchFields?.id || ""}
-                onChange={handleChange}
-                placeholder="Input..."
-              />
-            </div>
-
-            <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-              <label htmlFor="name" className="h-6 text-sm">
-                Nome
-              </label>
-              <input
-                type="text"
-                name="name"
-                className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
-                value={searchFields?.name || ""}
-                onChange={handleChange}
-                placeholder="Input..."
-              />
-            </div>
-
-            <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-              <label htmlFor="document" className="h-6 text-sm">
-                CPF/CNPJ
-              </label>
-              <input
-                type="text"
-                name="document"
-                className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
-                value={searchFields?.document || ""}
-                onChange={handleChange}
-                placeholder="Input..."
-              />
-            </div>
-
-            <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-              <label htmlFor="store_name" className="h-6 text-sm">
-                Nome da Loja
-              </label>
-              <input
-                type="text"
-                name="store_name"
-                className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
-                value={searchFields?.store_name || ""}
-                onChange={handleChange}
-                placeholder="Input..."
-              />
-            </div>
-
-            <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-              <label htmlFor="cel_number" className="h-6 text-sm">
-                Whatsapp/Telegram
-              </label>
-              <input
-                type="text"
-                name="cel_number"
-                className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
-                value={searchFields?.cel_number || ""}
-                onChange={handleChange}
-                placeholder="Input..."
-              />
-            </div>
-
-            <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-              <label htmlFor="phone" className="h-6 text-sm">
-                Telefone Fixo
-              </label>
-              <input
-                type="text"
-                name="phone"
-                className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
-                value={searchFields?.phone || ""}
-                onChange={handleChange}
-                placeholder="Input..."
-              />
-            </div>
-            <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-              <label htmlFor="status" className="h-6 text-sm">
-                Status
-              </label>
-              <select
-                id="status"
-                name="status"
-                // value={searchFields?.store_name || ""}
-                onChange={handleChange}
-                className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
-              >
-                <option value={2}>Nenhum</option>
-                <option value={0}>Suspenso</option>
-                <option value={1}>Operacional</option>
-              </select>
-            </div>
-          </div>
-          <Button onClick={() => getCustomerWithParams()}>Buscar</Button>
-          <Button>Limpar</Button>
-          <Button>Imprimir</Button>
-          {/* TODO: pass styling to css file */}
-          <Button onClick={() => setShowAddCustomerModal(true)}>Cadastrar</Button>
-        </div>
-
-        <Modal visible={showAddCustomerModal} closeModal={() => setShowAddCustomerModal(false)}>
-          <Formik
-            initialValues={initialValues}
-            validationSchema={choosingTheValidationScheme()}
-            onSubmit={async (value) => {
-              if (formCurrentStep === FORM_STEPS.STEP_1) setFormCurrentStep(FORM_STEPS.STEP_2);
-              if (formCurrentStep === FORM_STEPS.STEP_2) setFormCurrentStep(FORM_STEPS.STEP_3);
-              if (formCurrentStep === FORM_STEPS.STEP_3) {
-                setProcessing(true);
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                document.getElementById("saveButton").disabled = true;
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                document.getElementById("saveButton").style.backgroundColor = "rgb(12 74 110)";
-
-                const address = {
-                  zip_code: value.zip_code,
-                  neighborhood: value.neighborhood,
-                  public_place: value.public_place,
-                  city: value.city,
-                  state: value.state,
-                  address_number: Number(value.address_number),
-                  complement: value.complement
-                };
-
-                const body = {
-                  name: value.name,
-                  status: value.status,
-                  phone: value.phone,
-                  cel_number: value.cel_number,
-                  email: value.email,
-                  store_name: value.store_name,
-                  deliver: Boolean(value.deliver),
-                  pontalti: value.pontalti,
-                  secondary_line: value.secondary_line,
-                  credit_limit: Number(value.credit_limit),
-                  document: value.document,
-                  address: address
-                };
-
-                axios
-                  .post("/api/customers/", body)
-                  .then(() => {
-                    setProcessing(false);
-                    showSuccess("Cliente foi registrado com sucesso :)");
-                    setTimeout(() => {
-                      location.reload();
-                    }, 2000);
-                  })
-                  .catch((e: Error) => {
-                    setProcessing(false);
-                    showError(e.message);
-                  })
-                  .finally(() => {
-                    setShowAddCustomerModal(false);
-                    setFormCurrentStep(FORM_STEPS.STEP_1);
-                  });
-              }
-            }}
-          >
-            {({ setFieldValue }) => (
-              <div className="relative bg-white rounded-lg shadow h-full">
-                <div className="py-6 px-6 lg:px-8">
-                  <Form className="space-y-6">
-                    <span className="mb-4 text-xl font-medium">Cadastrar Cliente</span>
-
-                    {formCurrentStep === FORM_STEPS.STEP_1 && (
-                      <div>
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                          {/* Name */}
-                          <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-                            <label htmlFor="name" className="h-6 text-sm text-gray-600">
-                              Nome
-                            </label>
-                            <Field
-                              id="name"
-                              name="name"
-                              type="text"
-                              placeholder="John Snow"
-                              className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
-                            />
-                            <ErrorMessage
-                              name={"name"}
-                              component="span"
-                              className="text-red-400 text-[14px] block font-bold"
-                            />
-                          </div>
-
-                          {/* CPF/CNPJ */}
-                          <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-                            <label htmlFor="document" className="h-6 text-sm text-gray-600">
-                              CPF/CNPJ
-                            </label>
-                            <Field
-                              id="document"
-                              name="document"
-                              type="text"
-                              placeholder="555.555.555-55"
-                              className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
-                            />
-                            <ErrorMessage
-                              name={"document"}
-                              component="span"
-                              className="text-red-400 text-[14px] block font-bold"
-                            />
-                          </div>
-
-                          {/* Status */}
-                          <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-                            <label htmlFor="status" className="h-6 text-sm text-gray-600">
-                              Status
-                            </label>
-                            <Field
-                              as="select"
-                              id="status"
-                              name="status"
-                              className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
-                            >
-                              <option value={0}>Suspenso</option>
-                              <option value={1}>Operacional</option>
-                            </Field>
-                            <ErrorMessage
-                              name={"status"}
-                              component="span"
-                              className="text-red-400 text-[14px] block font-bold"
-                            />
-                          </div>
-
-                          {/* Celular */}
-                          <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-                            <label htmlFor="cel_number" className="h-6 text-sm text-gray-600">
-                              Celular
-                            </label>
-                            <Field
-                              id="cel_number"
-                              name="cel_number"
-                              placeholder="(00) 99999-9999"
-                              className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
-                            />
-                            <ErrorMessage
-                              name={"cel_number"}
-                              component="span"
-                              className="text-red-400 text-[14px] block font-bold"
-                            />
-                          </div>
-
-                          {/* Telefone */}
-                          <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-                            <label htmlFor="phone" className="h-6 text-sm text-gray-600">
-                              Telefone
-                            </label>
-                            <Field
-                              id="phone"
-                              name="phone"
-                              placeholder="(00) 9999-9999"
-                              className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
-                            />
-                            <ErrorMessage
-                              name={"phone"}
-                              component="span"
-                              className="text-red-400 text-[14px] block font-bold"
-                            />
-                          </div>
-
-                          {/* Email */}
-                          <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-                            <label htmlFor="email" className="h-6 text-sm text-gray-600">
-                              Email
-                            </label>
-                            <Field
-                              id="email"
-                              name="email"
-                              placeholder="example@email.com"
-                              className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
-                            />
-                            <ErrorMessage
-                              name={"email"}
-                              component="span"
-                              className="text-red-400 text-[14px] block font-bold"
-                            />
-                          </div>
-                        </div>
-
-                        {/* button */}
-                        <button type="submit" className={"formSubmit"}>
-                          <div className="flex items-center justify-between gap-x-2">
-                            Continue para cadastrar o cliente
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                          </div>
-                        </button>
-                      </div>
-                    )}
-
-                    {formCurrentStep === FORM_STEPS.STEP_2 && (
-                      <div>
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                          {/* Zip Code */}
-                          <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-                            <label htmlFor="zip_code" className="h-6 text-sm text-gray-600">
-                              CEP
-                            </label>
-                            <Field
-                              id="zip_code"
-                              name="zip_code"
-                              type="text"
-                              placeholder="555.555.555-55"
-                              className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
-                              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                              onChange={async (e: any) => {
-                                const cep = e.target.value;
-                                setFieldValue("zip_code", cep);
-
-                                if (cep.length == 8) {
-                                  try {
-                                    const response = await axios.get(`https://viacep.com.br/ws/${cep}/json`);
-                                    if (response.data.erro == true) throw new Error();
-                                    const { bairro, logradouro, localidade, uf } = response.data;
-                                    setFieldValue("neighborhood", bairro);
-                                    setFieldValue("public_place", logradouro);
-                                    setFieldValue("city", localidade);
-                                    setFieldValue("state", uf);
-                                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                  } catch (error: any) {
-                                    console.log("erro");
-                                    console.log(error.message);
-                                    showError("Não foi possíve preencher os campos de endereço");
-                                  }
-                                }
-                              }}
-                            />
-                            <ErrorMessage
-                              name={"zip_code"}
-                              component="span"
-                              className="text-red-400 text-[14px] block font-bold"
-                            />
-                          </div>
-
-                          {/* Neighborhood */}
-                          <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-                            <label htmlFor="neighborhood" className="h-6 text-sm text-gray-600">
-                              Bairro
-                            </label>
-                            <Field
-                              id="neighborhood"
-                              name="neighborhood"
-                              type="text"
-                              placeholder="555.555.555-55"
-                              className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
-                            />
-                            <ErrorMessage
-                              name={"neighborhood"}
-                              component="span"
-                              className="text-red-400 text-[14px] block font-bold"
-                            />
-                          </div>
-
-                          {/* Public Place */}
-                          <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-                            <label htmlFor="public_place" className="h-6 text-sm text-gray-600">
-                              Logradouro
-                            </label>
-                            <Field
-                              id="public_place"
-                              name="public_place"
-                              type="text"
-                              placeholder="555.555.555-55"
-                              className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
-                            />
-                            <ErrorMessage
-                              name={"public_place"}
-                              component="span"
-                              className="text-red-400 text-[14px] block font-bold"
-                            />
-                          </div>
-
-                          {/* City */}
-                          <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-                            <label htmlFor="city" className="h-6 text-sm text-gray-600">
-                              Cidade
-                            </label>
-                            <Field
-                              id="city"
-                              name="city"
-                              type="text"
-                              placeholder="555.555.555-55"
-                              className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
-                            />
-                            <ErrorMessage
-                              name={"city"}
-                              component="span"
-                              className="text-red-400 text-[14px] block font-bold"
-                            />
-                          </div>
-
-                          {/* State */}
-                          <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-                            <label htmlFor="state" className="h-6 text-sm text-gray-600">
-                              Estado
-                            </label>
-                            <Field
-                              id="state"
-                              name="state"
-                              type="text"
-                              placeholder="555.555.555-55"
-                              className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
-                            />
-                            <ErrorMessage
-                              name={"state"}
-                              component="span"
-                              className="text-red-400 text-[14px] block font-bold"
-                            />
-                          </div>
-
-                          {/* address_number */}
-                          <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-                            <label htmlFor="address_number" className="h-6 text-sm text-gray-600">
-                              N° Endereço
-                            </label>
-                            <Field
-                              id="address_number"
-                              name="address_number"
-                              type="text"
-                              placeholder="555.555.555-55"
-                              className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
-                            />
-                            <ErrorMessage
-                              name={"address_number"}
-                              component="span"
-                              className="text-red-400 text-[14px] block font-bold"
-                            />
-                          </div>
-
-                          {/* Complement */}
-                          <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-                            <label htmlFor="complement" className="h-6 text-sm text-gray-600">
-                              complemento
-                            </label>
-                            <Field
-                              id="complement"
-                              name="complement"
-                              type="text"
-                              placeholder="555.555.555-55"
-                              className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
-                            />
-                            <ErrorMessage
-                              name={"complement"}
-                              component="span"
-                              className="text-red-400 text-[14px] block font-bold"
-                            />
-                          </div>
-                        </div>
-
-                        {/* button */}
-                        <button type="submit" className={"formSubmit"}>
-                          <div className="flex items-center justify-between gap-x-2">
-                            Continue para cadastrar o cliente
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                          </div>
-                        </button>
-                      </div>
-                    )}
-
-                    {formCurrentStep === FORM_STEPS.STEP_3 && (
-                      <div>
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                          {/* Store Name */}
-                          <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-                            <label htmlFor="store_name" className="h-6 text-sm text-gray-600">
-                              Nome da loja
-                            </label>
-                            <Field
-                              id="store_name"
-                              name="store_name"
-                              type="text"
-                              placeholder="John Snow"
-                              className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
-                            />
-                            <ErrorMessage
-                              name={"name"}
-                              component="span"
-                              className="text-red-400 text-[14px] block font-bold"
-                            />
-                          </div>
-
-                          {/* Credit Limit */}
-                          <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-                            <label htmlFor="credit_limit" className="h-6 text-sm text-gray-600">
-                              Limite de Crédito
-                            </label>
-                            <Field
-                              id="credit_limit"
-                              name="credit_limit"
-                              type="text"
-                              placeholder="1000.00 R$"
-                              className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
-                            />
-                            <ErrorMessage
-                              name={"name"}
-                              component="span"
-                              className="text-red-400 text-[14px] block font-bold"
-                            />
-                          </div>
-
-                          {/* Deliver */}
-                          <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative ">
-                            <label htmlFor="deliver" className="h-6 text-sm text-gray-600">
-                              Entrega/Retirada
-                            </label>
-                            <Field
-                              as="select"
-                              id="deliver"
-                              name="deliver"
-                              className="border border-gray-300 rounded-full p-2 focus:outline-none focus:border-blue-500"
-                            >
-                              <option value={0}>Retirar</option>
-                              <option value={1}>Entregar</option>
-                            </Field>
-                            <ErrorMessage
-                              name={"deliver"}
-                              component="span"
-                              className="text-red-400 text-[14px] block font-bold"
-                            />
-                          </div>
-
-                          <div className="flex w-full lg:w-full flex-col gap-y-2 mb-3 relative">
-                            {/* Pontalti */}
-                            <label htmlFor="pontalti" className="h-6 text-sm text-gray-600">
-                              <Field type="checkbox" name="pontalti" className="mr-2" />
-                              Marca Pontalti?
-                            </label>
-
-                            {/* Secondary Line */}
-                            <label htmlFor="secondary_line" className="h-6 text-sm text-gray-600">
-                              <Field type="checkbox" name="secondary_line" className="mr-2" />
-                              Compra Segunda Linha?
-                            </label>
-                          </div>
-                        </div>
-
-                        <div className="flex lg:flex-row lg:justify-end flex-col gap-x-5 pt-11">
-                          {/* button */}
-                          <button
-                            type="submit"
-                            id="saveButton"
-                            className="inline-flex justify-center gap-1 items-center cursor-pointer text-white bg-sky-400 border border-blue-300 hover:bg-cyan-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm text-center mr-2 mb-2 dark:bg-blue-600 dark:text-white dark:border-blue-600 dark:hover:bg-blue-700 dark:hover:border-blue-700 dark:focus:ring-blue-800 px-5 h-10"
-                          >
-                            Cadastrar
-                          </button>
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="flex lg:flex-row lg:justify-end flex-col gap-x-5">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setShowAddCustomerModal(false);
-                          setFormCurrentStep(FORM_STEPS.STEP_1);
-                        }}
-                        className="absolute top-3 right-2.5 text-red-400 bg-transparent hover:bg-red-200 hover:text-red-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-red-800 dark:hover:text-white"
-                      >
-                        <svg
-                          className="w-5 h-5"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                            clipRule="evenodd"
-                          ></path>
-                        </svg>
-                      </button>
-                    </div>
-                  </Form>
-                </div>
-              </div>
-            )}
-          </Formik>
-        </Modal>
-        <Alert
-          {...alert}
-          onClose={() => {
-            setAlert({ kind: "", message: "" });
-          }}
-        />
-
-        <table className="table">
-          <thead>
-            <tr>
-              <th className="tableh">Id</th>
-              <th className="tableh">Nome</th>
-              <th className="tableh">CPF/CNPJ</th>
-              <th className="tableh">Whatsapp</th>
-              <th className="tableh">Telefone Fixo</th>
-              <th className="tableh">Nome da Loja</th>
-              <th className="tableh">Outros</th>
-            </tr>
-          </thead>
-          <tbody>
-            {customers.map((customer: Customer) => (
-              <tr key={customer.id}>
-                <td className="tabled">{customer.id}</td>
-                <td className="tabled">{customer.name}</td>
-                <td className="tabled">{customer.document}</td>
-                <td className="tabled">{customer.cel_number}</td>
-                <td className="tabled">{customer.phone}</td>
-                <td className="tabled">{customer.store_name}</td>
-                <td className="tabled">
-                  <Button onClick={() => router.push(`/register/customers/${customer.id}`)}>Ver Mais</Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <Spinner visible={processing} message="Processando" />
+    <div className="page-layout">
+      <nav className="aside-layout">
+        <Aside />
+      </nav>
+      <main className="main-layout">
+        <DynamicTable columns={columns} data={data} filterFields={arrayFilterFieldsByAcessorKey} />
+      </main>
     </div>
   );
 }

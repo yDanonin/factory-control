@@ -1,93 +1,48 @@
 "use client";
-import React, { useState } from "react";
-import "./Aside.css";
-import Link from "next/link";
+import React from "react";
 
+import "./Aside.css";
 import {
-  PencilSquareIcon,
-  UserIcon,
-  InboxIcon,
-  PresentationChartLineIcon,
-  Cog6ToothIcon,
-  CurrencyDollarIcon,
-  Bars3Icon,
-  Bars3BottomLeftIcon,
-  UserCircleIcon,
-  ArrowLeftEndOnRectangleIcon
-} from "@heroicons/react/24/solid";
-import Image from "next/image";
+  menuItensCadastro,
+  menuItensControle,
+  menuItensFuncionarios,
+  menuItensGastos,
+  menuItensProducao,
+  menuItensRecebimento
+} from "./MenuItens";
+import Divider from "../Divider/Divider";
+import MenuHoverButton from "@/components/MenuHoverButton";
+import { ModeToggle } from "../ModeToggle/ModeToggle";
+import LogoPontalti from "../LogoPontalti/LogoPontalti";
+import { DollarSign, FileCog, Inbox, Package2, SquarePlus, Users } from "lucide-react";
 
 const Aside: React.FC = () => {
-  const [menuSize, setMenuSize] = useState(false);
-
   return (
-    <div className={`aside ${menuSize ? "w-[4rem]" : "w-2/12"}`}>
-      <div className="aside-head">
-        {menuSize ? (
-          <>
-            <Link href="/">
-              <Image src="/white-logo.svg" alt="White Logo" width={40} height={40} />
-            </Link>
-            <Bars3Icon className="bar-icon" onClick={() => setMenuSize(!menuSize)} />
-          </>
-        ) : (
-          <>
-            <Link href="/">
-              <header className="title">PONTALTI</header>
-            </Link>
-            <Bars3BottomLeftIcon className="bar-icon" onClick={() => setMenuSize(!menuSize)} />
-          </>
-        )}
+    <div className="h-screen pt-5 flex flex-col content-center items-center border-r border-zinc-800">
+      <LogoPontalti />
+      <Divider />
+      <p className="text-xs font-bold text-zinc-800 mr-auto ml-6 my-2 sm:max-2xl:mx-auto">MENU</p>
+      <div className="flex flex-wrap justify-center items-center">
+        <MenuHoverButton name={"Cadastro"} menuItens={menuItensCadastro}>
+          <SquarePlus />
+        </MenuHoverButton>
+        <MenuHoverButton name={"Recebimento"} menuItens={menuItensRecebimento}>
+          <Inbox />
+        </MenuHoverButton>
+        <MenuHoverButton name={"Funcionarios"} menuItens={menuItensFuncionarios}>
+          <Users />
+        </MenuHoverButton>
+        <MenuHoverButton name={"Controle"} menuItens={menuItensControle}>
+          <FileCog />
+        </MenuHoverButton>
+        <MenuHoverButton name={"Producão"} menuItens={menuItensProducao}>
+          <Package2 />
+        </MenuHoverButton>
+        <MenuHoverButton name={"Gastos"} menuItens={menuItensGastos}>
+          <DollarSign />
+        </MenuHoverButton>
       </div>
-
-      {/* TODO: Remove this "Links" because this primaries buttons will be just a drop down */}
-      <div className="nav">
-        <Link href="customers">
-          <div className="item">
-            <PencilSquareIcon className="icons" />
-            <span hidden={menuSize}>Cadastro</span>
-          </div>
-        </Link>
-        <Link href="employees">
-          <div className="item">
-            <UserIcon className="icons" />
-            <span hidden={menuSize}>Funcionários</span>
-          </div>
-        </Link>
-        <Link href="production">
-          <div className="item">
-            <PresentationChartLineIcon className="icons" />
-            <span hidden={menuSize}>Produção</span>
-          </div>
-        </Link>
-        <Link href="receipts">
-          <div className="item">
-            <InboxIcon className="icons" />
-            <span hidden={menuSize}>Recebimentos</span>
-          </div>
-        </Link>
-        <Link href="control">
-          <div className="item">
-            <Cog6ToothIcon className="icons" />
-            <span hidden={menuSize}>Controle</span>
-          </div>
-        </Link>
-        <Link href="spending">
-          <div className="item">
-            <CurrencyDollarIcon className="icons" />
-            <span hidden={menuSize}>Gastos</span>
-          </div>
-        </Link>
-      </div>
-      <div className="aside-feet">
-        <Link href="/profile">
-          <UserCircleIcon className="icons" />
-          <span hidden={menuSize}>Eduardo</span>
-        </Link>
-        <Link href="/login">
-          <ArrowLeftEndOnRectangleIcon className="icons" />
-        </Link>
-      </div>
+      <ModeToggle className="absolute bottom-0 right-0 -translate-y-1/2 -translate-x-1/2"></ModeToggle>
     </div>
   );
 };

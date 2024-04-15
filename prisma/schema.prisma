@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://factory-user:password@localhost:5432/factorydb"
+}
+
+// TODO: Review address problem, if we will just create how a column or create a table with this data separing
+// the information and just throw there or apply 3FN that we will need to create more tables like a state table?
+
+// TODO: Review how access system will be.
+model users {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+  name     String
+}
+
+//TODO: to use "viacep" api to search for a new address if we haven't it in our db
+// viacep: https://viacep.com.br
+model adresses {
+  id             Int    @id @default(autoincrement())
+  zip_code       String
+  neighborhood   String
+  public_place   String
+  city           String
+  state          String
+  complement     String
+  address_number Int
+
+  customers customers[]
+}
+
+model customers {
+  id             Int     @id @default(autoincrement())
+  status         Int
+  addressId      Int
+  credit_limit   Float
+  name           String
+  phone          String
+  cel_number     String
+  email          String  @unique
+  store_name     String
+  // review this attr bellow, because don't make sense deliver to be a customer's attr.
+  // collect/deliveries, should be a request's attr.
+  deliver        Boolean
+  pontalti       Boolean
+  secondary_line Boolean
+  cpf            String?  @unique
+  cnpj           String?  @unique
+
+  address adresses @relation(fields: [addressId], references: [id])
+}
+
+// TODO: employee needs address.
+// TODO: Some doubts in how classification will works and confirm if phone and cel_number will be required.
+model employees {
+  id             Int       @id @default(autoincrement())
+  name           String
+  phone          String
+  cel_number     String
+  cpf            String    @unique
+  classification Int
+  admission      DateTime
+  salary         Float?
+  dismissal_date DateTime?
+}
+
+// TODO: employee needs address.
+// TODO: Study better the "Faturamento na compra" implementation
+// TODO: Study better vendors business rules
+model vendors {
+  id               Int     @id @default(autoincrement())
+  name             String
+  store_name       String
+  cnpj             String  @unique
+  status           Int
+  phone            String
+  cel_number       String
+  deliver          Boolean
+  volume_purchases Float
+  purchases        Float
+  invoicing        Float
+}
+
+// TODO: Study better vendors business rules
+model products {
+  id           Int    @id @default(autoincrement())
+  status       Int
+  volume_sales Float
+  sales        Float
+  invoicing    Float
+  name         String
+  model        String
+  size         String
+  character    String
+  moldes       Int
+  equivalency  Float
+}
+
+// TODO: Study better vendors business rules
+model machines {
+  id              Int    @id @default(autoincrement())
+  model           String
+  machine_number  Int
+  status          Int
+  location        String
+  location_status Int
+}
+
+// TODO: Study better vendors business rules
+model procedures {
+  id           Int    @id @default(autoincrement())
+  process_name String
+  status       Int
+  workers      Int
+}

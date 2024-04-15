@@ -10,9 +10,9 @@ import { RegisterCustomer } from "@/types/form.types";
 import { Customer } from "@/types/customer.types";
 import Alert from "@/components/Alert";
 import Header from "@/components/Aside";
-import Button from "@/components/Button";
 import Modal from "@/components/Modal";
 import Spinner from "@/components/Spinner";
+import { Button } from "@/components/ui/button";
 
 enum FORM_STEPS {
   STEP_1,
@@ -32,7 +32,6 @@ export default function Page({ params }: { params: { id: string } }) {
     const fetchCustomers = async () => {
       const response = await fetch(`/api/customers/${params.id}`);
       const data = await response.json();
-      console.log(data);
       setCustomer(data);
     };
 
@@ -106,7 +105,8 @@ export default function Page({ params }: { params: { id: string } }) {
           </div>
         </div>
       </div>
-      <Modal visible={showEditCustomerModal} closeModal={() => setShowEditCustomerModal(false)}>
+      {/* <Modal visible={showEditCustomerModal} closeModal={() => setShowEditCustomerModal(false)}></Modal> */}
+      <>
         <Formik
           initialValues={initialValues}
           validationSchema={choosingTheValidationScheme()}
@@ -341,8 +341,8 @@ export default function Page({ params }: { params: { id: string } }) {
                                   setFieldValue("state", uf);
                                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                 } catch (error: any) {
-                                  console.log("erro");
-                                  console.log(error.message);
+                                  console.error("erro");
+                                  console.error(error.message);
                                   showError("Não foi possíve preencher os campos de endereço");
                                 }
                               }
@@ -609,7 +609,7 @@ export default function Page({ params }: { params: { id: string } }) {
             </div>
           )}
         </Formik>
-      </Modal>
+      </>
       <Alert
         {...alert}
         onClose={() => {

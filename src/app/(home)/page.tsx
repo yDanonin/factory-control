@@ -1,56 +1,43 @@
 import Aside from "@/components/Aside";
-import Background from "@/components/Background";
 import DynamicTable from "@/components/DynamicTable";
 
 const columns = [
-  { header: "Nome", accessor: "name" },
-  { header: "Idade", accessor: "age" },
-  { header: "Cidade", accessor: "city" },
-  { header: "Nome", accessor: "name" },
-  { header: "Idade", accessor: "age" },
-  { header: "Cidade", accessor: "city" },
-  { header: "Nome", accessor: "name" },
-  { header: "Idade", accessor: "age" },
-  { header: "Cidade", accessor: "city" },
-  { header: "Nome", accessor: "name" },
-  { header: "Idade", accessor: "age" },
-  { header: "Cidade", accessor: "city" },
-  { header: "Nome", accessor: "name" },
-  { header: "Idade", accessor: "age" },
-  { header: "Cidade", accessor: "city" },
-  { header: "Nome", accessor: "name" },
-  { header: "Idade", accessor: "age" },
-  { header: "Cidade", accessor: "city" }
+  { header: "Nome", accessorKey: "nome" },
+  { header: "Idade", accessorKey: "idade" },
+  { header: "Cidade", accessorKey: "cidade" }
 ];
 
 const data = [
-  { name: "John", age: 30, city: "New York" },
-  { name: "Jane", age: 25, city: "San Francisco" },
-  { name: "John", age: 30, city: "New York" },
-  { name: "Jane", age: 25, city: "San Francisco" },
-  { name: "John", age: 30, city: "New York" },
-  { name: "Jane", age: 25, city: "San Francisco" },
-  { name: "John", age: 30, city: "New York" },
-  { name: "Jane", age: 25, city: "San Francisco" },
-  { name: "John", age: 30, city: "New York" },
-  { name: "Jane", age: 25, city: "San Francisco" },
-  { name: "John", age: 30, city: "New York" },
-  { name: "Jane", age: 25, city: "San Francisco" },
-  { name: "John", age: 30, city: "New York" },
-  { name: "Jane", age: 25, city: "San Francisco" },
-  { name: "John", age: 30, city: "New York" },
-  { name: "Jane", age: 25, city: "San Francisco" },
-  { name: "John", age: 30, city: "New York" },
-  { name: "Jane", age: 25, city: "San Francisco" }
+  { nome: "John", idade: 30, cidade: "New York" },
+  { nome: "Batman", idade: 25, cidade: "San Francisco" },
+  { nome: "Lucas", idade: 30, cidade: "New York" },
+  { nome: "Batman", idade: 25, cidade: "San Francisco" },
+  { nome: "Lucas", idade: 30, cidade: "New York" },
+  { nome: "Robin", idade: 25, cidade: "San Francisco" },
+  { nome: "Lucas", idade: 30, cidade: "New York" },
+  { nome: "Robin", idade: 25, cidade: "San Francisco" },
+  { nome: "John", idade: 30, cidade: "New York" },
+  { nome: "Robin", idade: 25, cidade: "San Francisco" },
+  { nome: "Coringa", idade: 30, cidade: "New York" },
+  { nome: "Jane", idade: 25, cidade: "San Francisco" },
+  { nome: "Coringa", idade: 30, cidade: "New York" },
+  { nome: "Jane", idade: 25, cidade: "San Francisco" },
+  { nome: "Coringa", idade: 30, cidade: "New York" },
+  { nome: "Jane", idade: 25, cidade: "San Francisco" },
+  { nome: "John", idade: 30, cidade: "New York" },
+  { nome: "Jane", idade: 25, cidade: "San Francisco" }
+  
 ];
 
 export default function Page() {
   return (
-    <div className="flex">
-      <Background />
-      <Aside />
-      <DynamicTable columns={columns} data={data} />
-      <h1>Olá</h1>
+    <div className="page-layout">
+      <nav className="aside-layout">
+        <Aside />
+      </nav>
+      <main className="main-layout">
+        <DynamicTable columns={columns} data={data} filterFields={[{ header: "Nome", accessorKey: "nome" }]} />
+      </main>
     </div>
   );
 }
