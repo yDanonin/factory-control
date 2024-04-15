@@ -9,6 +9,7 @@ import { Row } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Customer } from "@/types/customer.types";
+import { TableColumn } from "@/models/TableColumn";
 import DynamicTable from "@/components/DynamicTable";
 import {
   DropdownMenu,
@@ -18,9 +19,27 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import Modal from "@/components/Modal/Modal";
+import { AlertDialog } from '@radix-ui/react-alert-dialog';
 
 export default function Page() {
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
   const router = useRouter();
+
+  const editCustomer = async (customer: Customer) => {
+    try {
+      const test = await axios.patch(`/api/customer/${customer.id}`);
+      console.log(test);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const deleteCustomer = async (customer: Customer) => {
+    console.log(customer);
+  };
+
   const columns = [
     {
       header: "Nome",
@@ -75,14 +94,29 @@ export default function Page() {
               >
                 Ver detalhes do cliente
               </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
+                <AlertDialog>
+                  <Modal type="EDIT" nameModal="cliente" typeInformation={row.original} />
+                </AlertDialog>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
+                <AlertDialog>
+                  <Modal type="DELETE" nameModal="cliente" typeInformation={row.original} />
+                </AlertDialog>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );
       }
     }
   ];
-  const [data, setData] = useState([]);
-  const [error, setError] = useState(null);
+
+  const arrayFilterFieldsByAcessorKey = columns.reduce((acc: TableColumn[], column) => {
+    if (column.accessorKey && column.header) {
+      acc.push({ header: column.header, accessorKey: column.accessorKey });
+    }
+    return acc;
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,7 +124,7 @@ export default function Page() {
         const resp = await axios.get("/api/customers");
         setData(resp.data.data);
       } catch (err) {
-        setError(error);
+        console.error(err);
       }
     };
 
@@ -103,7 +137,7 @@ export default function Page() {
         <Aside />
       </nav>
       <main className="main-layout">
-        <DynamicTable columns={columns} data={data} filterField="name" />
+        <DynamicTable columns={columns} data={data} filterFields={arrayFilterFieldsByAcessorKey} />
       </main>
     </div>
   );

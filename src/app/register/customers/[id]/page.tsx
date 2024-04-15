@@ -105,7 +105,8 @@ export default function Page({ params }: { params: { id: string } }) {
           </div>
         </div>
       </div>
-      <Modal visible={showEditCustomerModal} closeModal={() => setShowEditCustomerModal(false)}>
+      {/* <Modal visible={showEditCustomerModal} closeModal={() => setShowEditCustomerModal(false)}></Modal> */}
+      <>
         <Formik
           initialValues={initialValues}
           validationSchema={choosingTheValidationScheme()}
@@ -608,7 +609,7 @@ export default function Page({ params }: { params: { id: string } }) {
             </div>
           )}
         </Formik>
-      </Modal>
+      </>
       <Alert
         {...alert}
         onClose={() => {

@@ -26,6 +26,7 @@ const data = [
   { nome: "Jane", idade: 25, cidade: "San Francisco" },
   { nome: "John", idade: 30, cidade: "New York" },
   { nome: "Jane", idade: 25, cidade: "San Francisco" }
+  
 ];
 
 export default function Page() {
@@ -35,7 +36,7 @@ export default function Page() {
         <Aside />
       </nav>
       <main className="main-layout">
-        <DynamicTable columns={columns} data={data} filterField="nome" />
+        <DynamicTable columns={columns} data={data} filterFields={[{ header: "Nome", accessorKey: "nome" }]} />
       </main>
     </div>
   );
