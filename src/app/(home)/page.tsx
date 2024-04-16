@@ -26,7 +26,6 @@ const data = [
   { nome: "Jane", idade: 25, cidade: "San Francisco" },
   { nome: "John", idade: 30, cidade: "New York" },
   { nome: "Jane", idade: 25, cidade: "San Francisco" }
-  
 ];
 
 export default function Page() {
