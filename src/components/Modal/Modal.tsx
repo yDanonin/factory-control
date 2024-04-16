@@ -1,3 +1,10 @@
+import React, { useState } from "react";
+
+import axios from "axios";
+import PropTypes from "prop-types";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Button } from "../ui/button";
 import {
   AlertDialogAction,
   AlertDialogCancel,
@@ -8,26 +15,34 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
-import { Button } from "../ui/button";
-import PropTypes from "prop-types";
-import { Input } from "../ui/input";
-import { useState } from "react";
+import { Customer } from "@/types/customer.types";
+import { Employee } from "@/types/employee.types";
 
 type TypeModal = "CREATE" | "EDIT" | "DELETE";
+
 interface ModalProps {
   type: TypeModal;
   nameModal: string;
-  typeInformation?: unknown;
+  typeInformation?: Partial<Customer> | Partial<Employee>;
+  idTypeInformation?: number;
 }
 
-const Modal: React.FC<ModalProps> = ({ type, nameModal, typeInformation }) => {
-  let designModalByType = null;
+const Modal: React.FC<ModalProps> = ({ type, nameModal, typeInformation, idTypeInformation }) => {
   const [editedValues, setEditedValues] = useState<Record<string, string>>({});
-  console.log(typeInformation);
+
   const handleInputChange = (key: string, value: string) => {
     setEditedValues({ ...editedValues, [key]: value });
-    console.log(editedValues);
   };
+  const handleContinueClick = async (editedValues: Record<string, string>) => {
+    try {
+      await axios.patch(`/api/customers/${idTypeInformation}`, editedValues);
+    } catch (err) {
+      console.error(err);
+    }
+    console.log("Valores editados:", editedValues);
+  };
+
+  let designModalByType = null;
 
   if (type === "CREATE") {
     designModalByType = (
@@ -54,20 +69,22 @@ const Modal: React.FC<ModalProps> = ({ type, nameModal, typeInformation }) => {
     designModalByType = (
       <>
         <AlertDialogTrigger>Editar {nameModal}</AlertDialogTrigger>
-        <AlertDialogContent>
+        <AlertDialogContent className="min-w-1/2">
           <AlertDialogHeader>
-            <AlertDialogTitle>Editando {nameModal}?</AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogTitle>Editando {nameModal}</AlertDialogTitle>
+            <AlertDialogDescription className="w-full grid grid-cols-4 gap-4">
               {typeof typeInformation === "object" &&
                 typeInformation &&
                 Object.entries(typeInformation).map(([key, value]) => {
                   if (key !== "id") {
                     return (
-                      <Input
-                        key={key}
-                        value={editedValues[key] || value}
-                        onChange={(newValue) => handleInputChange(key, newValue)}
-                      />
+                      <div key={key}>
+                        <Label htmlFor="picture">{key}</Label>
+                        <Input
+                          value={editedValues[key] || value}
+                          onChange={(e) => handleInputChange(key, e.target.value)}
+                        />
+                      </div>
                     );
                   }
                   return null;
@@ -76,7 +93,7 @@ const Modal: React.FC<ModalProps> = ({ type, nameModal, typeInformation }) => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction>Continuar</AlertDialogAction>
+            <AlertDialogAction onClick={() => handleContinueClick(editedValues)}>Continuar</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </>
@@ -89,7 +106,7 @@ const Modal: React.FC<ModalProps> = ({ type, nameModal, typeInformation }) => {
           <AlertDialogHeader>
             <AlertDialogTitle>Tem certeza que deseja deletar este {nameModal}</AlertDialogTitle>
             <AlertDialogDescription>
-              Esta acão não poderá ser desfeita. Tenha certeza que você está deletando o {nameModal} correto.
+              Esta ação não poderá ser desfeita. Tenha certeza que você está deletando o {nameModal} correto.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -100,13 +117,15 @@ const Modal: React.FC<ModalProps> = ({ type, nameModal, typeInformation }) => {
       </>
     );
   }
+
   return <>{designModalByType}</>;
 };
 
 Modal.propTypes = {
   type: PropTypes.oneOf<TypeModal>(["CREATE", "EDIT", "DELETE"]).isRequired,
   nameModal: PropTypes.string.isRequired,
-  typeInformation: PropTypes.any
+  typeInformation: PropTypes.any,
+  idTypeInformation: PropTypes.number
 };
 
 export default Modal;
