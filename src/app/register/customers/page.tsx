@@ -20,25 +20,12 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import Modal from "@/components/Modal/Modal";
-import { AlertDialog } from '@radix-ui/react-alert-dialog';
+import { AlertDialog } from "@radix-ui/react-alert-dialog";
 
 export default function Page() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const router = useRouter();
-
-  const editCustomer = async (customer: Customer) => {
-    try {
-      const test = await axios.patch(`/api/customer/${customer.id}`);
-      console.log(test);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const deleteCustomer = async (customer: Customer) => {
-    console.log(customer);
-  };
 
   const columns = [
     {
@@ -96,12 +83,22 @@ export default function Page() {
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
                 <AlertDialog>
-                  <Modal type="EDIT" nameModal="cliente" typeInformation={row.original} />
+                  <Modal
+                    type="EDIT"
+                    nameModal="cliente"
+                    typeInformation={row.original}
+                    idTypeInformation={row.original.id}
+                  />
                 </AlertDialog>
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
                 <AlertDialog>
-                  <Modal type="DELETE" nameModal="cliente" typeInformation={row.original} />
+                  <Modal
+                    type="DELETE"
+                    nameModal="cliente"
+                    typeInformation={row.original}
+                    idTypeInformation={row.original.id}
+                  />
                 </AlertDialog>
               </DropdownMenuItem>
             </DropdownMenuContent>
