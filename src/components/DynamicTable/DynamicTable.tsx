@@ -26,16 +26,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Modal from "@/components/Modal/Modal";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-
 import { AlertDialog } from "@/components/ui/alert-dialog";
+import { Customer } from "@/types/customer.types";
+import { Employee } from "@/types/employee.types";
 
 interface TableProps {
   columns: TableColumn[];
-  data: never[];
+  data: Partial<Customer>[] | Partial<Employee>[];
   filterFields: TableColumn[];
+  typeRegister: string;
 }
 
-const DynamicTable: React.FC<TableProps> = ({ columns, data, filterFields = [] }) => {
+const DynamicTable: React.FC<TableProps> = ({ columns, data, filterFields = [], typeRegister }) => {
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -66,8 +68,10 @@ const DynamicTable: React.FC<TableProps> = ({ columns, data, filterFields = [] }
         {filterFields && (
           <div className="w-full grid grid-cols-4 gap-4">
             {filterFields.map((filterField, index) => (
-              <div key={index} className="">
+              <div key={index}>
                 <Input
+                  type="text"
+                  name={filterField.accessorKey}
                   placeholder={"Filtrar " + filterField.header?.toLocaleLowerCase() + "..."}
                   value={(table.getColumn(filterField.accessorKey || "")?.getFilterValue() as string) ?? ""}
                   onChange={(event) =>
@@ -81,7 +85,7 @@ const DynamicTable: React.FC<TableProps> = ({ columns, data, filterFields = [] }
         )}
         <div className="w-1/2 flex justify-between">
           <AlertDialog>
-            <Modal type="CREATE" nameModal="usuário" />
+            <Modal typeModal="CREATE" nameModal={typeRegister} typeRegister={typeRegister} />
           </AlertDialog>
         </div>
         <DropdownMenu>

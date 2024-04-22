@@ -20,11 +20,11 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import Modal from "@/components/Modal/Modal";
-import { AlertDialog } from "@radix-ui/react-alert-dialog";
+import { AlertDialog } from "@/components/ui/alert-dialog";
 
 export default function Page() {
-  const [data, setData] = useState([]);
-  const [error, setError] = useState(null);
+  const [data, setData] = useState<Customer[]>([]);
+  // const [error, setError] = useState(null);
   const router = useRouter();
 
   const columns = [
@@ -57,8 +57,12 @@ export default function Page() {
       accessorKey: "cpf"
     },
     {
-      header: "Entrega/Retirada",
-      accessorKey: "deliver"
+      header: "Limite de crédito",
+      accessorKey: "credit_limit"
+    },
+    {
+      header: "Dívidas",
+      accessorKey: "debts"
     },
     {
       id: "actions",
@@ -84,20 +88,22 @@ export default function Page() {
               <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
                 <AlertDialog>
                   <Modal
-                    type="EDIT"
+                    typeModal="EDIT"
+                    typeRegister="Customer"
                     nameModal="cliente"
-                    typeInformation={row.original}
-                    idTypeInformation={row.original.id}
+                    rowData={row.original}
+                    idRowData={row.original.id}
                   />
                 </AlertDialog>
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
                 <AlertDialog>
                   <Modal
-                    type="DELETE"
+                    typeModal="DELETE"
+                    typeRegister="Customer"
                     nameModal="cliente"
-                    typeInformation={row.original}
-                    idTypeInformation={row.original.id}
+                    rowData={row.original}
+                    idRowData={row.original.id}
                   />
                 </AlertDialog>
               </DropdownMenuItem>
@@ -134,7 +140,12 @@ export default function Page() {
         <Aside />
       </nav>
       <main className="main-layout">
-        <DynamicTable columns={columns} data={data} filterFields={arrayFilterFieldsByAcessorKey} />
+        <DynamicTable
+          columns={columns}
+          data={data}
+          filterFields={arrayFilterFieldsByAcessorKey}
+          typeRegister="Customer"
+        />
       </main>
     </div>
   );
