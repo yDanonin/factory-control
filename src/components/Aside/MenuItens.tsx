@@ -7,27 +7,27 @@ export const menuItensCadastro = [
   {
     id: 1,
     item: "Funcionários",
-    route: "/blabla"
+    route: "/register/employees"
   },
   {
     id: 2,
     item: "Fornecedores",
-    route: "/blabla"
+    route: "/register/vendors"
   },
   {
     id: 3,
     item: "Produtos",
-    route: "/blabla"
+    route: "/register/products"
   },
   {
     id: 4,
     item: "Máquinas",
-    route: "/blabla"
+    route: "/register/machines"
   },
   {
     id: 5,
     item: "Processo",
-    route: "/blabla"
+    route: "/register/procedures"
   }
 ];
 

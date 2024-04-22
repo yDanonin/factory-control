@@ -13,6 +13,7 @@ export type Customer = {
   pontalti: boolean;
   secondary_line: boolean;
   credit_limit: number;
+  debts: number;
   address: Address;
   cpf: string;
   cnpj: string;
