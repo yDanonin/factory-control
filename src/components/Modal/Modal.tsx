@@ -1,10 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Customer } from "@/types/customer.types";
-import { Employee } from "@/types/employee.types";
 import { Edit } from "./EDIT/Edit";
 import { Create } from "./CREATE/Create";
 import { Delete } from "./DELETE/Delete";
+import { Vendor } from "@/types/vendor.types";
+import { Machine } from "@/types/machine.types";
+import { Product } from "@/types/product.types";
+import { Customer } from "@/types/customer.types";
+import { Employee } from "@/types/employee.types";
+import { Procedure } from "@/types/procedure.types";
 
 type TypeModal = "CREATE" | "EDIT" | "DELETE";
 
@@ -12,7 +16,13 @@ interface ModalProps {
   typeModal: TypeModal;
   nameModal: string;
   typeRegister: string;
-  rowData?: Partial<Customer> | Partial<Employee>;
+  rowData?:
+    | Partial<Customer>
+    | Partial<Employee>
+    | Partial<Machine>
+    | Partial<Procedure>
+    | Partial<Product>
+    | Partial<Vendor>;
   idRowData?: number;
 }
 
@@ -34,7 +44,7 @@ const Modal: React.FC<ModalProps> = ({ typeModal, nameModal, typeRegister, rowDa
   } else if (typeModal === "DELETE") {
     designModalByType = (
       <>
-        <Delete idRowData={idRowData} rowData={rowData} nameModal={nameModal} />
+        <Delete idRowData={idRowData} nameModal={nameModal} typeRegister={typeRegister} />
       </>
     );
   }

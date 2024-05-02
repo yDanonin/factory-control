@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { Status } from "@/types/common.types";
 import { Classification } from "@/types/employee.types";
 
 export const formCustomerSchema = z
@@ -25,7 +26,7 @@ export const formCustomerSchema = z
     deliver: z.string(),
     pontalti: z.string(),
     secondary_line: z.string(),
-    status: z.enum(["suspenso", "operacional"]),
+    status: z.nativeEnum(Status),
     address: z.object({
       zip_code: z.string().min(2, {
         message: "Informe o CEP."
@@ -67,4 +68,44 @@ export const formEmployeeSchema = z.object({
   salary: z.number(),
   admission: z.date(),
   dismissal_date: z.date()
+});
+
+export const formMachineSchema = z.object({
+  model: z.string(),
+  machine_number: z.number(),
+  location: z.string(),
+  status: z.nativeEnum(Status),
+  location_status: z.nativeEnum(Status)
+});
+
+export const formProcedureSchema = z.object({
+  process_name: z.string(),
+  workers: z.number(),
+  status: z.nativeEnum(Status)
+});
+
+export const formProductSchema = z.object({
+  name: z.string(),
+  model: z.string(),
+  size: z.string(),
+  sales: z.number(),
+  volume_sales: z.number(),
+  invoicing: z.number(),
+  character: z.string(),
+  moldes: z.number(),
+  equivalency: z.number(),
+  status: z.nativeEnum(Status)
+});
+
+export const formVendorSchema = z.object({
+  name: z.string(),
+  store_name: z.string(),
+  cnpj: z.string(),
+  cel_number: z.string(),
+  phone: z.string(),
+  deliver: z.boolean(),
+  volume_purchases: z.number(),
+  purchases: z.number(),
+  invoicing: z.number(),
+  status: z.nativeEnum(Status)
 });

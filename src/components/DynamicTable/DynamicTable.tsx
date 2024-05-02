@@ -29,10 +29,20 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { AlertDialog } from "@/components/ui/alert-dialog";
 import { Customer } from "@/types/customer.types";
 import { Employee } from "@/types/employee.types";
+import { Machine } from "@/types/machine.types";
+import { Procedure } from "@/types/procedure.types";
+import { Product } from "@/types/product.types";
+import { Vendor } from "@/types/vendor.types";
 
 interface TableProps {
   columns: TableColumn[];
-  data: Partial<Customer>[] | Partial<Employee>[];
+  data:
+    | Partial<Customer>[]
+    | Partial<Employee>[]
+    | Partial<Machine>[]
+    | Partial<Procedure>[]
+    | Partial<Product>[]
+    | Partial<Vendor>[];
   filterFields: TableColumn[];
   typeRegister: string;
 }

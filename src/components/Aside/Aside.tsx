@@ -21,25 +21,25 @@ const Aside: React.FC = () => {
     <div className="h-screen pt-5 flex flex-col content-center items-center border-r border-zinc-800">
       <LogoPontalti />
       <Divider />
-      <p className="text-xs font-bold text-zinc-800 mr-auto ml-6 my-2 sm:max-2xl:mx-auto">MENU</p>
+      <p className="text-xs font-bold text-[#64748b] mr-auto ml-6 my-2 sm:max-2xl:mx-auto">MENU</p>
       <div className="flex flex-wrap justify-center items-center">
         <MenuHoverButton name={"Cadastro"} menuItens={menuItensCadastro}>
-          <SquarePlus />
+          <SquarePlus color="#64748b" />
         </MenuHoverButton>
         <MenuHoverButton name={"Recebimento"} menuItens={menuItensRecebimento}>
-          <Inbox />
+          <Inbox color="#64748b" />
         </MenuHoverButton>
         <MenuHoverButton name={"Funcionarios"} menuItens={menuItensFuncionarios}>
-          <Users />
+          <Users color="#64748b" />
         </MenuHoverButton>
         <MenuHoverButton name={"Controle"} menuItens={menuItensControle}>
-          <FileCog />
+          <FileCog color="#64748b" />
         </MenuHoverButton>
         <MenuHoverButton name={"Producão"} menuItens={menuItensProducao}>
-          <Package2 />
+          <Package2 color="#64748b" />
         </MenuHoverButton>
         <MenuHoverButton name={"Gastos"} menuItens={menuItensGastos}>
-          <DollarSign />
+          <DollarSign color="#64748b" />
         </MenuHoverButton>
       </div>
       <ModeToggle className="absolute bottom-0 right-0 -translate-y-1/2 -translate-x-1/2"></ModeToggle>

@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import LogoPontaltiPng from "../../assets/images/logo_pontalti.png";
+import LogoPontaltiPng from "../../assets/images/logo_pontalti_black.png";
 
 const LogoPontalti = () => {
   return (
