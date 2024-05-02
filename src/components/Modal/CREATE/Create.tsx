@@ -7,17 +7,37 @@ import { format } from "date-fns";
 import { useForm } from "react-hook-form";
 import { CalendarIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Status } from "@/types/common.types";
+import { Vendor } from "@/types/vendor.types";
 import { Button } from "@/components/ui/button";
+import { Product } from "@/types/product.types";
+import { Machine } from "@/types/machine.types";
 import { Customer } from "@/types/customer.types";
-import { Employee } from "@/types/employee.types";
+import { Procedure } from "@/types/procedure.types";
 import { Calendar } from "@/components/ui/calendar";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Classification, Employee } from "@/types/employee.types";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { formCustomerSchema, formEmployeeSchema } from "@/schemas/FormSchemas";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { convertOptionsToBoolean, getBooleanLabel } from "@/services/booleanLabelService";
-import { customerDefaultValues, employeeDefaultValues } from "@/schemas/DefaultValuesForm";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { formatObject, getBooleanLabel } from "@/services/formatInputs";
+import {
+  formCustomerSchema,
+  formEmployeeSchema,
+  formMachineSchema,
+  formProcedureSchema,
+  formProductSchema,
+  formVendorSchema
+} from "@/schemas/FormSchemas";
+import {
+  customerDefaultValues,
+  employeeDefaultValues,
+  machineDefaultValues,
+  procedureDefaultValues,
+  productDefaultValues,
+  vendorDefaultValues
+} from "@/schemas/DefaultValuesForm";
 import {
   AlertDialogAction,
   AlertDialogCancel,
@@ -27,23 +47,64 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
+/* Explaining this component. First of all, formFields will create all the Inputs to forms
+   with the type that it received from objDefaultValues. But some things that have to be clear,
+   the order of some if's is important. So for example, the Date Input have to be before the object input.
+   The application have only two enums as attributes in the actual system. So one of the if's is modified
+   directly and not dynamically (the other one is in a rdio group).
+*/
 interface ModalEditProps {
   nameModal: string;
   typeRegister: string;
 }
 
+type EnumType<T> = {
+  [key: string]: T;
+};
+
+// Função para mapear enum para SelectItem
+function mapEnumToSelectItems<T extends string>(enumObj: EnumType<T>): JSX.Element[] {
+  return Object.keys(enumObj).map((key) => (
+    <SelectItem key={key} value={enumObj[key]}>
+      {String(enumObj[key])}
+    </SelectItem>
+  ));
+}
+
 export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) => {
-  let typeSchema: z.ZodType<Partial<Customer> | Partial<Employee>>;
+  let typeSchema:
+    | z.ZodType<Partial<Customer> | z.ZodType<Partial<Employee>> | z.ZodType<Partial<Machine>>>
+    | z.ZodType<Partial<Procedure>>
+    | z.ZodType<Partial<Product>>
+    | z.ZodType<Partial<Vendor>>;
+  let apiCallByType: string;
   let objDefaultValues;
 
   if (typeRegister === "Customer") {
     typeSchema = formCustomerSchema;
     objDefaultValues = customerDefaultValues;
+    apiCallByType = "customers";
   } else if (typeRegister === "Employee") {
     typeSchema = formEmployeeSchema;
     objDefaultValues = employeeDefaultValues;
+    apiCallByType = "employees";
+  } else if (typeRegister === "Machine") {
+    typeSchema = formMachineSchema;
+    objDefaultValues = machineDefaultValues;
+    apiCallByType = "machines";
+  } else if (typeRegister === "Procedure") {
+    typeSchema = formProcedureSchema;
+    objDefaultValues = procedureDefaultValues;
+    apiCallByType = "procedures";
+  } else if (typeRegister === "Product") {
+    typeSchema = formProductSchema;
+    objDefaultValues = productDefaultValues;
+    apiCallByType = "products";
+  } else if (typeRegister === "Vendor") {
+    typeSchema = formVendorSchema;
+    objDefaultValues = vendorDefaultValues;
+    apiCallByType = "vendors";
   } else {
     throw new Error(`Invalid typeRegister: ${typeRegister}`);
   }
@@ -52,18 +113,44 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
     resolver: zodResolver(typeSchema),
     defaultValues: objDefaultValues
   });
-
   async function onSubmit(data: z.infer<typeof typeSchema>) {
-    const optionsToBoolean = convertOptionsToBoolean(data);
+    // adicione no segundo argumento do formatObject os enums que devem ser tratados para serem enviados os seus indexes.
+    const formattedData = formatObject(data, [Classification, Status]);
     try {
-      await axios.post("/api/customers", optionsToBoolean);
+      await axios.post(`/api/${apiCallByType}`, formattedData);
     } catch (err) {
       console.error(err);
     }
   }
 
   const formFields = Object.entries(objDefaultValues).map(([fieldName, fieldValue]) => {
-    console.log(fieldName, fieldValue);
+    if (fieldName.includes("status") || fieldName.includes("classification")) {
+      return (
+        <FormField
+          key={fieldName}
+          control={form.control}
+          name={fieldName as keyof typeof objDefaultValues}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{fieldName}</FormLabel>
+              <Select onValueChange={field.onChange} value={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione uma classificação" />
+                  </SelectTrigger>
+                </FormControl>
+                {fieldName === "classification" ? (
+                  <SelectContent>{mapEnumToSelectItems(Classification)}</SelectContent>
+                ) : (
+                  <SelectContent>{mapEnumToSelectItems(Status)}</SelectContent>
+                )}
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      );
+    }
     if (typeof fieldValue === "boolean") {
       return (
         <FormField
@@ -77,19 +164,13 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
                 <RadioGroup onValueChange={field.onChange}>
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem
-                        value={getBooleanLabel(fieldName, 0) as unknown as string}
-                        id={`option-one-${fieldName}`}
-                      />
+                      <RadioGroupItem value="true" id={`option-one-${fieldName}`} />
                     </FormControl>
                     <FormLabel className="font-normal">{getBooleanLabel(fieldName, 0)}</FormLabel>
                   </FormItem>
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem
-                        value={getBooleanLabel(fieldName, 1) as unknown as string}
-                        id={`option-two-${fieldName}`}
-                      />
+                      <RadioGroupItem value="false" id={`option-two-${fieldName}`} />
                     </FormControl>
                     <FormLabel className="font-normal">{getBooleanLabel(fieldName, 1)}</FormLabel>
                   </FormItem>
@@ -100,30 +181,6 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
           )}
         />
       );
-      // corrigir isso depois
-    } else if (fieldValue.length > 0) {
-      <FormField
-        control={form.control}
-        name={fieldName as keyof typeof objDefaultValues}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Email</FormLabel>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
-              <FormControl>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a verified email to display" />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent>
-                <SelectItem value="m@example.com">m@example.com</SelectItem>
-                <SelectItem value="m@google.com">m@google.com</SelectItem>
-                <SelectItem value="m@support.com">m@support.com</SelectItem>
-              </SelectContent>
-            </Select>
-            <FormMessage />
-          </FormItem>
-        )}
-      />;
     } else if (fieldValue instanceof Date) {
       return (
         <FormField
@@ -131,8 +188,8 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
           control={form.control}
           name={`${fieldName}` as keyof typeof objDefaultValues}
           render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel htmlFor={`${fieldName}`}>Date of birth</FormLabel>
+            <FormItem className="flex flex-col justify-between">
+              <FormLabel htmlFor={`${fieldName}`}>{fieldName}</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -146,13 +203,7 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
-                    initialFocus
-                  />
+                  <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
                 </PopoverContent>
               </Popover>
               <FormMessage />

@@ -17,15 +17,17 @@ const MenuHoverButton: React.FC<any> = ({ name, menuItens, children }) => {
   const router = useRouter();
   // const is2Xl = useMediaQuery({ query: "(min-width: 1536px)" });
   return (
-    <div className="my-1 w-full ml-3">
+    <div className="my-1 w-full px-5">
       <DropdownMenu>
         <DropdownMenuTrigger className="mr-5" asChild>
-          <Button variant="ghost">
-            {children} {name}
-            <ChevronRight className="h-4 w-4 ml-1" />
-          </Button>
+          <div className="w-full flex flex-row justify-between items-center text-[#64748b] hover:bg-[#f1f5f9] rounded-lg cursor-pointer">
+            <Button variant="ghost" className="gap-3 hover:text-[#64748b] hover:bg-transparent">
+              {children} {name}
+            </Button>
+            <ChevronRight color="#64748b" className="h-4 w-4 mr-5" />
+          </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="ms-16 border-zinc-800" align="start" alignOffset={100} sideOffset={-30}>
+        <DropdownMenuContent className="ml-16" align="start" alignOffset={100} sideOffset={-30}>
           {menuItens.map((item: any) => (
             <DropdownMenuItem className="cursor-pointer" onClick={() => router.push(item.route)} key={item.id}>
               {item.item}

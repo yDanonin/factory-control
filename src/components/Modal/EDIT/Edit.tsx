@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { getBooleanLabel } from "@/services/booleanLabelService";
+import { getBooleanLabel } from "@/services/formatInputs";
 import { Customer } from "@/types/customer.types";
 import { Employee } from "@/types/employee.types";
 import axios from "axios";
