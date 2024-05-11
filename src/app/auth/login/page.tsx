@@ -1,32 +1,21 @@
 "use client";
-import React from "react";
+import React, { useTransition } from "react";
 import Image from "next/image";
 
 import { z } from "zod";
-// import axios from "axios";
-import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
+import { login } from "../../../../actions/login";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
-import LogoPontaltiPng from "../../../assets/images/logo_pontalti_default.png";
+import { Separator } from "@/components/ui/separator";
+import { signInFormSchema } from "@/schemas/FormSchemas";
+import LogoPontaltiPng from "@/assets/images/logo_pontalti_default.png";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
-const signInFormSchema = z.object({
-  email: z
-    .string()
-    .email()
-    .regex(/@\S*pontalti\S*/, { message: "Email inválido." })
-    .min(1, {
-      message: "Insira uma senha."
-    }),
-  password: z.string().min(1, {
-    message: "Insira uma senha."
-  })
-});
+const Login: React.FC = () => {
+  const [isPending, startTransition] = useTransition();
 
-const SignIn: React.FC = () => {
   const form = useForm<z.infer<typeof signInFormSchema>>({
     resolver: zodResolver(signInFormSchema),
     defaultValues: {
@@ -35,17 +24,10 @@ const SignIn: React.FC = () => {
     }
   });
 
-  async function onSubmit(values: z.infer<typeof signInFormSchema>) {
-    const res = await signIn("credentials", {
-      email: values.email,
-      password: values.password,
-      redirect: false
+  async function handleSubmit(values: z.infer<typeof signInFormSchema>) {
+    startTransition(() => {
+      login(values);
     });
-    console.log(res);
-
-    // if (res.error) {
-    //   // toast()... - implementar a notificação
-    // }
   }
 
   return (
@@ -56,7 +38,7 @@ const SignIn: React.FC = () => {
         </div>
         <Separator />
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
             <FormField
               control={form.control}
               name="email"
@@ -64,7 +46,7 @@ const SignIn: React.FC = () => {
                 <FormItem>
                   <FormLabel className="font-semibold">Endereço de Email</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input disabled={isPending} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -82,13 +64,13 @@ const SignIn: React.FC = () => {
                     </Button>
                   </div>
                   <FormControl>
-                    <Input type="password" {...field} />
+                    <Input disabled={isPending} type="password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button className="w-full" type="submit">
+            <Button className="w-full" type="submit" disabled={isPending}>
               Logar
             </Button>
           </form>
@@ -98,4 +80,4 @@ const SignIn: React.FC = () => {
   );
 };
 
-export default SignIn;
+export default Login;

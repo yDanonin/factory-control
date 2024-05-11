@@ -20,10 +20,15 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import Modal from "@/components/Modal/Modal";
+import { useSession } from "next-auth/react";
 import { AlertDialog } from "@/components/ui/alert-dialog";
 
 export default function Page() {
   const [data, setData] = useState<Customer[]>([]);
+  const { data: session } = useSession();
+  const config = {
+    headers: { Authorization: `Bearer ${session?.user.accessToken}` }
+  };
   // const [error, setError] = useState(null);
   const router = useRouter();
 
@@ -123,12 +128,12 @@ export default function Page() {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const resp = await axios.get("/api/customers");
-        setData(resp.data.data);
-      } catch (err) {
-        console.error(err);
-      }
+      await axios
+        .get("/backend/api/customers", config)
+        .then((resp) => {
+          setData(resp.data.data);
+        })
+        .catch((err) => console.error(err));
     };
 
     fetchData();

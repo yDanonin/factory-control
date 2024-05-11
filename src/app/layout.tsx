@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { Session } from "next-auth";
 import { Inter as FontSans } from "next/font/google";
 import { ThemeProvider } from "@/styles/themeProvider";
-import { Providers } from "@/app/providers";
+import AuthWrapper from "@/components/AuthWrapper/AuthWrapper";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -15,8 +15,7 @@ interface IProps {
   session: Session;
 }
 
-export default function RootLayout({ children, session }: IProps) {
-  console.log("aaaaaaaaaa", session);
+export default function RootLayout({ children }: IProps) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
@@ -24,11 +23,9 @@ export default function RootLayout({ children, session }: IProps) {
         suppressHydrationWarning={true}
         className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}
       >
-        <Providers session={session}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            {children}
-          </ThemeProvider>
-        </Providers>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <AuthWrapper>{children}</AuthWrapper>
+        </ThemeProvider>
       </body>
     </html>
   );

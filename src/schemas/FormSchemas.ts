@@ -109,3 +109,16 @@ export const formVendorSchema = z.object({
   invoicing: z.number(),
   status: z.nativeEnum(Status)
 });
+
+export const signInFormSchema = z.object({
+  email: z
+    .string()
+    .email()
+    .regex(/@\S*pontalti\S*/, { message: "Email inválido." })
+    .min(1, {
+      message: "Insira um email pontalti."
+    }),
+  password: z.string().min(1, {
+    message: "Insira uma senha."
+  })
+});
