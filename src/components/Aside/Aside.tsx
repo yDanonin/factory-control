@@ -11,12 +11,15 @@ import {
   menuItensRecebimento
 } from "./MenuItens";
 import Divider from "../Divider/Divider";
-import MenuHoverButton from "@/components/MenuHoverButton";
+import { useSession } from "next-auth/react";
 import { ModeToggle } from "../ModeToggle/ModeToggle";
 import LogoPontalti from "../LogoPontalti/LogoPontalti";
+import MenuHoverButton from "@/components/MenuHoverButton";
 import { DollarSign, FileCog, Inbox, Package2, SquarePlus, Users } from "lucide-react";
 
 const Aside: React.FC = () => {
+  const session = useSession();
+
   return (
     <div className="h-screen pt-5 flex flex-col content-center items-center border-r border-zinc-800">
       <LogoPontalti />
@@ -41,6 +44,13 @@ const Aside: React.FC = () => {
         <MenuHoverButton name={"Gastos"} menuItens={menuItensGastos}>
           <DollarSign color="#64748b" />
         </MenuHoverButton>
+      </div>
+      <div>
+        <p>Informacões user logado</p>
+        <p>-------------------</p>
+        <p>Email: {session?.data?.user.email}</p>
+        <p>Nome: {session?.data?.user.name}</p>
+        <p>ADMIN: {session?.data?.user.isAdmin ? "Admin" : "Comum"}</p>
       </div>
       <ModeToggle className="absolute bottom-0 right-0 -translate-y-1/2 -translate-x-1/2"></ModeToggle>
     </div>
