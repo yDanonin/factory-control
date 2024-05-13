@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 .page-layout {
   @apply
     flex
@@ -11,8 +12,8 @@
     overflow-x-hidden 
     break-all 
     relative 
-    /* sm:max-2xl:flex 
-    sm:max-2xl:flex-row */
+    sm:max-2xl:flex 
+    sm:max-2xl:flex-row
 }
 
 
