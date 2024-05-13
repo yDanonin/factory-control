@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 .page-layout {
   @apply
     flex
