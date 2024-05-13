@@ -1,5 +1,4 @@
 import "@/styles/globals.css";
-import { cn } from "@/lib/utils";
 import { Session } from "next-auth";
 import { Inter as FontSans } from "next/font/google";
 import AuthWrapper from "@/components/AuthWrapper/AuthWrapper";
@@ -9,6 +8,12 @@ const fontSans = FontSans({
   variable: "--font-sans"
 });
 
+interface IProps {
+  children: React.ReactNode;
+  session: Session;
+}
+
+export default function RootLayout({ children }: IProps) {
 interface IProps {
   children: React.ReactNode;
   session: Session;
