@@ -30,7 +30,7 @@ const Login: React.FC = () => {
   }
 
   return (
-    <div className="max-w-screen min-h-screen flex items-center justify-center">
+    <div className="max-w-screen bg-white min-h-screen flex items-center justify-center">
       <div className="w-1/4 flex flex-col gap-5 rounded border border-[#e2e8f0] p-7 shadow-md">
         <div className="w-full flex items-center justify-center">
           <Image src="/images/logo_pontalti_default.png" width={45} height={45} alt="Logo Pontalti" />

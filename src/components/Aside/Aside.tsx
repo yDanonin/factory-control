@@ -10,25 +10,25 @@ import {
   menuItensProducao,
   menuItensRecebimento
 } from "./MenuItens";
-import Divider from "../Divider/Divider";
-import { useSession } from "next-auth/react";
-import { ModeToggle } from "../ModeToggle/ModeToggle";
+import { signOut, useSession } from "next-auth/react";
 import LogoPontalti from "../LogoPontalti/LogoPontalti";
 import MenuHoverButton from "@/components/MenuHoverButton";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DollarSign, FileCog, Inbox, Package2, SquarePlus, Users } from "lucide-react";
+import { Button } from "../ui/button";
+import { Skeleton } from "../ui/skeleton";
 
 const Aside: React.FC = () => {
   const session = useSession();
   return (
     <div className="h-screen p-5">
-      <div className="h-full py-5 rounded-lg flex flex-col content-center items-center bg-white">
+      <div className="h-full py-5 rounded-lg flex flex-col items-center gap-4 bg-white">
         <div className="w-full ml-10 flex flex-row items-center justify-items-start gap-3">
           <LogoPontalti />
           <h1 className="font-bold tracking-wide uppercase antialiased">pontalti</h1>
         </div>
-        <Divider />
-        <p className="text-xs font-bold text-[#64748b] mr-auto ml-6 my-2 sm:max-2xl:mx-auto">MENU</p>
-        <div className="flex flex-wrap justify-center items-center">
+        <div className="flex flex-wrap items-center">
+          <p className="text-xs font-bold text-[#64748b] ml-5 my-2 sm:max-2xl:mx-auto">MENU</p>
           <MenuHoverButton name={"Cadastro"} menuItens={menuItensCadastro}>
             <SquarePlus color="#64748b" />
           </MenuHoverButton>
@@ -48,14 +48,30 @@ const Aside: React.FC = () => {
             <DollarSign color="#64748b" />
           </MenuHoverButton>
         </div>
-        <div>
-          <p>Informacões user logado</p>
-          <p>-------------------</p>
-          <p>Email: {session?.data?.user.email}</p>
-          <p>Nome: {session?.data?.user.name}</p>
-          <p>ADMIN: {session?.data?.user.isAdmin ? "Admin" : "Comum"}</p>
+        <div className="flex flex-row gap-3 mt-auto mb-3">
+          <Avatar>
+            <AvatarImage src="" />
+            <AvatarFallback>PA</AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col">
+            {session ? (
+              <>
+                <p className="font-semibold tracking-wide antialiased text-sm">{session.data?.user.name}</p>
+                <p className="font-semibold tracking-wide antialiased text-sm text-slate-400">
+                  {session.data?.user.email}
+                </p>
+              </>
+            ) : (
+              <>
+                <Skeleton className="h-4 w-[250px]" />
+                <Skeleton className="h-4 w-[200px]" />
+              </>
+            )}
+          </div>
         </div>
-        <ModeToggle className="absolute bottom-0 right-0 -translate-y-1/2 -translate-x-1/2"></ModeToggle>
+        <Button className="w-3/4" variant="outline" onClick={() => signOut()}>
+          Sair
+        </Button>
       </div>
     </div>
   );

@@ -2,7 +2,6 @@ import "@/styles/globals.css";
 import { cn } from "@/lib/utils";
 import { Session } from "next-auth";
 import { Inter as FontSans } from "next/font/google";
-import { ThemeProvider } from "@/styles/themeProvider";
 import AuthWrapper from "@/components/AuthWrapper/AuthWrapper";
 
 const fontSans = FontSans({
@@ -21,11 +20,9 @@ export default function RootLayout({ children }: IProps) {
       <head />
       <body
         suppressHydrationWarning={true}
-        className={cn("min-h-screen bg-[#E7E8EE] font-sans antialiased", fontSans.variable)}
+        className={cn("min-h-screen bg-[#17181A] font-sans antialiased", fontSans.variable)}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <AuthWrapper>{children}</AuthWrapper>
-        </ThemeProvider>
+        <AuthWrapper>{children}</AuthWrapper>
       </body>
     </html>
   );
