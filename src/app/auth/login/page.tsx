@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Separator } from "@/components/ui/separator";
 import { signInFormSchema } from "@/schemas/FormSchemas";
-import LogoPontaltiPng from "@/assets/images/logo_pontalti_default.png";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 const Login: React.FC = () => {
@@ -34,7 +33,7 @@ const Login: React.FC = () => {
     <div className="max-w-screen min-h-screen flex items-center justify-center">
       <div className="w-1/4 flex flex-col gap-5 rounded border border-[#e2e8f0] p-7 shadow-md">
         <div className="w-full flex items-center justify-center">
-          <Image src={LogoPontaltiPng} width={45} height={45} alt="Logo Pontalti" />
+          <Image src="/images/logo_pontalti_default.png" width={45} height={45} alt="Logo Pontalti" />
         </div>
         <Separator />
         <Form {...form}>

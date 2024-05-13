@@ -117,7 +117,7 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
     // adicione no segundo argumento do formatObject os enums que devem ser tratados para serem enviados os seus indexes.
     const formattedData = formatObject(data, [Classification, Status]);
     try {
-      await axios.post(`/backend/api/${apiCallByType}`, formattedData);
+      await axios.post(`api/${apiCallByType}`, formattedData);
     } catch (err) {
       console.error(err);
     }
