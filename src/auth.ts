@@ -9,31 +9,16 @@ const providers: Provider[] = [
     credentials: { password: { label: "Password", type: "password" } },
     async authorize(credentials) {
       const { email, password } = await signInFormSchema.parseAsync(credentials);
-      const headers = {
-        "Content-Type": "application/json; charset=utf-8",
-        "Access-Control-Allow-Origin": "*"
-      };
       try {
-        const tokenReceived = await axios.post(
-          "http://localhost:3001/api/v1/auth/login",
-          {
-            email: email,
-            password: password
-          },
-          {
-            headers: headers
-          }
-        );
+        console.log("teste", email, password);
+        const tokenReceived = await axios.post("http://localhost:3001/api/v1/authentication/login", {
+          email: email,
+          password: password
+        });
         const accessToken = tokenReceived.data.data.token;
-        const user = await axios.post(
-          "http://localhost:3001/api/v1/users/email/",
-          {
-            email: email
-          },
-          {
-            headers: headers
-          }
-        );
+        const user = await axios.post("http://localhost:3001/api/v1/users/email/", {
+          email: email
+        });
         if (user.data && accessToken) {
           return { ...user.data, accessToken: accessToken };
         } else {

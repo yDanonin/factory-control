@@ -22,13 +22,30 @@ import {
 import Modal from "@/components/Modal/Modal";
 import { useSession } from "next-auth/react";
 import { AlertDialog } from "@/components/ui/alert-dialog";
+import { User } from "next-auth";
 
 export default function Page() {
   const [data, setData] = useState<Customer[]>([]);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (!session) return;
+    const fetchData = async () => {
+      await axios
+        .get("/api/customers", config)
+        .then((resp) => {
+          setData(resp.data.data);
+        })
+        .catch((err) => console.error(err));
+    };
+
+    fetchData();
+  }, [session]);
+
   const config = {
     headers: { Authorization: `Bearer ${session?.user.accessToken}` }
   };
+
   // const [error, setError] = useState(null);
   const router = useRouter();
 
@@ -124,19 +141,6 @@ export default function Page() {
       acc.push({ header: column.header, accessorKey: column.accessorKey });
     }
     return acc;
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await axios
-        .get("/backend/api/customers", config)
-        .then((resp) => {
-          setData(resp.data.data);
-        })
-        .catch((err) => console.error(err));
-    };
-
-    fetchData();
   }, []);
 
   return (

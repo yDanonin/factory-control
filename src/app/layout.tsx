@@ -21,7 +21,7 @@ export default function RootLayout({ children }: IProps) {
       <head />
       <body
         suppressHydrationWarning={true}
-        className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}
+        className={cn("min-h-screen bg-[#E7E8EE] font-sans antialiased", fontSans.variable)}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <AuthWrapper>{children}</AuthWrapper>

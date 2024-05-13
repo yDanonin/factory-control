@@ -108,7 +108,7 @@ export default function Page() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const resp = await axios.get("/backend/api/machines");
+        const resp = await axios.get("api/machines");
         setData(resp.data.data);
       } catch (err) {
         console.error(err);

@@ -100,7 +100,7 @@ export default function Page() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const resp = await axios.get("/backend/api/procedures");
+        const resp = await axios.get("api/procedures");
         setData(resp.data.data);
       } catch (err) {
         console.error(err);
