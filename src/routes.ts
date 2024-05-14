@@ -8,7 +8,7 @@ export const authRoutes = ["/auth/login", "/auth/reset"];
  * Prefix for API authentication
  * @type { string }
  * */
-export const apiAuthPrefix = "/api/auth";
+export const apiAuthPrefix = "/api/authentication";
 
 /**
  * Default redirect path after logging in
