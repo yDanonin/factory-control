@@ -3,7 +3,6 @@ import { cn } from "@/lib/utils";
 import { Session } from "next-auth";
 import { Inter as FontSans } from "next/font/google";
 import AuthWrapper from "@/components/AuthWrapper/AuthWrapper";
-import { cn } from '@/lib/utils';
 
 const fontSans = FontSans({
   subsets: ["latin"],
