@@ -114,7 +114,6 @@ export const signInFormSchema = z.object({
   email: z
     .string()
     .email()
-    .regex(/@\S*pontalti\S*/, { message: "Email inválido." })
     .min(1, {
       message: "Insira um email pontalti."
     }),
