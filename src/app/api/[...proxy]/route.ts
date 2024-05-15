@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import axios, { AxiosHeaders } from "axios";
 import { NextRequest } from "next/server";
 
 // change this later when in production
@@ -16,14 +17,19 @@ function stripContentEncoding(result: Response) {
 }
 
 async function POST(request: NextRequest) {
+
   const session = await auth();
+  
   let url = request.nextUrl.href.replace(request.nextUrl.origin, backendUrl);
   url = url.replace("/api", "/api/v1");
-  console.log("URL", url);
-  const headers = new Headers(request.headers);
+  
+  const headers = new AxiosHeaders();
   headers.set("Authorization", `Bearer ${session?.user.accessToken}`);
-
-  return await fetch(url, { headers, body: JSON.stringify(request.body), method: "post" });
+  
+  const body = await request.json()
+  const res =  await fetch(url, { headers, body: body, method: "post" });
+  
+  return res
 }
 
 async function GET(request: NextRequest) {
