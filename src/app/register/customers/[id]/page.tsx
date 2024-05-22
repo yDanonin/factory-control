@@ -147,7 +147,7 @@ export default function Page({ params }: { params: { id: string } }) {
               };
 
               axios
-                .patch("/api/customers/" + params.id, body)
+                .patch("/api/customerss/" + params.id, body)
                 .then(() => {
                   setProcessing(false);
                   showSuccess("Cliente foi atualizado com sucesso :)");

@@ -38,7 +38,7 @@ export const Edit: React.FC<ModalEditProps> = ({ nameModal, rowData, idRowData }
 
   const handleContinueClick = async () => {
     try {
-      await axios.patch(`/api/customers/${idRowData}`, editedValues);
+      await axios.patch(`/api/customerss/${idRowData}`, editedValues);
     } catch (err) {
       console.error(err);
     }

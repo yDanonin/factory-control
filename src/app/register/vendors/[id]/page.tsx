@@ -29,7 +29,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     const fetchCustomers = async () => {
-      const response = await fetch(` /api/customers/${params.id}`);
+      const response = await fetch(` /api/customerss/${params.id}`);
       const data = await response.json();
       setCustomer(data);
     };

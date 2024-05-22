@@ -114,12 +114,12 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
     defaultValues: objDefaultValues
   });
   async function onSubmit(data: z.infer<typeof typeSchema>) {
-    console.log(apiCallByType)
+    console.log(apiCallByType);
     console.log(data);
     // adicione no segundo argumento do formatObject os enums que devem ser tratados para serem enviados os seus indexes.
     const formattedData = formatObject(data, [Classification, Status]);
     try {
-      console.log(formattedData)
+      console.log("formated data", formattedData);
       await axios.post(`/api/${apiCallByType}`, formattedData);
     } catch (err) {
       console.error(err);
