@@ -1,49 +1,84 @@
 import { auth } from "@/auth";
-import axios, { AxiosHeaders } from "axios";
-import { NextRequest } from "next/server";
+import axios, { AxiosError } from "axios";
+import { NextRequest, NextResponse } from "next/server";
 
-// change this later when in production
-const backendUrl = "http://localhost:3001";
-
-function stripContentEncoding(result: Response) {
-  const responseHeaders = new Headers(result.headers);
-  responseHeaders.delete("content-encoding");
-
-  return new Response(result.body, {
-    status: result.status,
-    statusText: result.statusText,
-    headers: responseHeaders
-  });
-}
-
-async function POST(request: NextRequest) {
-
+const handler = async (req: NextRequest) => {
   const session = await auth();
-  
-  let url = request.nextUrl.href.replace(request.nextUrl.origin, backendUrl);
-  url = url.replace("/api", "/api/v1");
-  
-  const headers = new AxiosHeaders();
-  headers.set("Authorization", `Bearer ${session?.user.accessToken}`);
-  
-  const body = await request.json()
-  const res =  await fetch(url, { headers, body: body, method: "post" });
-  
-  return res
-}
+  const headers = {
+    "Content-Type": "application/json",
+    Connection: "keep-alive",
+    Authorization: `Bearer ${session?.user.accessToken}`
+  };
 
-async function GET(request: NextRequest) {
-  const session = await auth();
-  const headers = new Headers(request.headers);
-  headers.set("Authorization", `Bearer ${session?.user.accessToken}`);
+  let url = req.nextUrl.href.replace(req.nextUrl.origin, "http://localhost:3001");
+  url = url.replace("api", "api/v1");
 
-  let url = request.nextUrl.href.replace(request.nextUrl.origin, backendUrl);
-  url = url.replace("/api", "/api/v1");
-  console.log("URL", url);
-
-  const result = await fetch(url, { headers });
-  return stripContentEncoding(result);
-}
+  switch (req.method) {
+    case "GET":
+      try {
+        const response = await axios.get(url, { headers: headers });
+        return NextResponse.json(response.data, {
+          status: response.status || 200,
+          statusText: response.statusText,
+          headers: headers
+        });
+      } catch (err) {
+        const error = err as AxiosError;
+        return NextResponse.json(error.response?.data || "", {
+          status: error.response?.status,
+          statusText: error.response?.statusText
+        });
+      }
+    case "POST":
+      try {
+        const bodyNotParsed = await req.json();
+        const response = await axios.post(url, bodyNotParsed, { headers: headers });
+        return NextResponse.json(response.data, {
+          status: response.status || 200,
+          statusText: response.statusText,
+          headers: headers
+        });
+      } catch (err) {
+        const error = err as AxiosError;
+        return NextResponse.json(error.response?.data || "", {
+          status: error.response?.status,
+          statusText: error.response?.statusText
+        });
+      }
+    case "PATCH":
+      try {
+        const bodyNotParsed = await req.json();
+        const response = await axios.patch(url, bodyNotParsed, { headers: headers });
+        return NextResponse.json(response.data, {
+          status: response.status || 200,
+          statusText: response.statusText,
+          headers: headers
+        });
+      } catch (err) {
+        const error = err as AxiosError;
+        return NextResponse.json(error.response?.data || "", {
+          status: error.response?.status,
+          statusText: error.response?.statusText
+        });
+      }
+    case "DELETE":
+      try {
+        const response = await axios.delete(url, { headers: headers });
+        return NextResponse.json(response.data, {
+          status: response.status || 200,
+          statusText: response.statusText,
+          headers: headers
+        });
+      } catch (err) {
+        const error = err as AxiosError;
+        return NextResponse.json(error.response?.data || "", {
+          status: error.response?.status,
+          statusText: error.response?.statusText
+        });
+      }
+  }
+};
 
 export const dynamic = "force-dynamic";
-export { GET, POST };
+
+export { handler as GET, handler as POST, handler as PATCH, handler as DELETE };
