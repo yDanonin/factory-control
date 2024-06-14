@@ -1,21 +1,23 @@
-import {
-  AlertDialogHeader,
-  AlertDialogFooter,
-  AlertDialogAction,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogCancel
-} from "@/components/ui/alert-dialog";
+import React, { useState } from "react";
+
+import axios from "axios";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { getBooleanLabel } from "@/services/formatInputs";
 import { Customer } from "@/types/customer.types";
 import { Employee } from "@/types/employee.types";
-import axios from "axios";
-import React, { useState } from "react";
+import { getBooleanLabel } from "@/services/formatInputs";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+
+import {
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 interface ModalEditProps {
   nameModal: string;
@@ -47,11 +49,11 @@ export const Edit: React.FC<ModalEditProps> = ({ nameModal, rowData, idRowData }
 
   return (
     <>
-      <AlertDialogTrigger>Editar {nameModal}</AlertDialogTrigger>
-      <AlertDialogContent className="min-w-1/2">
-        <AlertDialogHeader>
-          <AlertDialogTitle>Editando {nameModal}</AlertDialogTitle>
-          <AlertDialogDescription className="w-full grid grid-cols-4 gap-4">
+      <DialogTrigger>Editar {nameModal}</DialogTrigger>
+      <DialogContent className="min-w-1/2">
+        <DialogHeader>
+          <DialogTitle>Editando {nameModal}</DialogTitle>
+          <DialogDescription className="w-full grid grid-cols-4 gap-4">
             {typeof rowData === "object" &&
               rowData &&
               Object.entries(rowData).map(([key, value]) => {
@@ -87,13 +89,19 @@ export const Edit: React.FC<ModalEditProps> = ({ nameModal, rowData, idRowData }
                 }
                 return null;
               })}
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction onClick={handleContinueClick}>Continuar</AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button type="button" variant="secondary">
+              Fechar
+            </Button>
+          </DialogClose>
+          <Button type="button" onClick={handleContinueClick}>
+            Continuar
+          </Button>
+        </DialogFooter>
+      </DialogContent>
     </>
   );
 };
