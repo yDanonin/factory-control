@@ -6,11 +6,13 @@ import axios from "axios";
 import Aside from "@/components/Aside";
 import { useRouter } from "next/navigation";
 import { Row } from "@tanstack/react-table";
+import Modal from "@/components/Modal/Modal";
 import { MoreHorizontal } from "lucide-react";
+import { Dialog } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Customer } from "@/types/customer.types";
-import { TableColumn } from "@/models/TableColumn";
 import DynamicTable from "@/components/DynamicTable";
+import { DataRow, TableColumn } from "@/models/TableColumn";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,12 +21,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+
 import Header from "@/components/Header"
-import Modal from "@/components/Modal/Modal";
 import { AlertDialog } from "@/components/ui/alert-dialog";
 
 export default function Page() {
   const [data, setData] = useState<Customer[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,6 +36,8 @@ export default function Page() {
         setData(resp.data.data);
       } catch (err) {
         console.error(err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -82,7 +87,7 @@ export default function Page() {
     {
       id: "actions",
       enableHiding: false,
-      cell: ({ row }: { row: Row<Customer> }) => {
+      cell: ({ row }: { row: Row<DataRow> }) => {
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -101,7 +106,7 @@ export default function Page() {
                 Ver detalhes do cliente
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
-                <AlertDialog>
+                <Dialog>
                   <Modal
                     typeModal="EDIT"
                     typeRegister="Customer"
@@ -109,10 +114,10 @@ export default function Page() {
                     rowData={row.original}
                     idRowData={row.original.id}
                   />
-                </AlertDialog>
+                </Dialog>
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
-                <AlertDialog>
+                <Dialog>
                   <Modal
                     typeModal="DELETE"
                     typeRegister="Customer"
@@ -120,7 +125,7 @@ export default function Page() {
                     rowData={row.original}
                     idRowData={row.original.id}
                   />
-                </AlertDialog>
+                </Dialog>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -129,7 +134,7 @@ export default function Page() {
     }
   ];
 
-  const arrayFilterFieldsByAcessorKey = columns.reduce((acc: TableColumn[], column) => {
+  const arrayFilterFieldsByAcessorKey = columns.reduce((acc: TableColumn<DataRow>[], column) => {
     if (column.accessorKey && column.header) {
       acc.push({ header: column.header, accessorKey: column.accessorKey });
     }
@@ -144,6 +149,7 @@ export default function Page() {
       <main className="main-layout">
         <Header title="Clientes"/>
         <DynamicTable
+          isLoadingSpinner={isLoading}
           columns={columns}
           data={data}
           filterFields={arrayFilterFieldsByAcessorKey}
