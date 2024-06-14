@@ -4,9 +4,19 @@ import React, { useState } from "react";
 
 import "./DynamicTable.css";
 import { ChevronDown } from "lucide-react";
+import { Spinner } from "@nextui-org/react";
+import Modal from "@/components/Modal/Modal";
+import { Vendor } from "@/types/vendor.types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { TableColumn } from "@/models/TableColumn";
+import { Dialog } from "@/components/ui/dialog";
+import { Machine } from "@/types/machine.types";
+import { Product } from "@/types/product.types";
+import { Customer } from "@/types/customer.types";
+import { Employee } from "@/types/employee.types";
+import { Procedure } from "@/types/procedure.types";
+import { DataRow, TableColumn } from "@/models/TableColumn";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import {
   ColumnFiltersState,
   SortingState,
@@ -24,18 +34,9 @@ import {
   DropdownMenuTrigger,
   DropdownMenuCheckboxItem
 } from "@/components/ui/dropdown-menu";
-import Modal from "@/components/Modal/Modal";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { AlertDialog } from "@/components/ui/alert-dialog";
-import { Customer } from "@/types/customer.types";
-import { Employee } from "@/types/employee.types";
-import { Machine } from "@/types/machine.types";
-import { Procedure } from "@/types/procedure.types";
-import { Product } from "@/types/product.types";
-import { Vendor } from "@/types/vendor.types";
 
 interface TableProps {
-  columns: TableColumn[];
+  columns: TableColumn<DataRow>[];
   data:
     | Partial<Customer>[]
     | Partial<Employee>[]
@@ -43,11 +44,12 @@ interface TableProps {
     | Partial<Procedure>[]
     | Partial<Product>[]
     | Partial<Vendor>[];
-  filterFields: TableColumn[];
-  typeRegister: string;
+  filterFields: TableColumn<DataRow>[];
+  typeRegister?: string;
+  isLoadingSpinner?: boolean;
 }
 
-const DynamicTable: React.FC<TableProps> = ({ columns, data, filterFields = [], typeRegister }) => {
+const DynamicTable: React.FC<TableProps> = ({ columns, data, isLoadingSpinner, filterFields = [], typeRegister }) => {
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -93,11 +95,13 @@ const DynamicTable: React.FC<TableProps> = ({ columns, data, filterFields = [], 
             ))}
           </div>
         )}
-        <div className="w-1/2 flex justify-between">
-          <AlertDialog>
-            <Modal typeModal="CREATE" nameModal={typeRegister} typeRegister={typeRegister} />
-          </AlertDialog>
-        </div>
+        {typeRegister && (
+          <div className="w-1/2 flex justify-between">
+            <Dialog>
+              <Modal typeModal="CREATE" nameModal={typeRegister} typeRegister={typeRegister} />
+            </Dialog>
+          </div>
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild className="px-3">
             <Button variant="outline" className="ml-auto">
@@ -139,7 +143,13 @@ const DynamicTable: React.FC<TableProps> = ({ columns, data, filterFields = [], 
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isLoadingSpinner ? (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  <Spinner color="default" />
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows?.length > 0 ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                   {row.getVisibleCells().map((cell) => (
