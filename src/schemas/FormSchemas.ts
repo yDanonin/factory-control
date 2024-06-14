@@ -28,9 +28,14 @@ export const formCustomerSchema = z
     secondary_line: z.string(),
     status: z.nativeEnum(Status),
     address: z.object({
-      zip_code: z.string().min(2, {
-        message: "Informe o CEP."
-      }),
+      zip_code: z
+        .string()
+        .min(2, {
+          message: "Informe o CEP."
+        })
+        .refine((cep) => validaCep(cep), {
+          message: "CEP Inválido."
+        }),
       neighborhood: z.string().min(2, {
         message: "Informe o bairro."
       }),
@@ -40,8 +45,8 @@ export const formCustomerSchema = z
       city: z.string().min(8, {
         message: "Informe a cidade."
       }),
-      state: z.string().min(8, {
-        message: "Informe o Estado."
+      state: z.string().max(2, {
+        message: "Informe a sigla do Estado."
       }),
       complement: z.string(),
       address_number: z.number()
@@ -111,13 +116,14 @@ export const formVendorSchema = z.object({
 });
 
 export const signInFormSchema = z.object({
-  email: z
-    .string()
-    .email()
-    .min(1, {
-      message: "Insira um email pontalti."
-    }),
+  email: z.string().email().min(1, {
+    message: "Insira um email pontalti."
+  }),
   password: z.string().min(1, {
     message: "Insira uma senha."
   })
 });
+
+function validaCep(cep: string) {
+  return /^\d{8}$/.test(cep.replace(/[^\d]+/g, ""));
+}
