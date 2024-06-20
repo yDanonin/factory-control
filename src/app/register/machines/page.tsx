@@ -21,6 +21,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import Header from "@/components/Header";
 
 export default function Page() {
   const router = useRouter();
@@ -31,7 +32,7 @@ export default function Page() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const resp = await axios.get("api/machines");
+        const resp = await axios.get("/api/machines");
         setData(resp.data.data);
       } catch (err) {
         console.error(err);
@@ -127,6 +128,7 @@ export default function Page() {
         <Aside />
       </nav>
       <main className="main-layout">
+        <Header title="Maquinas"/>
         <DynamicTable
           isLoadingSpinner={isLoading}
           columns={columns}
