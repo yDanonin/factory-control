@@ -15,9 +15,10 @@ interface ModalEditProps {
   nameModal: string;
   typeRegister: string;
   idRowData?: number;
+  onDelete?: () => void;
 }
 
-export const Delete: React.FC<ModalEditProps> = ({ nameModal, typeRegister, idRowData }) => {
+export const Delete: React.FC<ModalEditProps> = ({ nameModal, typeRegister, idRowData, onDelete}) => {
   let apiCallByType: string;
   if (typeRegister === "Customer") {
     apiCallByType = "customers";
@@ -42,6 +43,16 @@ export const Delete: React.FC<ModalEditProps> = ({ nameModal, typeRegister, idRo
       console.error(err);
     }
   }
+
+  const afterDelete = () => {
+    if(onDelete) {
+      return onDelete()
+    } 
+    else {
+      return location.reload()
+    }
+  }
+
   return (
     <>
       <AlertDialogTrigger>Deletar {nameModal}</AlertDialogTrigger>
@@ -54,7 +65,7 @@ export const Delete: React.FC<ModalEditProps> = ({ nameModal, typeRegister, idRo
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction onClick={() => deleteData()}>Continuar</AlertDialogAction>
+          <AlertDialogAction onClick={() => deleteData().then(() => {afterDelete()})}>Continuar</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </>

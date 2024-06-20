@@ -24,9 +24,10 @@ interface ModalProps {
     | Partial<Product>
     | Partial<Vendor>;
   idRowData?: number;
+  onDelete?: () => void
 }
 
-const Modal: React.FC<ModalProps> = ({ typeModal, nameModal, typeRegister, rowData, idRowData }) => {
+const Modal: React.FC<ModalProps> = ({ typeModal, nameModal, typeRegister, rowData, idRowData, onDelete }) => {
   let designModalByType = null;
 
   if (typeModal === "CREATE") {
@@ -44,7 +45,7 @@ const Modal: React.FC<ModalProps> = ({ typeModal, nameModal, typeRegister, rowDa
   } else if (typeModal === "DELETE") {
     designModalByType = (
       <>
-        <Delete idRowData={idRowData} nameModal={nameModal} typeRegister={typeRegister} />
+        <Delete idRowData={idRowData} nameModal={nameModal} typeRegister={typeRegister} onDelete={onDelete}/>
       </>
     );
   }
