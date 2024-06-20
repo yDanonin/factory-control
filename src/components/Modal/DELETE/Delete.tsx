@@ -21,7 +21,11 @@ interface ModalEditProps {
   onDelete?: () => void;
 }
 
-export const Delete: React.FC<ModalEditProps> = ({ nameModal, typeRegister, idRowData, onDelete}) => {
+export const Delete: React.FC<ModalEditProps> = ({ nameModal, typeRegister, idRowData, onDelete }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { toast } = useToast();
+
   let apiCallByType: string;
   if (typeRegister === "Customer") {
     apiCallByType = "customers";
@@ -77,13 +81,24 @@ export const Delete: React.FC<ModalEditProps> = ({ nameModal, typeRegister, idRo
           <DialogTitle>Tem certeza que deseja deletar este {nameModal}</DialogTitle>
           <DialogDescription>
             Esta ação não poderá ser desfeita. Tenha certeza que você está deletando o {nameModal} correto.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction onClick={() => deleteData().then(() => {afterDelete()})}>Continuar</AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button type="button" variant="secondary">
+              Fechar
+            </Button>
+          </DialogClose>
+          {isLoading ? (
+            <Button disabled>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Deletando...
+            </Button>
+          ) : (
+            <Button onClick={() => deleteData().then(() => {afterDelete()})}>Deletar</Button>
+          )}
+        </DialogFooter>
+      </DialogContent>
     </>
   );
 };
