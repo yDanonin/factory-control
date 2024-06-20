@@ -31,7 +31,7 @@ export default function Page() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const resp = await axios.get("api/employees");
+        const resp = await axios.get("/api/employees");
         setData(resp.data.data);
       } catch (err) {
         console.error(err);
