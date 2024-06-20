@@ -12,6 +12,8 @@ export type Employee = {
   cpf: string;
   classification: Classification;
   admission: Date;
-  salary?: number;
+  salary: number;
   dismissal_date?: Date;
+  created_at: Date;
+  updated_at: Date;
 };

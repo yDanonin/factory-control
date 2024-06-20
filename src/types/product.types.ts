@@ -12,4 +12,6 @@ export type Product = {
   character: string;
   moldes: number;
   equivalency: number;
+  created_at: Date;
+  updated_at: Date;
 };

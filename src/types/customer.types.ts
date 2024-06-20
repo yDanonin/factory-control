@@ -17,6 +17,8 @@ export type Customer = {
   address: Address;
   cpf: string;
   cnpj: string;
+  created_at: Date;
+  updated_at: Date;
 };
 
 export type CustomerRegister = Omit<Customer, "id">;

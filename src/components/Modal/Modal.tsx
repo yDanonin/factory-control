@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Edit } from "./EDIT/Edit";
 import { Create } from "./CREATE/Create";
 import { Delete } from "./DELETE/Delete";
@@ -24,9 +23,10 @@ interface ModalProps {
     | Partial<Product>
     | Partial<Vendor>;
   idRowData?: number;
+  onDelete?: () => void
 }
 
-const Modal: React.FC<ModalProps> = ({ typeModal, nameModal, typeRegister, rowData, idRowData }) => {
+const Modal: React.FC<ModalProps> = ({ typeModal, nameModal, typeRegister, rowData, idRowData, onDelete }) => {
   let designModalByType = null;
 
   if (typeModal === "CREATE") {
@@ -44,19 +44,12 @@ const Modal: React.FC<ModalProps> = ({ typeModal, nameModal, typeRegister, rowDa
   } else if (typeModal === "DELETE") {
     designModalByType = (
       <>
-        <Delete idRowData={idRowData} nameModal={nameModal} typeRegister={typeRegister} />
+        <Delete idRowData={idRowData} nameModal={nameModal} typeRegister={typeRegister} onDelete={onDelete}/>
       </>
     );
   }
 
   return <>{designModalByType}</>;
-};
-
-Modal.propTypes = {
-  typeModal: PropTypes.oneOf<TypeModal>(["CREATE", "EDIT", "DELETE"]).isRequired,
-  nameModal: PropTypes.string.isRequired,
-  rowData: PropTypes.any,
-  idRowData: PropTypes.number
 };
 
 export default Modal;

@@ -1,4 +1,5 @@
 import { Status } from "./common.types";
+import { Address } from "./address.types";
 
 export type Vendor = {
   id: number;
@@ -12,4 +13,7 @@ export type Vendor = {
   volume_purchases: number;
   purchases: number;
   invoicing: number;
+  address: Address;
+  created_at: Date;
+  updated_at: Date;
 };

@@ -7,4 +7,6 @@ export type Machine = {
   status: Status;
   location: string;
   location_status: Status;
+  created_at: Date;
+  updated_at: Date;
 };

@@ -10,18 +10,18 @@ const providers: Provider[] = [
     async authorize(credentials) {
       const { email, password } = await signInFormSchema.parseAsync(credentials);
       try {
-        console.log("teste", email, password);
         const user = await axios.post("http://localhost:3001/api/v1/authentication/login", {
           email: email,
           password: password
         });
-        console.log(user.data);
+        console.log("aaaaa", user);
         if (user) {
           return { ...user.data.user, accessToken: user.data.token };
         } else {
           return null;
         }
       } catch (e) {
+        console.log(e);
         throw new Error("something went wrong");
       }
     }
