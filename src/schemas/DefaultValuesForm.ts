@@ -7,7 +7,7 @@ export const employeeDefaultValues = {
   cel_number: "",
   cpf: "",
   classification: Classification.funcionario,
-  salary: 0,
+  salary: "0",
   admission: new Date(),
   dismissal_date: new Date()
 };
@@ -18,8 +18,8 @@ export const customerDefaultValues = {
   cel_number: "",
   email: "",
   store_name: "",
-  credit_limit: 0,
-  debts: 0,
+  credit_limit: "0",
+  debts: "0",
   cpf: "",
   cnpj: "",
   deliver: false,
@@ -33,7 +33,7 @@ export const customerDefaultValues = {
     city: "",
     state: "",
     complement: "",
-    address_number: 0
+    address_number: "0"
   }
 };
 
@@ -57,7 +57,7 @@ export const productDefaultValues = {
   size: "",
   sales: 0,
   volume_sales: 0,
-  invoicing: 0,
+  invoicing: "0",
   character: "",
   moldes: 0,
   equivalency: 0,
@@ -72,7 +72,16 @@ export const vendorDefaultValues = {
   phone: "",
   deliver: false,
   volume_purchases: 0,
-  purchases: 0,
-  invoicing: 0,
-  status: Status.operacional
+  purchases: "0",
+  invoicing: "0",
+  status: Status.operacional,
+  address: {
+    zip_code: "",
+    neighborhood: "",
+    public_place: "",
+    city: "",
+    state: "",
+    complement: "",
+    address_number: "0"
+  }
 };
