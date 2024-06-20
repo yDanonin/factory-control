@@ -13,6 +13,7 @@ import { Classification } from "@/types/employee.types";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { withMask } from "use-mask-input";
 
 interface FormFieldsEmployee {
   form: UseFormReturn;
@@ -55,7 +56,7 @@ export const FormFieldsEmployee: React.FC<FormFieldsEmployee> = ({ form }) => {
           <FormItem>
             <FormLabel htmlFor="telefone">Número de Telefone</FormLabel>
             <FormControl>
-              <Input id="phone" {...field} placeholder="(xx) xxxxx-xxxx" />
+              <Input id="phone" {...field} ref={withMask("(99) 9999-9999")} placeholder="ex. (99) 99999-9999" />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -69,7 +70,7 @@ export const FormFieldsEmployee: React.FC<FormFieldsEmployee> = ({ form }) => {
           <FormItem>
             <FormLabel htmlFor="numero_celular">Número de Celular</FormLabel>
             <FormControl>
-              <Input id="cel_number" {...field} placeholder="(xx) xxxxx-xxxx" />
+              <Input id="cel_number" {...field} ref={withMask("(99) 99999-9999")} placeholder="ex. (99) 9999-9999" />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -83,7 +84,7 @@ export const FormFieldsEmployee: React.FC<FormFieldsEmployee> = ({ form }) => {
           <FormItem>
             <FormLabel htmlFor="cpf">Cpf</FormLabel>
             <FormControl>
-              <Input id="cpf" {...field} placeholder="Insira o cpf" />
+              <Input id="cpf" {...field} ref={withMask("999.999.999-99")} placeholder="999.999.999-99" />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -117,15 +118,10 @@ export const FormFieldsEmployee: React.FC<FormFieldsEmployee> = ({ form }) => {
             <FormItem>
               <FormLabel htmlFor="salario">Salário</FormLabel>
               <FormControl>
-                <Input
-                  id="salary"
-                  type="number"
-                  {...field}
-                  {...form.register("salary", {
-                    valueAsNumber: true
-                  })}
-                  placeholder="Insira o salário"
-                />
+                <div className="relative ml-auto flex-1">
+                  <span className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground">R$</span>
+                  <Input id="salary" type="number" {...field} className="w-full rounded-lg bg-background pl-8 pt-2.5" />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -5,6 +5,7 @@ import React from "react";
 import { Input } from "@/components/ui/input";
 import { Status } from "@/types/common.types";
 import { UseFormReturn } from "react-hook-form";
+import { Textarea } from "@/components/ui/textarea";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -100,7 +101,7 @@ export const FormFieldsProduct: React.FC<FormFieldsProduct> = ({ form }) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="volume_sales">Número do volúme de vendas</FormLabel>
+              <FormLabel htmlFor="volume_sales">Número do volume de vendas</FormLabel>
               <FormControl>
                 <Input
                   id="volume_sales"
@@ -126,34 +127,20 @@ export const FormFieldsProduct: React.FC<FormFieldsProduct> = ({ form }) => {
             <FormItem>
               <FormLabel htmlFor="invoicing">Faturamento</FormLabel>
               <FormControl>
-                <Input
-                  id="invoicing"
-                  type="number"
-                  {...field}
-                  {...form.register("invoicing", {
-                    valueAsNumber: true
-                  })}
-                  placeholder="Insira o faturamento"
-                />
+                <div className="relative ml-auto flex-1">
+                  <span className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground">R$</span>
+                  <Input
+                    id="invoicing"
+                    type="number"
+                    {...field}
+                    className="w-full rounded-lg bg-background pl-8 pt-2.5"
+                  />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
           );
         }}
-      />
-      <FormField
-        key="character"
-        control={form.control}
-        name="character"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel htmlFor="character">Característica</FormLabel>
-            <FormControl>
-              <Input id="name" {...field} placeholder="Insira a característica" />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
       />
       <FormField
         key="moldes"
@@ -162,7 +149,7 @@ export const FormFieldsProduct: React.FC<FormFieldsProduct> = ({ form }) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="moldes">Moldes</FormLabel>
+              <FormLabel htmlFor="moldes">Quantidade de moldes</FormLabel>
               <FormControl>
                 <Input
                   id="moldes"
@@ -218,6 +205,20 @@ export const FormFieldsProduct: React.FC<FormFieldsProduct> = ({ form }) => {
               </FormControl>
               <SelectContent>{mapEnumToSelectItems(Status)}</SelectContent>
             </Select>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        key="character"
+        control={form.control}
+        name="character"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel htmlFor="character">Característica</FormLabel>
+            <FormControl>
+              <Textarea id="name" {...field} placeholder="Insira a característica" />
+            </FormControl>
             <FormMessage />
           </FormItem>
         )}

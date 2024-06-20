@@ -19,8 +19,14 @@ export const formCustomerSchema = z
     store_name: z.string().min(2, {
       message: "Informe o nome da loja."
     }),
-    credit_limit: z.number(),
-    debts: z.number(),
+    credit_limit: z
+      .string()
+      .transform((n) => (n.includes(",") ? n.replace(",", ".") : n))
+      .refine((n) => parseFloat(n).toFixed(2)),
+    debts: z
+      .string()
+      .transform((n) => (n.includes(",") ? n.replace(",", ".") : n))
+      .refine((n) => parseFloat(n).toFixed(2)),
     cpf: z.string(),
     cnpj: z.string(),
     deliver: z.string(),
@@ -49,7 +55,7 @@ export const formCustomerSchema = z
         message: "Informe a sigla do Estado."
       }),
       complement: z.string(),
-      address_number: z.number()
+      address_number: z.string().refine((n) => parseInt(n))
     })
   })
   .partial()
@@ -70,7 +76,10 @@ export const formEmployeeSchema = z.object({
   }),
   cpf: z.string(),
   classification: z.nativeEnum(Classification),
-  salary: z.number(),
+  salary: z
+    .string()
+    .transform((n) => (n.includes(",") ? n.replace(",", ".") : n))
+    .refine((n) => parseFloat(n).toFixed(2)),
   admission: z.date(),
   dismissal_date: z.date()
 });
@@ -95,7 +104,10 @@ export const formProductSchema = z.object({
   size: z.string(),
   sales: z.number(),
   volume_sales: z.number(),
-  invoicing: z.number(),
+  invoicing: z
+    .string()
+    .transform((n) => (n.includes(",") ? n.replace(",", ".") : n))
+    .refine((n) => parseFloat(n).toFixed(2)),
   character: z.string(),
   moldes: z.number(),
   equivalency: z.number(),
@@ -108,11 +120,41 @@ export const formVendorSchema = z.object({
   cnpj: z.string(),
   cel_number: z.string(),
   phone: z.string(),
-  deliver: z.boolean(),
+  deliver: z.string(),
   volume_purchases: z.number(),
-  purchases: z.number(),
-  invoicing: z.number(),
-  status: z.nativeEnum(Status)
+  purchases: z
+    .string()
+    .transform((n) => (n.includes(",") ? n.replace(",", ".") : n))
+    .refine((n) => parseFloat(n).toFixed(2)),
+  invoicing: z
+    .string()
+    .transform((n) => (n.includes(",") ? n.replace(",", ".") : n))
+    .refine((n) => parseFloat(n).toFixed(2)),
+  status: z.nativeEnum(Status),
+  address: z.object({
+    zip_code: z
+      .string()
+      .min(2, {
+        message: "Informe o CEP."
+      })
+      .refine((cep) => validaCep(cep), {
+        message: "CEP Inválido."
+      }),
+    neighborhood: z.string().min(2, {
+      message: "Informe o bairro."
+    }),
+    public_place: z.string().min(2, {
+      message: "Informe a rua/avenida."
+    }),
+    city: z.string().min(8, {
+      message: "Informe a cidade."
+    }),
+    state: z.string().max(2, {
+      message: "Informe a sigla do Estado."
+    }),
+    complement: z.string(),
+    address_number: z.string().refine((n) => parseInt(n))
+  })
 });
 
 export const signInFormSchema = z.object({
