@@ -5,4 +5,6 @@ export type Procedure = {
   process_name: string;
   status: Status;
   workers: number;
+  created_at: Date;
+  updated_at: Date;
 };

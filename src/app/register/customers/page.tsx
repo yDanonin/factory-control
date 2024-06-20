@@ -19,6 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import Header from "@/components/Header"
 import Modal from "@/components/Modal/Modal";
 import { AlertDialog } from "@/components/ui/alert-dialog";
 
@@ -141,6 +142,7 @@ export default function Page() {
         <Aside />
       </nav>
       <main className="main-layout">
+        <Header title="Clientes"/>
         <DynamicTable
           columns={columns}
           data={data}
