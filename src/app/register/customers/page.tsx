@@ -22,8 +22,7 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 
-import Header from "@/components/Header"
-import { AlertDialog } from "@/components/ui/alert-dialog";
+import Header from "@/components/Header";
 
 export default function Page() {
   const [data, setData] = useState<Customer[]>([]);
@@ -107,24 +106,12 @@ export default function Page() {
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
                 <Dialog>
-                  <Modal
-                    typeModal="EDIT"
-                    typeRegister="Customer"
-                    nameModal="cliente"
-                    rowData={row.original}
-                    idRowData={row.original.id}
-                  />
+                  <Modal typeModal="EDIT" typeRegister="Customer" nameModal="cliente" rowData={row.original} />
                 </Dialog>
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
                 <Dialog>
-                  <Modal
-                    typeModal="DELETE"
-                    typeRegister="Customer"
-                    nameModal="cliente"
-                    rowData={row.original}
-                    idRowData={row.original.id}
-                  />
+                  <Modal typeModal="DELETE" typeRegister="Customer" nameModal="cliente" idRowData={row.original.id} />
                 </Dialog>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -147,7 +134,7 @@ export default function Page() {
         <Aside />
       </nav>
       <main className="main-layout">
-        <Header title="Clientes"/>
+        <Header title="Clientes" />
         <DynamicTable
           isLoadingSpinner={isLoading}
           columns={columns}

@@ -18,12 +18,12 @@ import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formatObject } from "@/services/formatInputs";
 import { Classification, Employee } from "@/types/employee.types";
-import { FormFieldsVendor } from "../FormFieldsObjects/FormFieldsVendor";
-import { FormFieldsProduct } from "../FormFieldsObjects/FormFieldsProduct";
-import { FormFieldsMachine } from "../FormFieldsObjects/FormFieldsMachine";
-import { FormFieldsEmployee } from "../FormFieldsObjects/FormFieldsEmployee";
-import { FormFieldsCustomer } from "../FormFieldsObjects/FormFieldsCustomer";
-import { FormFieldsProcedure } from "../FormFieldsObjects/FormFieldsProcedure";
+import { FormFieldsVendor } from "../FormFieldsObjectsCreate/FormFieldsVendor";
+import { FormFieldsProduct } from "../FormFieldsObjectsCreate/FormFieldsProduct";
+import { FormFieldsMachine } from "../FormFieldsObjectsCreate/FormFieldsMachine";
+import { FormFieldsEmployee } from "../FormFieldsObjectsCreate/FormFieldsEmployee";
+import { FormFieldsCustomer } from "../FormFieldsObjectsCreate/FormFieldsCustomer";
+import { FormFieldsProcedure } from "../FormFieldsObjectsCreate/FormFieldsProcedure";
 import {
   formCustomerSchema,
   formEmployeeSchema,
@@ -58,7 +58,6 @@ import {
 interface ModalEditProps {
   nameModal: string;
   typeRegister: string;
-  customForm?: React.FC;
 }
 
 export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) => {
