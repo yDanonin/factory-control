@@ -19,14 +19,8 @@ export const formCustomerSchema = z
     store_name: z.string().min(2, {
       message: "Informe o nome da loja."
     }),
-    credit_limit: z
-      .string()
-      .transform((n) => (n.includes(",") ? n.replace(",", ".") : n))
-      .refine((n) => parseFloat(n).toFixed(2)),
-    debts: z
-      .string()
-      .transform((n) => (n.includes(",") ? n.replace(",", ".") : n))
-      .refine((n) => parseFloat(n).toFixed(2)),
+    credit_limit: z.number({ coerce: true }),
+    debts: z.number({ coerce: true }),
     cpf: z.string(),
     cnpj: z.string(),
     deliver: z.string(),
@@ -55,7 +49,7 @@ export const formCustomerSchema = z
         message: "Informe a sigla do Estado."
       }),
       complement: z.string(),
-      address_number: z.string().refine((n) => parseInt(n))
+      address_number: z.number({ coerce: true })
     })
   })
   .partial()
@@ -76,10 +70,7 @@ export const formEmployeeSchema = z.object({
   }),
   cpf: z.string(),
   classification: z.nativeEnum(Classification),
-  salary: z
-    .string()
-    .transform((n) => (n.includes(",") ? n.replace(",", ".") : n))
-    .refine((n) => parseFloat(n).toFixed(2)),
+  salary: z.number({ coerce: true }),
   admission: z.date(),
   dismissal_date: z.date()
 });
@@ -104,10 +95,7 @@ export const formProductSchema = z.object({
   size: z.string(),
   sales: z.number(),
   volume_sales: z.number(),
-  invoicing: z
-    .string()
-    .transform((n) => (n.includes(",") ? n.replace(",", ".") : n))
-    .refine((n) => parseFloat(n).toFixed(2)),
+  invoicing: z.number({ coerce: true }),
   character: z.string(),
   moldes: z.number(),
   equivalency: z.number(),
@@ -122,14 +110,8 @@ export const formVendorSchema = z.object({
   phone: z.string(),
   deliver: z.string(),
   volume_purchases: z.number(),
-  purchases: z
-    .string()
-    .transform((n) => (n.includes(",") ? n.replace(",", ".") : n))
-    .refine((n) => parseFloat(n).toFixed(2)),
-  invoicing: z
-    .string()
-    .transform((n) => (n.includes(",") ? n.replace(",", ".") : n))
-    .refine((n) => parseFloat(n).toFixed(2)),
+  purchases: z.number({ coerce: true }),
+  invoicing: z.number({ coerce: true }),
   status: z.nativeEnum(Status),
   address: z.object({
     zip_code: z
@@ -153,7 +135,7 @@ export const formVendorSchema = z.object({
       message: "Informe a sigla do Estado."
     }),
     complement: z.string(),
-    address_number: z.string().refine((n) => parseInt(n))
+    address_number: z.number({ coerce: true })
   })
 });
 

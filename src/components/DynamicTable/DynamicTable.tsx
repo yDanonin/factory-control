@@ -151,7 +151,11 @@ const DynamicTable: React.FC<TableProps> = ({ columns, data, isLoadingSpinner, f
               </TableRow>
             ) : table.getRowModel().rows?.length > 0 ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"} className={row?.getValue("status") == "Suspenso" ? "bg-red-100" : ""}>
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                  className={row?.getValue("status") == "Suspenso" ? "bg-red-100" : ""}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                   ))}
