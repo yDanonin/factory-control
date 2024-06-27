@@ -6,15 +6,15 @@ import "./DynamicTable.css";
 import { ChevronDown } from "lucide-react";
 import { Spinner } from "@nextui-org/react";
 import Modal from "@/components/Modal/Modal";
-import { Vendor } from "@/types/vendor.types";
+// import { Vendor } from "@/types/vendor.types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
-import { Machine } from "@/types/machine.types";
-import { Product } from "@/types/product.types";
-import { Customer } from "@/types/customer.types";
-import { Employee } from "@/types/employee.types";
-import { Procedure } from "@/types/procedure.types";
+// import { Machine } from "@/types/machine.types";
+// import { Product } from "@/types/product.types";
+// import { Customer } from "@/types/customer.types";
+// import { Employee } from "@/types/employee.types";
+// import { Procedure } from "@/types/procedure.types";
 import { DataRow, TableColumn } from "@/models/TableColumn";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import {
@@ -37,14 +37,15 @@ import {
 
 interface TableProps {
   columns: TableColumn<DataRow>[];
-  data:
-    | Partial<Customer>[]
-    | Partial<Employee>[]
-    | Partial<Machine>[]
-    | Partial<Procedure>[]
-    | Partial<Product>[]
-    | Partial<Vendor>[];
-  filterFields: TableColumn<DataRow>[];
+  data: unknown;
+  // data:
+  //   | Partial<Customer>[]
+  //   | Partial<Employee>[]
+  //   | Partial<Machine>[]
+  //   | Partial<Procedure>[]
+  //   | Partial<Product>[]
+  //   | Partial<Vendor>[];
+  filterFields?: TableColumn<DataRow>[];
   typeRegister?: string;
   isLoadingSpinner?: boolean;
 }
@@ -75,58 +76,58 @@ const DynamicTable: React.FC<TableProps> = ({ columns, data, isLoadingSpinner, f
   });
 
   return (
-    <div className="w-full p-4">
-      <div className="flex items-center py-4 gap-4 flex-wrap">
-        {filterFields && (
-          <div className="w-full grid grid-cols-4 gap-4">
-            {filterFields.map((filterField, index) => (
-              <div key={index}>
-                <Input
-                  type="text"
-                  name={filterField.accessorKey}
-                  placeholder={"Filtrar " + filterField.header?.toLocaleLowerCase() + "..."}
-                  value={(table.getColumn(filterField.accessorKey || "")?.getFilterValue() as string) ?? ""}
-                  onChange={(event) =>
-                    table.getColumn(filterField.accessorKey || "")?.setFilterValue(event.target.value)
-                  }
-                  className="max-w-sm"
-                />
-              </div>
-            ))}
-          </div>
-        )}
-        {typeRegister && (
+    <div className={typeRegister ? "w-full p-4" : "w-full"}>
+      {typeRegister && (
+        <div className="flex items-center py-4 gap-4 flex-wrap">
+          {filterFields && (
+            <div className="w-full grid grid-cols-4 gap-4">
+              {filterFields.map((filterField, index) => (
+                <div key={index}>
+                  <Input
+                    type="text"
+                    name={filterField.accessorKey}
+                    placeholder={"Filtrar " + filterField.header?.toLocaleLowerCase() + "..."}
+                    value={(table.getColumn(filterField.accessorKey || "")?.getFilterValue() as string) ?? ""}
+                    onChange={(event) =>
+                      table.getColumn(filterField.accessorKey || "")?.setFilterValue(event.target.value)
+                    }
+                    className="max-w-sm"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
           <div className="w-1/2 flex justify-between">
             <Dialog>
               <Modal typeModal="CREATE" nameModal={typeRegister} typeRegister={typeRegister} />
             </Dialog>
           </div>
-        )}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild className="px-3">
-            <Button variant="outline" className="ml-auto">
-              Colunas <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                  >
-                    {column.columnDef.header}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild className="px-3">
+              <Button variant="outline" className="ml-auto">
+                Colunas <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                    >
+                      {column.columnDef.header}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      )}
       <div className="rounded-md border">
         <Table>
           <TableHeader>

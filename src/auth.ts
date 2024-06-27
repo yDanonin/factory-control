@@ -30,7 +30,10 @@ const providers: Provider[] = [
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   secret: "jwttoken",
-  session: { strategy: "jwt" },
+  session: {
+    strategy: "jwt",
+    maxAge: 24 * 60 * 60 // 24 hours
+  },
   providers,
   callbacks: {
     async session({ session, token }) {

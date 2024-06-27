@@ -132,7 +132,7 @@ export default function Page() {
         <Aside />
       </nav>
       <main className="main-layout">
-        <Header title="Empregados"/>
+        <Header title="Empregados" />
         <DynamicTable
           isLoadingSpinner={isLoading}
           columns={columns}
