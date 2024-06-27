@@ -194,8 +194,8 @@ export const Edit: React.FC<ModalEditProps> = ({ nameModal, rowData, idRowData, 
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <DialogHeader>
               <DialogTitle>Editando {nameModal}</DialogTitle>
-              <div className="grid grid-cols-3 gap-4">{formFields}</div>
             </DialogHeader>
+            <div className="grid grid-cols-3 gap-4">{formFields}</div>
             <DialogFooter className="absolute bottom-0 right-0 p-10">
               <DialogClose asChild>
                 <Button type="button" variant="secondary" disabled={isLoading ? true : false}>

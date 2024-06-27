@@ -1,19 +1,18 @@
 "use client";
 
-import Aside from "@/components/Aside";
 import React, { useEffect, useState } from "react";
-import { Customer } from "@/types/customer.types";
-import DataList from "@/components/DataList";
-import Header from "@/components/Header";
-import Modal from "@/components/Modal/Modal";
-import { AlertDialog } from "@/components/ui/alert-dialog";
-
-import { useRouter } from "next/navigation";
 
 import VMasker from "vanilla-masker";
-import { Separator } from "@/components/ui/separator";
+import Aside from "@/components/Aside";
+import Header from "@/components/Header";
 import { MoreVertical } from "lucide-react";
+import { useRouter } from "next/navigation";
+import DataList from "@/components/DataList";
+import Modal from "@/components/Modal/Modal";
 import { Button } from "@/components/ui/button";
+import { Dialog } from "@/components/ui/dialog";
+import { Customer } from "@/types/customer.types";
+import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   DropdownMenu,
@@ -67,7 +66,7 @@ export default function Page({ params }: { params: { id: string } }) {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
-                          <AlertDialog>
+                          <Dialog>
                             <Modal
                               typeModal="EDIT"
                               typeRegister="Customer"
@@ -75,10 +74,10 @@ export default function Page({ params }: { params: { id: string } }) {
                               rowData={customer}
                               idRowData={customer.id}
                             />
-                          </AlertDialog>
+                          </Dialog>
                         </DropdownMenuItem>
                         <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
-                          <AlertDialog>
+                          <Dialog>
                             <Modal
                               typeModal="DELETE"
                               typeRegister="Customer"
@@ -89,7 +88,7 @@ export default function Page({ params }: { params: { id: string } }) {
                                 router.push("/register/customers");
                               }}
                             />
-                          </AlertDialog>
+                          </Dialog>
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
