@@ -58,12 +58,12 @@ export const menuItensFuncionarios = [
   {
     id: 0,
     item: "Horários",
-    route: "/blabla"
+    route: "/controltime"
   },
   {
     id: 1,
     item: "Controle de férias",
-    route: "/blabla"
+    route: "/controlvacation"
   }
 ];
 
