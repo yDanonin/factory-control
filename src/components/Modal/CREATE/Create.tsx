@@ -144,7 +144,6 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
     const formattedData = formatObject(data, [Classification, Status]);
     setIsLoading(true);
     try {
-      console.log("formated data", formattedData);
       await axios.post(`/api/${apiCallByType}`, formattedData);
       setIsLoading(false);
       toast({

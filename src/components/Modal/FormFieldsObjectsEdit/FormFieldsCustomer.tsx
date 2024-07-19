@@ -31,7 +31,6 @@ function mapEnumToSelectItems<T extends string>(enumObj: EnumType<T>): JSX.Eleme
 }
 
 export const FormFieldsCustomer: React.FC<FormFieldsCustomer> = ({ form, rowData }) => {
-  console.log(rowData);
   function cleanFieldsAddress(): void {
     form.setValue("address.public_place", "");
     form.setValue("address.neighborhood", "");
