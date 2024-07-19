@@ -155,7 +155,7 @@ const DynamicTable: React.FC<TableProps> = ({ columns, data, isLoadingSpinner, f
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className={row?.getValue("status") == "Suspenso" ? "bg-red-100" : ""}
+                  className={row?.getValue("status") === "Suspenso" ? "bg-red-100" : ""}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
