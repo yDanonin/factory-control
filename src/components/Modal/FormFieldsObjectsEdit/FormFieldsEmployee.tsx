@@ -32,8 +32,7 @@ function mapEnumToSelectItems<T extends string>(enumObj: EnumType<T>): JSX.Eleme
   ));
 }
 
-export const FormFieldsEmployee: React.FC<FormFieldsEmployee> = ({ form, rowData }) => {
-  console.log(rowData);
+export const FormFieldsEmployee: React.FC<FormFieldsEmployee> = ({ form }) => {
   return (
     <>
       <FormField

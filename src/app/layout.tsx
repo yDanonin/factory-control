@@ -16,7 +16,7 @@ interface IProps {
   session: Session;
 }
 
-export default function RootLayout({ children }: IProps) {
+export default function RootLayout({ children, session }: IProps) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
@@ -25,7 +25,7 @@ export default function RootLayout({ children }: IProps) {
         className={cn("min-h-screen bg-[#17181A] font-sans antialiased", fontSans.variable)}
       >
         <NextUIProvider>
-          <AuthWrapper>{children}</AuthWrapper>
+          <AuthWrapper session={session}>{children}</AuthWrapper>
           <Toaster />
         </NextUIProvider>
       </body>

@@ -14,9 +14,9 @@ const providers: Provider[] = [
           email: email,
           password: password
         });
-        console.log("aaaaa", user);
         if (user) {
-          return { ...user.data.user, accessToken: user.data.token };
+          console.log(user.data.user);
+          return { ...user.data.user, id: user.data.user.id.toString(), accessToken: user.data.token };
         } else {
           return null;
         }
@@ -38,7 +38,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async session({ session, token }) {
       session.user = {
-        id: session.user.id,
+        id: session.userId,
         emailVerified: new Date(),
         idToken: token.idToken,
         name: session.user.name,

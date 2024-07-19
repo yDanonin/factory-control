@@ -2,22 +2,22 @@
 
 import React, { useEffect, useState } from "react";
 
+import axios from "axios";
+import moment from "moment";
 import VMasker from "vanilla-masker";
 import Aside from "@/components/Aside";
 import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
 import DataList from "@/components/DataList";
+import { MoreVertical } from "lucide-react";
 import Modal from "@/components/Modal/Modal";
 import { Button } from "@/components/ui/button";
-import { Employee } from "@/types/employee.types";
-import DynamicTable from "@/components/DynamicTable";
-import { Separator } from "@/components/ui/separator";
-import { FileText, MoreVertical } from "lucide-react";
-import { calculateHoursWorked, formatDate, formatTime } from "@/services/formatDate";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog } from "@/components/ui/dialog";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Employee } from "@/types/employee.types";
+import { formatDate } from "@/services/formatDate";
+import { Separator } from "@/components/ui/separator";
+import ClocksEmployee, { EmployeeWorkHour } from "@/components/ClocksEmployee/ClocksEmployee";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,186 +27,37 @@ import {
 
 export default function Page({ params }: { params: { id: string } }) {
   const [employee, setEmployee] = useState<Employee>();
+  const [workHours, setWorkHours] = useState<EmployeeWorkHour[]>([]);
 
   const router = useRouter();
   useEffect(() => {
     const fetchEmployees = async () => {
       const response = await fetch(`/api/employees/${params.id}`);
       const data = await response.json();
-      console.log("AQUI:", data);
       setEmployee(data);
     };
+    const fetchWorkHours = async (employeeId: string) => {
+      const endDate = moment().format("YYYY-MM-DD");
+      const startDate = moment().subtract(3, "months").format("YYYY-MM-DD");
 
-    fetchEmployees();
-  }, [params.id]);
-
-  const today = new Date();
-  const entryTime = new Date();
-  entryTime.setHours(9, 0, 0); // 09:00:00
-  const exitTime = new Date();
-  exitTime.setHours(17, 0, 0); // 17:00:00
-
-  const data = [
-    {
-      date_worked: formatDate(today),
-      entry: formatTime(entryTime),
-      exit: formatTime(exitTime),
-      hours_worked: calculateHoursWorked(entryTime, exitTime)
-    },
-    {
-      date_worked: formatDate(new Date(today.setDate(today.getDate() - 1))),
-      entry: formatTime(new Date(entryTime.setDate(entryTime.getDate() - 1))),
-      exit: formatTime(new Date(exitTime.setDate(exitTime.getDate() - 1))),
-      hours_worked: calculateHoursWorked(entryTime, exitTime)
-    },
-    {
-      date_worked: formatDate(new Date(today.setDate(today.getDate() - 2))),
-      entry: formatTime(new Date(entryTime.setDate(entryTime.getDate() - 2))),
-      exit: formatTime(new Date(exitTime.setDate(exitTime.getDate() - 2))),
-      hours_worked: calculateHoursWorked(entryTime, exitTime)
-    },
-    {
-      date_worked: formatDate(new Date(today.setDate(today.getDate() - 3))),
-      entry: formatTime(new Date(entryTime.setDate(entryTime.getDate() - 3))),
-      exit: formatTime(new Date(exitTime.setDate(exitTime.getDate() - 3))),
-      hours_worked: calculateHoursWorked(entryTime, exitTime)
-    },
-    {
-      date_worked: formatDate(new Date(today.setDate(today.getDate() - 4))),
-      entry: formatTime(new Date(entryTime.setDate(entryTime.getDate() - 4))),
-      exit: formatTime(new Date(exitTime.setDate(exitTime.getDate() - 4))),
-      hours_worked: calculateHoursWorked(entryTime, exitTime)
-    },
-    {
-      date_worked: formatDate(today),
-      entry: formatTime(entryTime),
-      exit: formatTime(exitTime),
-      hours_worked: calculateHoursWorked(entryTime, exitTime)
-    },
-    {
-      date_worked: formatDate(today),
-      entry: formatTime(entryTime),
-      exit: formatTime(exitTime),
-      hours_worked: calculateHoursWorked(entryTime, exitTime)
-    },
-    {
-      date_worked: formatDate(today),
-      entry: formatTime(entryTime),
-      exit: formatTime(exitTime),
-      hours_worked: calculateHoursWorked(entryTime, exitTime)
-    },
-    {
-      date_worked: formatDate(today),
-      entry: formatTime(entryTime),
-      exit: formatTime(exitTime),
-      hours_worked: calculateHoursWorked(entryTime, exitTime)
-    },
-    {
-      date_worked: formatDate(today),
-      entry: formatTime(entryTime),
-      exit: formatTime(exitTime),
-      hours_worked: calculateHoursWorked(entryTime, exitTime)
-    },
-    {
-      date_worked: formatDate(today),
-      entry: formatTime(entryTime),
-      exit: formatTime(exitTime),
-      hours_worked: calculateHoursWorked(entryTime, exitTime)
-    },
-    {
-      date_worked: formatDate(today),
-      entry: formatTime(entryTime),
-      exit: formatTime(exitTime),
-      hours_worked: calculateHoursWorked(entryTime, exitTime)
-    },
-    {
-      date_worked: formatDate(today),
-      entry: formatTime(entryTime),
-      exit: formatTime(exitTime),
-      hours_worked: calculateHoursWorked(entryTime, exitTime)
-    },
-    {
-      date_worked: formatDate(today),
-      entry: formatTime(entryTime),
-      exit: formatTime(exitTime),
-      hours_worked: calculateHoursWorked(entryTime, exitTime)
-    },
-    {
-      date_worked: formatDate(today),
-      entry: formatTime(entryTime),
-      exit: formatTime(exitTime),
-      hours_worked: calculateHoursWorked(entryTime, exitTime)
-    },
-    {
-      date_worked: formatDate(today),
-      entry: formatTime(entryTime),
-      exit: formatTime(exitTime),
-      hours_worked: calculateHoursWorked(entryTime, exitTime)
-    },
-    {
-      date_worked: formatDate(today),
-      entry: formatTime(entryTime),
-      exit: formatTime(exitTime),
-      hours_worked: calculateHoursWorked(entryTime, exitTime)
-    },
-    {
-      date_worked: formatDate(today),
-      entry: formatTime(entryTime),
-      exit: formatTime(exitTime),
-      hours_worked: calculateHoursWorked(entryTime, exitTime)
-    }
-  ];
-
-  const columns = [
-    {
-      header: "Dia",
-      accessorKey: "date_worked"
-    },
-    {
-      header: "Entrada",
-      accessorKey: "entry"
-    },
-    {
-      header: "Saída",
-      accessorKey: "exit"
-    },
-    {
-      header: "Horas Trabalhadas",
-      accessorKey: "hours_worked"
-    },
-    {
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => {
-        return (
-          <Sheet>
-            <TooltipProvider>
-              <Tooltip>
-                <SheetTrigger asChild>
-                  <TooltipTrigger asChild>
-                    <Button variant="outline" size="icon">
-                      <FileText className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
-                </SheetTrigger>
-                <TooltipContent>
-                  <p>Ver Histórico de descanso do dia</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <SheetContent className="max-w-[400px] sm:max-w-[540px]">
-              <SheetHeader>
-                <SheetTitle>Histórico de descanso do dia {row.original.date_worked}</SheetTitle>
-              </SheetHeader>
-              <SheetDescription>
-                <DynamicTable columns={columns} data={data} />
-              </SheetDescription>
-            </SheetContent>
-          </Sheet>
-        );
+      try {
+        const response = await axios.get(`/api/employees/work-hours`, {
+          params: {
+            employee_id: employeeId,
+            startDate: startDate,
+            endDate: endDate
+          }
+        });
+        setWorkHours(response.data);
+      } catch (error) {
+        console.error("Error fetching work hours:", error);
       }
-    }
-  ];
+    };
+
+    fetchEmployees().then(() => {
+      fetchWorkHours(params.id);
+    });
+  }, [params.id]);
 
   return (
     <div className="page-layout">
@@ -341,7 +192,8 @@ export default function Page({ params }: { params: { id: string } }) {
               </div>
             )}
             <div className="w-1/2">
-              <DynamicTable columns={columns} data={data} />
+              <div className="text-muted-foreground text-center font-semibold mb-2">Histórico de Horas Trabalhadas</div>
+              <ClocksEmployee data={workHours} />
             </div>
           </div>
         </div>

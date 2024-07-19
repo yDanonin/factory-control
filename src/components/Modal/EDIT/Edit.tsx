@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 
 import { z } from "zod";
 import { Loader2 } from "lucide-react";
@@ -54,42 +54,42 @@ interface ModalEditProps {
   idRowData?: number;
 }
 
-export const Edit: React.FC<ModalEditProps> = ({ nameModal, rowData, idRowData, typeRegister }) => {
-  function dataCorrected(obj) {
-    if (obj["address"]) {
-      obj["address"]["address_number"] = obj["address"]["address_number"].toString();
-    }
-    for (const key in obj) {
-      if (obj[key] === null) {
-        obj[key] = "";
-      }
-      if (typeof obj[key] === "number") {
-        obj[key] = obj[key].toString();
-      }
-      if (typeof obj[key] === "boolean" && obj[key] === true) {
-        obj[key] = "true";
-      }
-      if (typeof obj[key] === "boolean" && obj[key] === false) {
-        obj[key] = "false";
-      }
-      if ((key === "status" || key === "location_status") && obj[key] === "Operacional") {
-        obj[key] = Status.operacional;
-      }
-      if ((key === "status" || key === "location_status") && obj[key] === "Suspenso") {
-        obj[key] = Status.suspenso;
-      }
-      if (key === "classification" && obj[key] === "funcionario") {
-        obj[key] = Classification.funcionario;
-      }
-      if (key === "classification" && obj[key] === "em teste") {
-        obj[key] = Classification.em_teste;
-      }
-      if (key === "classification" && obj[key] === "externo") {
-        obj[key] = Classification.externo;
-      }
-    }
-    return obj;
-  }
+function Edit({ nameModal, rowData, idRowData, typeRegister }: ModalEditProps) {
+  // function dataCorrected(obj) {
+  //   if (obj["address"]) {
+  //     obj["address"]["address_number"] = obj["address"]["address_number"].toString();
+  //   }
+  //   for (const key in obj) {
+  //     if (obj[key] === null) {
+  //       obj[key] = "";
+  //     }
+  //     if (typeof obj[key] === "number") {
+  //       obj[key] = obj[key].toString();
+  //     }
+  //     if (typeof obj[key] === "boolean" && obj[key] === true) {
+  //       obj[key] = "true";
+  //     }
+  //     if (typeof obj[key] === "boolean" && obj[key] === false) {
+  //       obj[key] = "false";
+  //     }
+  //     if ((key === "status" || key === "location_status") && obj[key] === "Operacional") {
+  //       obj[key] = Status.operacional;
+  //     }
+  //     if ((key === "status" || key === "location_status") && obj[key] === "Suspenso") {
+  //       obj[key] = Status.suspenso;
+  //     }
+  //     if (key === "classification" && obj[key] === "funcionario") {
+  //       obj[key] = Classification.funcionario;
+  //     }
+  //     if (key === "classification" && obj[key] === "em teste") {
+  //       obj[key] = Classification.em_teste;
+  //     }
+  //     if (key === "classification" && obj[key] === "externo") {
+  //       obj[key] = Classification.externo;
+  //     }
+  //   }
+  //   return obj;
+  // }
 
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
@@ -134,7 +134,7 @@ export const Edit: React.FC<ModalEditProps> = ({ nameModal, rowData, idRowData, 
 
   const form = useForm<z.infer<typeof typeSchema>>({
     resolver: zodResolver(typeSchema),
-    defaultValues: dataCorrected(rowData),
+    defaultValues: rowData,
     disabled: isLoading
   });
 
@@ -186,6 +186,8 @@ export const Edit: React.FC<ModalEditProps> = ({ nameModal, rowData, idRowData, 
     }
   }
 
+  console.log(isLoading);
+
   return (
     <>
       <DialogTrigger>Editar {nameModal}</DialogTrigger>
@@ -216,13 +218,6 @@ export const Edit: React.FC<ModalEditProps> = ({ nameModal, rowData, idRowData, 
       </Form>
     </>
   );
-};
+}
 
-// const handleContinueClick = async () => {
-//   try {
-//     await axios.patch(`/api/customerss/${rowData?.id}`, editedValues);
-//   } catch (err) {
-//     console.error(err);
-//   }
-//   console.log("Valores editados:", editedValues);
-// };
+export default memo(Edit);
