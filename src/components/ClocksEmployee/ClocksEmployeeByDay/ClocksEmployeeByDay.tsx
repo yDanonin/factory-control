@@ -64,11 +64,11 @@ function ClocksEmployeeByDay({ dateFormated, idEmployee }: { dateFormated: strin
       }
     };
     fetchData();
-  }, [dateFormated, idEmployee]);
+  }, []);
 
   const table = useReactTable({
-    dataWorkedByDay,
-    columns,
+    data: dataWorkedByDay,
+    columns: columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel()
   });
