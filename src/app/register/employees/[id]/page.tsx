@@ -22,12 +22,21 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import DynamicTable from "@/components/DynamicTable";
+import { MoreHorizontal } from "lucide-react";
+import { AlertDialog } from "@/components/ui/alert-dialog";
+import { DataRow, TableColumn } from "@/models/TableColumn";
+import { Row } from "@tanstack/react-table";
+import { Schedule } from "@/types/schedule.types";
 
 export default function Page({ params }: { params: { id: string } }) {
   const [employee, setEmployee] = useState<Employee>();
   const [workHours, setWorkHours] = useState<EmployeeWorkHour[]>([]);
+  const [data, setData] = useState<Schedule[]>();
 
   const router = useRouter();
   useEffect(() => {
@@ -36,6 +45,14 @@ export default function Page({ params }: { params: { id: string } }) {
       const data = await response.json();
       setEmployee(data);
     };
+
+    const fetchEmployeeSchedules = async () => {
+      const response = await fetch(`/api/employees/schedules/?employee_id=${params.id}`);
+      const resp = await response.json();
+      console.log("------------------------------ AQUI ------------------------------", resp)
+      setData(resp);
+    }
+
     const fetchWorkHours = async (employeeId: string) => {
       const endDate = moment().format("YYYY-MM-DD");
       const startDate = moment().subtract(3, "months").format("YYYY-MM-DD");
@@ -57,7 +74,54 @@ export default function Page({ params }: { params: { id: string } }) {
     fetchEmployees().then(() => {
       fetchWorkHours(params.id);
     });
+    fetchEmployeeSchedules()
   }, [params.id]);
+
+  const columns = [
+    {
+      header: "Dia da Semana",
+      accessorKey: "day_of_week"
+    },
+    {
+      header: "Horário de entrada",
+      accessorKey: "start_time"
+    },
+    {
+      header: "Horário de saída",
+      accessorKey: "end_time"
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }: { row: Row<DataRow> }) => {
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Ações</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
+                <AlertDialog>
+                  <Modal
+                    typeModal="EDIT"
+                    typeRegister="TimeConfiguration"
+                    nameModal="Tempo"
+                    rowData={row.original}
+                    idRowData={row.original.id}
+                  />
+                </AlertDialog>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      }
+    }
+  ]
 
   return (
     <div className="page-layout">
@@ -196,7 +260,14 @@ export default function Page({ params }: { params: { id: string } }) {
               <ClocksEmployee data={workHours} />
             </div>
           </div>
-        </div>
+
+          <div className="text-muted-foreground text-center font-semibold mb-2">Horário do funcionário</div>
+              {data && <DynamicTable
+                columns={columns}
+                data={data}
+              />}
+          </div>
+
       </main>
     </div>
   );

@@ -7,8 +7,9 @@ import { Product } from "@/types/product.types";
 import { Vendor } from "@/types/vendor.types";
 import { Vacation } from "@/types/vacation.types";
 import { TimeConfiguration } from "@/types/time-configuration.types";
+import { Schedule } from "@/types/schedule.types";
 
-export type DataRow = Customer | Employee | Machine | Procedure | Product | Vendor | Vacation | TimeConfiguration;
+export type DataRow = Customer | Employee | Machine | Procedure | Product | Vendor | Vacation | TimeConfiguration | Schedule;
 
 export type TableColumn<DataRow> = {
   id?: string;
