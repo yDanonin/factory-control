@@ -2,9 +2,21 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table";
-import { columns, data } from "./columns";
+import { columns } from "./columns";
+import { ColumnDef } from "@tanstack/react-table";
 
-function ClockActiveEmployees() {
+export type EmployeeActive = {
+  name: string;
+  cpf: string;
+  clock_in: Date;
+};
+
+interface Props {
+  data: Array<Object>;
+  // columns: ColumnDef<EmployeeActive>[];
+}
+
+function ClockActiveEmployees({ data }: Props) {
   const table = useReactTable({
     data: data,
     columns: columns,

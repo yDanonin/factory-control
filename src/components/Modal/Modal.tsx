@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import Edit from "./EDIT/Edit";
 import { Create } from "./CREATE/Create";
+import { Edit } from "./EDIT/Edit";
 import { Delete } from "./DELETE/Delete";
 import { Customer } from "@/types/customer.types";
 import { Employee } from "@/types/employee.types";
@@ -33,6 +33,7 @@ const Modal: React.FC<ModalProps> = ({ typeModal, rowData, nameModal, typeRegist
   } else if (typeModal === "EDIT") {
     designModalByType = (
       <>
+        {console.log("CHAMANDO O EDIT")}
         <Edit idRowData={idRowData} rowData={rowData} nameModal={nameModal} typeRegister={typeRegister} />
       </>
     );

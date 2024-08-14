@@ -14,11 +14,15 @@ import { Product } from "@/types/product.types";
 import { Machine } from "@/types/machine.types";
 import { Customer } from "@/types/customer.types";
 import { Procedure } from "@/types/procedure.types";
+import { Vacation } from "@/types/vacation.types";
+import { TimeConfiguration } from "@/types/time-configuration.types";
 import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formatObject } from "@/services/formatInputs";
 import { Classification, Employee } from "@/types/employee.types";
 import { FormFieldsVendor } from "../FormFieldsObjectsEdit/FormFieldsVendor";
+import { FormFieldsVacation } from "../FormFieldsObjectsEdit/FormFieldsVacation";
+import { FormFieldsTimeConfiguration } from "../FormFieldsObjectsEdit/FormFieldsTimeConfiguration";
 import { FormFieldsProduct } from "../FormFieldsObjectsEdit/FormFieldsProduct";
 import { FormFieldsMachine } from "../FormFieldsObjectsEdit/FormFieldsMachine";
 import { FormFieldsEmployee } from "../FormFieldsObjectsEdit/FormFieldsEmployee";
@@ -30,7 +34,9 @@ import {
   formMachineSchema,
   formProcedureSchema,
   formProductSchema,
-  formVendorSchema
+  formVendorSchema,
+  formVacationSchema,
+  formTimeConfigurationSchema
 } from "@/schemas/FormSchemas";
 import {
   DialogContent,
@@ -41,6 +47,18 @@ import {
   DialogTrigger
 } from "@/components/ui/dialog";
 
+import {
+  
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogAction,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogCancel,
+} from "@/components/ui/alert-dialog";
+
 interface ModalEditProps {
   nameModal: string;
   typeRegister: string;
@@ -50,47 +68,13 @@ interface ModalEditProps {
     | Partial<Machine>
     | Partial<Procedure>
     | Partial<Product>
-    | Partial<Vendor>;
+    | Partial<Vendor>
+    | Partial<Vacation>
+    | Partial<TimeConfiguration>;
   idRowData?: number;
 }
 
-function Edit({ nameModal, rowData, idRowData, typeRegister }: ModalEditProps) {
-  // function dataCorrected(obj) {
-  //   if (obj["address"]) {
-  //     obj["address"]["address_number"] = obj["address"]["address_number"].toString();
-  //   }
-  //   for (const key in obj) {
-  //     if (obj[key] === null) {
-  //       obj[key] = "";
-  //     }
-  //     if (typeof obj[key] === "number") {
-  //       obj[key] = obj[key].toString();
-  //     }
-  //     if (typeof obj[key] === "boolean" && obj[key] === true) {
-  //       obj[key] = "true";
-  //     }
-  //     if (typeof obj[key] === "boolean" && obj[key] === false) {
-  //       obj[key] = "false";
-  //     }
-  //     if ((key === "status" || key === "location_status") && obj[key] === "Operacional") {
-  //       obj[key] = Status.operacional;
-  //     }
-  //     if ((key === "status" || key === "location_status") && obj[key] === "Suspenso") {
-  //       obj[key] = Status.suspenso;
-  //     }
-  //     if (key === "classification" && obj[key] === "funcionario") {
-  //       obj[key] = Classification.funcionario;
-  //     }
-  //     if (key === "classification" && obj[key] === "em teste") {
-  //       obj[key] = Classification.em_teste;
-  //     }
-  //     if (key === "classification" && obj[key] === "externo") {
-  //       obj[key] = Classification.externo;
-  //     }
-  //   }
-  //   return obj;
-  // }
-
+export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -98,7 +82,9 @@ function Edit({ nameModal, rowData, idRowData, typeRegister }: ModalEditProps) {
     | z.ZodType<Partial<Customer> | z.ZodType<Partial<Employee>> | z.ZodType<Partial<Machine>>>
     | z.ZodType<Partial<Procedure>>
     | z.ZodType<Partial<Product>>
-    | z.ZodType<Partial<Vendor>>;
+    | z.ZodType<Partial<Vendor>>
+    | z.ZodType<Partial<Vacation>>
+    | z.ZodType<Partial<TimeConfiguration>>;
 
   let apiCallByType: string;
   let formFields;
@@ -128,6 +114,14 @@ function Edit({ nameModal, rowData, idRowData, typeRegister }: ModalEditProps) {
       typeSchema = formVendorSchema;
       apiCallByType = "vendors";
       break;
+    case "Vacation":
+      typeSchema = formVacationSchema;
+      apiCallByType = "employees/vacations";
+      break;
+    case "TimeConfiguration":
+      typeSchema = formTimeConfigurationSchema;
+      apiCallByType = "time-configurations";
+      break;
     default:
       throw new Error(`Invalid typeRegister: ${typeRegister}`);
   }
@@ -156,6 +150,12 @@ function Edit({ nameModal, rowData, idRowData, typeRegister }: ModalEditProps) {
       break;
     case "Vendor":
       formFields = <FormFieldsVendor form={form} rowData={rowData} />;
+      break;
+    case "Vacation":
+      formFields = <FormFieldsVacation form={form}/>;
+      break;
+    case "TimeConfiguration":
+      formFields = <FormFieldsTimeConfiguration form={form} />
       break;
     default:
       formFields = <div>erro</div>;
@@ -190,20 +190,20 @@ function Edit({ nameModal, rowData, idRowData, typeRegister }: ModalEditProps) {
 
   return (
     <>
-      <DialogTrigger>Editar {nameModal}</DialogTrigger>
+      <AlertDialogTrigger>Editar {nameModal}</AlertDialogTrigger>
       <Form {...form}>
-        <DialogContent className="min-w-full min-h-full">
+        <AlertDialogContent className="min-w-full min-h-full">
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <DialogHeader>
-              <DialogTitle>Editando {nameModal}</DialogTitle>
-            </DialogHeader>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Editando {nameModal}</AlertDialogTitle>
+            </AlertDialogHeader>
             <div className="grid grid-cols-3 gap-4">{formFields}</div>
-            <DialogFooter className="absolute bottom-0 right-0 p-10">
-              <DialogClose asChild>
+            <AlertDialogFooter className="absolute bottom-0 right-0 p-10">
+              <AlertDialogCancel asChild>
                 <Button type="button" variant="secondary" disabled={isLoading ? true : false}>
                   Fechar
                 </Button>
-              </DialogClose>
+              </AlertDialogCancel>
               {isLoading ? (
                 <Button disabled>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -212,12 +212,12 @@ function Edit({ nameModal, rowData, idRowData, typeRegister }: ModalEditProps) {
               ) : (
                 <Button type="submit">Editar</Button>
               )}
-            </DialogFooter>
+            </AlertDialogFooter>
           </form>
-        </DialogContent>
+        </AlertDialogContent>
       </Form>
     </>
   );
 }
 
-export default memo(Edit);
+// export default Edit;
