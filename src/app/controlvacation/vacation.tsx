@@ -1,17 +1,14 @@
 "use client";
 import { useState, useEffect } from "react";
 
-import "./Employees.css";
 import axios from "axios";
-import Aside from "@/components/Aside";
 import { useRouter } from "next/navigation";
 import { Row } from "@tanstack/react-table";
 import Modal from "@/components/Modal/Modal";
 import { MoreHorizontal } from "lucide-react";
-import { AlertDialog } from "@/components/ui/alert-dialog";
 import { Dialog } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Employee } from "@/types/employee.types";
+import { Vacation } from "@/types/vacation.types";
 import DynamicTable from "@/components/DynamicTable";
 import { DataRow, TableColumn } from "@/models/TableColumn";
 import {
@@ -22,19 +19,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import Header from "@/components/Header";
 
-export default function Page() {
+
+export const VacationPage = () => {
   const router = useRouter();
-  const [data, setData] = useState<Employee[]>([]);
+  const [data, setData] = useState<Vacation[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  // const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const resp = await axios.get("/api/employees");
-        setData(resp.data.data);
+        const resp = await axios.get("/api/employees/vacations");
+        setData(resp.data);
       } catch (err) {
         console.error(err);
       } finally {
@@ -47,34 +43,25 @@ export default function Page() {
 
   const columns = [
     {
-      header: "Nome",
-      accessorKey: "name"
+      header: "Id do Funcionário",
+      accessorKey: "employee_id"
     },
     {
-      header: "Cpf",
-      accessorKey: "cpf"
+      header: "Data de inicio",
+      accessorKey: "start_date"
     },
     {
-      header: "Num. telefone",
-      accessorKey: "phone"
+      header: "Data final",
+      accessorKey: "end_date"
     },
     {
-      header: "Num. celular",
-      accessorKey: "cel_number"
-    },
-    {
-      header: "Salário",
-      accessorKey: "salary"
-    },
-    {
-      header: "Admissão",
-      accessorKey: "admission"
+      header: "Total de dias vendidos",
+      accessorKey: "sold_days"
     },
     {
       id: "actions",
       enableHiding: false,
       cell: ({ row }: { row: Row<DataRow> }) => {
-        
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -86,29 +73,23 @@ export default function Page() {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Ver mais</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={() => router.push(`/register/employees/${row.original.id}`)}
-              >
-                Ver detalhes do funcionário
-              </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
-                <AlertDialog>
+                <Dialog>
                   <Modal
                     typeModal="EDIT"
-                    typeRegister="Employee"
-                    nameModal="funcionario"
+                    typeRegister="Vacation"
+                    nameModal="férias"
                     rowData={row.original}
                     idRowData={row.original.id}
                   />
-                </AlertDialog>
+                </Dialog>
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
                 <Dialog>
                   <Modal
                     typeModal="DELETE"
-                    typeRegister="Employee"
-                    nameModal="funcionario"
+                    typeRegister="Vacation"
+                    nameModal="férias"
                     rowData={row.original}
                     idRowData={row.original.id}
                   />
@@ -129,20 +110,15 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="page-layout">
-      <nav className="aside-layout">
-        <Aside />
-      </nav>
-      <main className="main-layout">
-        <Header title="Empregados" />
-        <DynamicTable
-          isLoadingSpinner={isLoading}
-          columns={columns}
-          data={data}
-          filterFields={arrayFilterFieldsByAcessorKey}
-          typeRegister="Employee"
-        />
-      </main>
-    </div>
+    <main className="main-layout">
+      <DynamicTable
+            isLoadingSpinner={isLoading}
+            columns={columns}
+            data={data}
+            filterFields={arrayFilterFieldsByAcessorKey}
+            typeRegister="Vacation"
+          />
+    </main>
+   
   );
 }

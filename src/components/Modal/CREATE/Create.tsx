@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import { Status } from "@/types/common.types";
 import { Vendor } from "@/types/vendor.types";
+import { Vacation } from "@/types/vacation.types";
 import { Button } from "@/components/ui/button";
 import { Product } from "@/types/product.types";
 import { Machine } from "@/types/machine.types";
@@ -19,6 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { formatObject } from "@/services/formatInputs";
 import { Classification, Employee } from "@/types/employee.types";
 import { FormFieldsVendor } from "../FormFieldsObjectsCreate/FormFieldsVendor";
+import { FormFieldsVacation } from "../FormFieldsObjectsCreate/FormFieldsVacation";
 import { FormFieldsProduct } from "../FormFieldsObjectsCreate/FormFieldsProduct";
 import { FormFieldsMachine } from "../FormFieldsObjectsCreate/FormFieldsMachine";
 import { FormFieldsEmployee } from "../FormFieldsObjectsCreate/FormFieldsEmployee";
@@ -30,7 +32,8 @@ import {
   formMachineSchema,
   formProcedureSchema,
   formProductSchema,
-  formVendorSchema
+  formVendorSchema,
+  formVacationSchema
 } from "@/schemas/FormSchemas";
 import {
   customerDefaultValues,
@@ -38,7 +41,8 @@ import {
   machineDefaultValues,
   procedureDefaultValues,
   productDefaultValues,
-  vendorDefaultValues
+  vendorDefaultValues,
+  vacationDefaultValues
 } from "@/schemas/DefaultValuesForm";
 import {
   DialogContent,
@@ -68,7 +72,8 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
     | z.ZodType<Partial<Customer> | z.ZodType<Partial<Employee>> | z.ZodType<Partial<Machine>>>
     | z.ZodType<Partial<Procedure>>
     | z.ZodType<Partial<Product>>
-    | z.ZodType<Partial<Vendor>>;
+    | z.ZodType<Partial<Vendor>>
+    | z.ZodType<Partial<Vacation>>;
 
   let apiCallByType: string;
   let objDefaultValues;
@@ -105,6 +110,11 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
       objDefaultValues = vendorDefaultValues;
       apiCallByType = "vendors";
       break;
+    case "Vacation":
+      typeSchema = formVacationSchema;
+      objDefaultValues = vacationDefaultValues;
+      apiCallByType = "employees/vacations";
+      break;
     default:
       throw new Error(`Invalid typeRegister: ${typeRegister}`);
   }
@@ -133,6 +143,9 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
       break;
     case "Vendor":
       formFields1 = <FormFieldsVendor form={form} />;
+      break;
+    case "Vacation":
+      formFields1 = <FormFieldsVacation form={form} />;
       break;
     default:
       formFields1 = <div>erro</div>;
@@ -172,7 +185,7 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <DialogHeader>
               <DialogTitle>Criando {nameModal}</DialogTitle>
-              <div className="grid grid-cols-3 gap-4">{formFields1}</div>
+              <div className="pt-4 grid grid-cols-3 gap-4">{formFields1}</div>
             </DialogHeader>
             <DialogFooter className="absolute bottom-0 right-0 p-10">
               <DialogClose asChild>

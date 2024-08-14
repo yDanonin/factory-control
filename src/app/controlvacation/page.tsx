@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-import { TimeConfigTable } from "./TimeConfigTable";
+import { VacationPage } from "./vacation";
 
 import Aside from "@/components/Aside";
 import Header from "@/components/Header";
@@ -17,9 +17,9 @@ function Page() {
           <Aside />
         </nav>
         <main className="main-layout">
-          <Header title="Horário Padrão da Fábrica" />
+          <Header title="Controle de Férias" />
 
-          {session.user.isAdmin && <TimeConfigTable/> }
+          {session.user.isAdmin && <VacationPage/> }
         </main>
       </div>
     );

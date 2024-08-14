@@ -148,6 +148,19 @@ export const signInFormSchema = z.object({
   })
 });
 
+export const formVacationSchema = z.object({
+  employee_id: z.number({ coerce: true }),
+  start_date: z.date(),
+  end_date: z.date(),
+  sold_days: z.number({ coerce: true })
+});
+
+export const formTimeConfigurationSchema = z.object({
+  work_start: z.string(),
+  work_end: z.string(),
+  late_limit_in_minutes: z.number({ coerce: true })
+})
+
 function validaCep(cep: string) {
   return /^\d{8}$/.test(cep.replace(/[^\d]+/g, ""));
 }

@@ -85,3 +85,10 @@ export const vendorDefaultValues = {
     address_number: "0"
   }
 };
+
+export const vacationDefaultValues = {
+  employee_id: 0,
+  start_date: new Date(),
+  end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+  sold_days: 0,
+}
