@@ -57,11 +57,16 @@ export const menuItensRecebimento = [
 export const menuItensFuncionarios = [
   {
     id: 0,
+    item: "Dashboard",
+    route: "/timedashboard"
+  },
+  {
+    id: 1,
     item: "Horários",
     route: "/controltime"
   },
   {
-    id: 1,
+    id: 2,
     item: "Controle de férias",
     route: "/controlvacation"
   }

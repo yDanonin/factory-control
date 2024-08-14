@@ -1,4 +1,4 @@
-// import axios from "axios";
+import axios from "axios";
 // import moment from "moment";
 // import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -8,45 +8,34 @@ import { ArrowUpRight, Users } from "lucide-react";
 // import { EmployeeWorkHour } from "@/components/ClocksEmployee/columns";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import ClockActiveEmployees from "@/components/ClockActiveEmployees/ClockActiveEmployees";
+import { WorkHour } from "@/types/work-types.types";
 
 // const today = moment().format("YYYY-MM-DD");
 
 export const Admin = () => {
   const [qtdFuncionario, setQtdFuncionario] = useState(0);
-  // const [employeesWorkHours, setEmployeesWorkHours] = useState([]);
+  const [qtdEmployeeActive, setQtdEmployeeActive] = useState(0);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    // const fetchData = async () => {
-    //   try {
-    //     const employeesResponse = await axios.get("/api/employees");
-    //     const employees = employeesResponse.data.data;
+    const fetchData = async () => {
+      try {
+        const resp = await axios.get("/api/employees/work-hours/today");
+        const data = resp.data.map((workHour: WorkHour) => {
+          return { name: workHour.employee.name, cpf: workHour.employee.cpf, primeiroPonto: workHour.clock_in}
+        })
+        const resp2 = await axios.get("/api/employees");
+        setQtdFuncionario(resp2.data.data.length)
+        setQtdEmployeeActive(data.length)
+        console.log(qtdEmployeeActive)
+        console.log(qtdFuncionario)
+        setData(data)
+      } catch (err) {
+        console.error(err);
+      }
+    };
 
-    //     setQtdFuncionario(employees.length);
-
-    //     const onlyIdEmployees = employees.map((employee: Employee) => employee.id);
-    //     console.log(onlyIdEmployees);
-
-    //     const workHoursPromises = onlyIdEmployees.map((employeeId: { id: number }) => {
-    //       console.log("entrou");
-    //       return axios.get(`/api/employees/work-hours`, {
-    //         params: {
-    //           employee_id: employeeId,
-    //           startDate: today,
-    //           endDate: today
-    //         }
-    //       });
-    //     });
-
-    //     const workHoursResponses = await Promise.all(workHoursPromises);
-    //     console.log(workHoursResponses);
-    //     const allEmployeesWorkHours = workHoursResponses.map((response) => response.data);
-    //     setEmployeesWorkHours(allEmployeesWorkHours);
-    //   } catch (err) {
-    //     console.error(err);
-    //   }
-    // };
-
-    // fetchData();
+    fetchData();
   }, []);
 
   return (
@@ -61,9 +50,10 @@ export const Admin = () => {
           </CardContent>
           <CardFooter>
             {/* <p className="text-2xl font-bold">{qtdFuncionario}</p> */}
-            <p className="text-2xl font-bold">7</p>
+            <p className="text-2xl font-bold">{qtdFuncionario}</p>
           </CardFooter>
         </Card>
+
         <Card x-chunk="dashboard-01-chunk-2">
           <CardHeader>
             <Users className="h-7 w-7 text-muted-foreground" />
@@ -75,7 +65,7 @@ export const Admin = () => {
             </div>
           </CardContent>
           <CardFooter>
-            <p className="text-2xl font-bold">7</p>
+            <p className="text-2xl font-bold">{qtdEmployeeActive}</p>
           </CardFooter>
         </Card>
       </div>
@@ -88,7 +78,9 @@ export const Admin = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <ClockActiveEmployees />
+            <ClockActiveEmployees 
+              data={data}
+            />
           </CardContent>
         </Card>
       </div>

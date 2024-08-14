@@ -5,8 +5,10 @@ import { Machine } from "@/types/machine.types";
 import { Procedure } from "@/types/procedure.types";
 import { Product } from "@/types/product.types";
 import { Vendor } from "@/types/vendor.types";
+import { Vacation } from "@/types/vacation.types";
+import { TimeConfiguration } from "@/types/time-configuration.types";
 
-export type DataRow = Customer | Employee | Machine | Procedure | Product | Vendor;
+export type DataRow = Customer | Employee | Machine | Procedure | Product | Vendor | Vacation | TimeConfiguration;
 
 export type TableColumn<DataRow> = {
   id?: string;

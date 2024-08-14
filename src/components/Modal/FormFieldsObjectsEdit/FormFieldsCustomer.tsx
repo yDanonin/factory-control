@@ -3,7 +3,7 @@
 import React from "react";
 
 import axios from "axios";
-import { withMask } from "use-mask-input";
+import useMask from "use-mask-input";
 import { Input } from "@/components/ui/input";
 import { Status } from "@/types/common.types";
 import { UseFormReturn } from "react-hook-form";
@@ -84,7 +84,7 @@ export const FormFieldsCustomer: React.FC<FormFieldsCustomer> = ({ form, rowData
           <FormItem>
             <FormLabel htmlFor="telefone">Número de Telefone</FormLabel>
             <FormControl>
-              <Input id="phone" {...field} ref={withMask("(99) 9999-9999")} placeholder="ex. (99) 99999-9999" />
+              <Input id="phone" {...field} ref={useMask.withMask("(99) 9999-9999")} placeholder="ex. (99) 99999-9999" />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -98,7 +98,7 @@ export const FormFieldsCustomer: React.FC<FormFieldsCustomer> = ({ form, rowData
           <FormItem>
             <FormLabel htmlFor="numero_celular">Número de Celular</FormLabel>
             <FormControl>
-              <Input id="cel_number" {...field} ref={withMask("(99) 99999-9999")} placeholder="ex. (99) 9999-9999" />
+              <Input id="cel_number" {...field} ref={useMask.withMask("(99) 99999-9999")} placeholder="ex. (99) 9999-9999" />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -183,7 +183,7 @@ export const FormFieldsCustomer: React.FC<FormFieldsCustomer> = ({ form, rowData
           <FormItem>
             <FormLabel htmlFor="cpf">Cpf</FormLabel>
             <FormControl>
-              <Input id="cpf" {...field} ref={withMask("999.999.999-99")} placeholder="999.999.999-99" />
+              <Input id="cpf" {...field} ref={useMask.withMask("999.999.999-99")} placeholder="999.999.999-99" />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -197,7 +197,7 @@ export const FormFieldsCustomer: React.FC<FormFieldsCustomer> = ({ form, rowData
           <FormItem>
             <FormLabel htmlFor="cnpj">Cnpj</FormLabel>
             <FormControl>
-              <Input id="cnpj" {...field} ref={withMask("99.999.999/9999-99")} placeholder="99.999.999/9999-99" />
+              <Input id="cnpj" {...field} ref={useMask.withMask("99.999.999/9999-99")} placeholder="99.999.999/9999-99" />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -311,7 +311,7 @@ export const FormFieldsCustomer: React.FC<FormFieldsCustomer> = ({ form, rowData
           <FormItem>
             <FormLabel htmlFor="cep">CEP</FormLabel>
             <FormControl onChange={captureCep}>
-              <Input {...field} ref={withMask("99999-999")} id="zip_code" placeholder="99999-999" />
+              <Input {...field} ref={useMask.withMask("99999-999")} id="zip_code" placeholder="99999-999" />
             </FormControl>
             <FormMessage />
           </FormItem>

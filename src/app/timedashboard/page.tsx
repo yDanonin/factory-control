@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 
-import { TimeConfigTable } from "./TimeConfigTable";
-
+import { Admin } from "./admin";
+import { Employee } from "./employee";
 import Aside from "@/components/Aside";
 import Header from "@/components/Header";
 
@@ -17,9 +17,8 @@ function Page() {
           <Aside />
         </nav>
         <main className="main-layout">
-          <Header title="Horário Padrão da Fábrica" />
-
-          {session.user.isAdmin && <TimeConfigTable/> }
+          <Header title="Controle de Horários" />
+          {session.user.isAdmin === true ? <Admin /> : <Employee idUser={session.user.idToken} />}
         </main>
       </div>
     );
