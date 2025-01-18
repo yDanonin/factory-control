@@ -39,6 +39,7 @@ import {
   formTimeConfigurationSchema
 } from "@/schemas/FormSchemas";
 import {
+  Dialog,
   DialogContent,
   DialogClose,
   DialogFooter,
@@ -48,7 +49,7 @@ import {
 } from "@/components/ui/dialog";
 
 import {
-  
+  AlertDialog,
   AlertDialogHeader,
   AlertDialogFooter,
   AlertDialogAction,
@@ -189,21 +190,21 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
   console.log(isLoading);
 
   return (
-    <>
-      <AlertDialogTrigger>Editar {nameModal}</AlertDialogTrigger>
+    <Dialog>
+      <DialogTrigger>Editar {nameModal}</DialogTrigger>
       <Form {...form}>
-        <AlertDialogContent className="min-w-full min-h-full">
+        <DialogContent className="min-w-full min-h-full">
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Editando {nameModal}</AlertDialogTitle>
-            </AlertDialogHeader>
+            <DialogHeader>
+              <DialogTitle>Editando {nameModal}</DialogTitle>
+            </DialogHeader>
             <div className="grid grid-cols-3 gap-4">{formFields}</div>
-            <AlertDialogFooter className="absolute bottom-0 right-0 p-10">
-              <AlertDialogCancel asChild>
+            <DialogFooter className="absolute bottom-0 right-0 p-10">
+              <DialogClose asChild>
                 <Button type="button" variant="secondary" disabled={isLoading ? true : false}>
                   Fechar
                 </Button>
-              </AlertDialogCancel>
+              </DialogClose>
               {isLoading ? (
                 <Button disabled>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -212,11 +213,11 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
               ) : (
                 <Button type="submit">Editar</Button>
               )}
-            </AlertDialogFooter>
+            </DialogFooter>
           </form>
-        </AlertDialogContent>
+        </DialogContent>
       </Form>
-    </>
+    </Dialog>
   );
 }
 
