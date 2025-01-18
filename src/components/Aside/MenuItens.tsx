@@ -35,22 +35,22 @@ export const menuItensRecebimento = [
   {
     id: 0,
     item: "Pedidos",
-    route: "/blabla"
+    route: "/receive/orders"
   },
   {
     id: 1,
     item: "Pagamentos",
-    route: "/blabla"
+    route: "/receive/payments"
   },
   {
     id: 2,
     item: "Material Produtivo",
-    route: "/blabla"
+    route: "/receive/material-orders"
   },
   {
     id: 3,
     item: "Devolucões",
-    route: "/blabla"
+    route: "/receive/product-returns"
   }
 ];
 
