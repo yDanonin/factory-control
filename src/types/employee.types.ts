@@ -7,12 +7,12 @@ export enum Classification {
 export type Employee = {
   id: number;
   name: string;
-  phone: string;
+  phone?: string;
   cel_number: string;
   cpf: string;
   classification: Classification;
   admission: Date;
-  salary: number;
+  salary?: number;
   dismissal_date?: Date;
   created_at: Date;
   updated_at: Date;

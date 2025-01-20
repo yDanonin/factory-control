@@ -19,10 +19,18 @@ export const formCustomerSchema = z
     store_name: z.string().min(2, {
       message: "Informe o nome da loja."
     }),
-    credit_limit: z.number({ coerce: true }),
-    debts: z.number({ coerce: true }),
-    cpf: z.string(),
-    cnpj: z.string(),
+    credit_limit: z.number({ coerce: true }).min(0, {
+      message: "Informe o limite de crédito."
+    }),
+    debts: z.number({ coerce: true }).min(0, {
+      message: "Informe o débito."
+    }),
+    cpf: z.string().min(11, {
+      message: "Informe o CPF."
+    }),
+    cnpj: z.string().min(14, {
+      message: "Informe o CNPJ."
+    }),
     deliver: z.string(),
     pontalti: z.string(),
     secondary_line: z.string(),
@@ -42,14 +50,16 @@ export const formCustomerSchema = z
       public_place: z.string().min(2, {
         message: "Informe a rua/avenida."
       }),
-      city: z.string().min(8, {
+      city: z.string().min(2, {
         message: "Informe a cidade."
       }),
-      state: z.string().max(2, {
-        message: "Informe a sigla do Estado."
-      }),
-      complement: z.string(),
-      address_number: z.number({ coerce: true })
+      state: z.string()
+      .min(2, { message: "Informe a sigla do Estado." })
+      .max(2, { message: "Informe a sigla do Estado." }),
+      complement: z.string().optional(),
+      address_number: z.number({ coerce: true }).min(1, {
+        message: "Informe o número do endereço."
+      })
     })
   })
   .partial()
@@ -64,19 +74,23 @@ export const formEmployeeSchema = z.object({
   }),
   phone: z.string().min(11, {
     message: "Informe o número de telefone."
-  }),
+  }).optional(),
   cel_number: z.string().min(11, {
     message: "Informe o número de celular."
   }),
-  cpf: z.string(),
+  cpf: z.string().min(11, {
+    message: "Informe o CPF."
+  }),
   classification: z.nativeEnum(Classification),
-  salary: z.number({ coerce: true }),
+  salary: z.number({ coerce: true }).optional(),
   admission: z.date(),
-  dismissal_date: z.date()
+  dismissal_date: z.date().optional()
 });
 
 export const formMachineSchema = z.object({
-  model: z.string(),
+  model: z.string().min(2, {
+    message: "Informe o modelo."
+  }),
   machine_number: z.number(),
   location: z.string(),
   status: z.nativeEnum(Status),
@@ -84,13 +98,17 @@ export const formMachineSchema = z.object({
 });
 
 export const formProcedureSchema = z.object({
-  process_name: z.string(),
+  process_name: z.string().min(2, {
+    message: "Informe o nome do processo."
+  }),
   workers: z.number(),
   status: z.nativeEnum(Status)
 });
 
 export const formProductSchema = z.object({
-  name: z.string(),
+  name: z.string().min(2, {
+    message: "Informe o nome."
+  }),
   model: z.string(),
   size: z.string(),
   sales: z.number(),
@@ -103,11 +121,21 @@ export const formProductSchema = z.object({
 });
 
 export const formVendorSchema = z.object({
-  name: z.string(),
-  store_name: z.string(),
-  cnpj: z.string(),
-  cel_number: z.string(),
-  phone: z.string(),
+  name: z.string().min(2, {
+    message: "Informe o nome."
+  }),
+  store_name: z.string().min(2, {
+    message: "Informe o nome da loja."
+  }),
+  cnpj: z.string().min(14, {
+    message: "Informe o CNPJ."
+  }),
+  cel_number: z.string().min(11, {
+    message: "Informe o número de celular."
+  }),
+  phone: z.string().min(11, {
+    message: "Informe o número de telefone."
+  }),
   deliver: z.string(),
   volume_purchases: z.number(),
   purchases: z.number({ coerce: true }),
@@ -128,14 +156,16 @@ export const formVendorSchema = z.object({
     public_place: z.string().min(2, {
       message: "Informe a rua/avenida."
     }),
-    city: z.string().min(8, {
+    city: z.string().min(2, {
       message: "Informe a cidade."
     }),
-    state: z.string().max(2, {
-      message: "Informe a sigla do Estado."
-    }),
-    complement: z.string(),
-    address_number: z.number({ coerce: true })
+    state: z.string()
+    .min(2, { message: "Informe a sigla do Estado." })
+    .max(2, { message: "Informe a sigla do Estado." }),
+    complement: z.string().optional(),
+    address_number: z.number({ coerce: true }).min(1, {
+      message: "Informe o número do endereço."
+    })
   })
 });
 

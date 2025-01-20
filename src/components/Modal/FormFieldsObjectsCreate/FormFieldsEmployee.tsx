@@ -54,7 +54,12 @@ export const FormFieldsEmployee: React.FC<FormFieldsEmployee> = ({ form }) => {
         name="phone"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="telefone">Número de Telefone</FormLabel>
+            <FormLabel htmlFor="telefone">
+              Número de Telefone
+              <span className="ml-1 text-sm font-normal text-muted-foreground">
+                (Opcional)
+              </span>
+            </FormLabel>
             <FormControl>
               <Input id="phone" {...field} ref={withMask("(99) 9999-9999")} placeholder="ex. (99) 99999-9999" />
             </FormControl>
@@ -116,7 +121,11 @@ export const FormFieldsEmployee: React.FC<FormFieldsEmployee> = ({ form }) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="salario">Salário</FormLabel>
+              <FormLabel htmlFor="salario">Salário
+                <span className="ml-1 text-sm font-normal text-muted-foreground">
+                  (Opcional)
+                </span>
+              </FormLabel>
               <FormControl>
                 <div className="relative ml-auto flex-1">
                   <span className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground">R$</span>
@@ -161,7 +170,12 @@ export const FormFieldsEmployee: React.FC<FormFieldsEmployee> = ({ form }) => {
         name="dismissal_date"
         render={({ field }) => (
           <FormItem className="flex flex-col justify-between">
-            <FormLabel htmlFor="dismissal_date">Data de Demissão</FormLabel>
+            <FormLabel htmlFor="dismissal_date">
+              Data de Demissão
+                <span className="ml-1 text-sm font-normal text-muted-foreground">
+                  (Opcional)
+                </span>
+              </FormLabel>
             <Popover>
               <PopoverTrigger asChild>
                 <FormControl>
@@ -175,7 +189,18 @@ export const FormFieldsEmployee: React.FC<FormFieldsEmployee> = ({ form }) => {
                 </FormControl>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
-                <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
+                <Calendar
+                  mode="single"
+                  selected={field.value || undefined}
+                  onSelect={(date) => {
+                    field.onChange(date);
+                  }}
+                  fromDate={new Date()}
+                  showOutsideDays={true}
+                  fixedWeeks={true}
+                  initialFocus={false}
+                  captionLayout="dropdown"
+                  />
               </PopoverContent>
             </Popover>
             <FormMessage />
