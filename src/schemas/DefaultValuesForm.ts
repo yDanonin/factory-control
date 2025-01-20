@@ -3,13 +3,13 @@ import { Classification } from "@/types/employee.types";
 
 export const employeeDefaultValues = {
   name: "",
-  phone: "",
+  phone: undefined,
   cel_number: "",
   cpf: "",
   classification: Classification.funcionario,
-  salary: "0",
+  salary: undefined,
   admission: new Date(),
-  dismissal_date: new Date()
+  dismissal_date: undefined
 };
 
 export const customerDefaultValues = {
@@ -32,8 +32,8 @@ export const customerDefaultValues = {
     public_place: "",
     city: "",
     state: "",
-    complement: "",
-    address_number: "0"
+    complement: undefined,
+    address_number: ""
   }
 };
 
@@ -81,8 +81,8 @@ export const vendorDefaultValues = {
     public_place: "",
     city: "",
     state: "",
-    complement: "",
-    address_number: "0"
+    complement: undefined,
+    address_number: ""
   }
 };
 

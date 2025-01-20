@@ -5,7 +5,7 @@ export type Address = {
   public_place: string;
   city: string;
   state: string;
-  complement: string;
+  complement?: string;
   address_number: number;
 };
 

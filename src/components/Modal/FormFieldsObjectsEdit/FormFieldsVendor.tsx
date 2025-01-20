@@ -342,7 +342,11 @@ export const FormFieldsVendor: React.FC<FormFieldsVendor> = ({ form, rowData }) 
         name="address.complement"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="complement">Complemento</FormLabel>
+            <FormLabel htmlFor="complement">Complemento
+              <span className="ml-1 text-sm font-normal text-muted-foreground">
+                (Opcional)
+              </span>
+            </FormLabel>
             <FormControl>
               <Input id="complement" {...field} placeholder="ex. Bloco A, Apto 99" />
             </FormControl>
