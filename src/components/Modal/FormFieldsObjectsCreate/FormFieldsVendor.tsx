@@ -327,7 +327,7 @@ export const FormFieldsVendor: React.FC<FormFieldsVendor> = ({ form }) => {
             <FormItem>
               <FormLabel htmlFor="debitos">Número</FormLabel>
               <FormControl>
-                <Input id="address_number" type="number" {...field} />
+                <Input id="address_number" type="number" {...field} placeholder="Insira o número do endereço"/>
               </FormControl>
               <FormMessage />
             </FormItem>

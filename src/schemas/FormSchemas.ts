@@ -97,7 +97,7 @@ export const formMachineSchema = z.object({
   model: z.string().min(2, {
     message: "Informe o modelo."
   }),
-  machine_number: z.number(),
+  machine_number: z.number({ coerce: true }),
   location: z.string(),
   status: z.nativeEnum(Status),
   location_status: z.nativeEnum(Status)
@@ -107,7 +107,7 @@ export const formProcedureSchema = z.object({
   process_name: z.string().min(2, {
     message: "Informe o nome do processo."
   }),
-  workers: z.number(),
+  workers: z.number({ coerce: true }),
   status: z.nativeEnum(Status)
 });
 
@@ -117,12 +117,12 @@ export const formProductSchema = z.object({
   }),
   model: z.string(),
   size: z.string(),
-  sales: z.number(),
-  volume_sales: z.number(),
+  sales: z.number({ coerce: true }),
+  volume_sales: z.number({ coerce: true }),
   invoicing: z.number({ coerce: true }),
   character: z.string(),
-  moldes: z.number(),
-  equivalency: z.number(),
+  moldes: z.number({ coerce: true }),
+  equivalency: z.number({ coerce: true }),
   status: z.nativeEnum(Status)
 });
 
@@ -143,7 +143,7 @@ export const formVendorSchema = z.object({
     message: "Informe o número de telefone."
   }).optional(),
   deliver: z.string(),
-  volume_purchases: z.number(),
+  volume_purchases: z.number({ coerce: true }),
   purchases: z.number({ coerce: true }),
   invoicing: z.number({ coerce: true }),
   status: z.nativeEnum(Status),
