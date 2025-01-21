@@ -102,7 +102,7 @@ export const FormFieldsEmployee: React.FC<FormFieldsEmployee> = ({ form }) => {
         render={({ field }) => (
           <FormItem>
             <FormLabel htmlFor="classification">Classification</FormLabel>
-            <Select onValueChange={field.onChange} value={field.value}>
+            <Select value={Classification[field.value as keyof typeof Classification]} onValueChange={field.onChange}>
               <FormControl>
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione uma classificação" />
