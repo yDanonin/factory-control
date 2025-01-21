@@ -18,8 +18,8 @@ export const customerDefaultValues = {
   cel_number: "",
   email: "",
   store_name: "",
-  credit_limit: "0",
-  debts: "0",
+  credit_limit: "",
+  debts: "",
   cpf: "",
   cnpj: "",
   deliver: false,
@@ -39,7 +39,7 @@ export const customerDefaultValues = {
 
 export const machineDefaultValues = {
   model: "",
-  machine_number: 0,
+  machine_number: "",
   location: "",
   status: Status.operacional,
   location_status: Status.operacional
@@ -47,7 +47,7 @@ export const machineDefaultValues = {
 
 export const procedureDefaultValues = {
   process_name: "",
-  workers: 0,
+  workers: "",
   status: Status.operacional
 };
 
@@ -55,12 +55,12 @@ export const productDefaultValues = {
   name: "",
   model: "",
   size: "",
-  sales: 0,
-  volume_sales: 0,
-  invoicing: "0",
+  sales: "",
+  volume_sales: "",
+  invoicing: "",
   character: "",
-  moldes: 0,
-  equivalency: 0,
+  moldes: "",
+  equivalency: "",
   status: Status.operacional
 };
 
@@ -71,9 +71,9 @@ export const vendorDefaultValues = {
   cel_number: "",
   phone: "",
   deliver: false,
-  volume_purchases: 0,
-  purchases: "0",
-  invoicing: "0",
+  volume_purchases: "",
+  purchases: "",
+  invoicing: "",
   status: Status.operacional,
   address: {
     zip_code: "",

@@ -68,7 +68,7 @@ export const FormFieldsCustomer: React.FC<FormFieldsCustomer> = ({ form }) => {
           <FormItem>
             <FormLabel htmlFor="nome">Nome</FormLabel>
             <FormControl>
-              <Input id="name" {...field} />
+              <Input id="name" {...field} placeholder="Insira o nome"/>
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -124,7 +124,7 @@ export const FormFieldsCustomer: React.FC<FormFieldsCustomer> = ({ form }) => {
           <FormItem>
             <FormLabel htmlFor="nome_loja">Nome da Loja</FormLabel>
             <FormControl>
-              <Input id="store_name" {...field} />
+              <Input id="store_name" {...field} placeholder="Insira o nome da loja"/>
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -380,7 +380,7 @@ export const FormFieldsCustomer: React.FC<FormFieldsCustomer> = ({ form }) => {
             <FormItem>
               <FormLabel htmlFor="debitos">Número</FormLabel>
               <FormControl>
-                <Input id="address_number" type="number" {...field} />
+                <Input id="address_number" type="number" {...field} placeholder="Insira o número do endereço"/>
               </FormControl>
               <FormMessage />
             </FormItem>
