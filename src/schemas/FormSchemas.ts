@@ -9,7 +9,7 @@ export const formCustomerSchema = z
     }),
     phone: z.string().min(11, {
       message: "Informe o número de telefone."
-    }),
+    }).optional(),
     cel_number: z.string().min(11, {
       message: "Informe o número de celular."
     }),
@@ -25,12 +25,8 @@ export const formCustomerSchema = z
     debts: z.number({ coerce: true }).min(0, {
       message: "Informe o débito."
     }),
-    cpf: z.string().min(11, {
-      message: "Informe o CPF."
-    }),
-    cnpj: z.string().min(14, {
-      message: "Informe o CNPJ."
-    }),
+    cpf: z.string().optional(),
+    cnpj: z.string().optional(),
     deliver: z.string(),
     pontalti: z.string(),
     secondary_line: z.string(),
@@ -63,9 +59,19 @@ export const formCustomerSchema = z
     })
   })
   .partial()
-  .refine((data) => !!data.cpf || !!data.cnpj, {
-    message: "Cpf ou Cnpj devem ser inseridos",
-    path: ["cpf"]
+  .superRefine((data, ctx) => {
+    if(!data.cpf && !data.cnpj) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "CPF ou CNPJ devem ser inseridos",
+        path: ["cpf"]
+      });
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "CPF ou CNPJ devem ser inseridos",
+        path: ["cnpj"]
+      })
+    }
   });
 
 export const formEmployeeSchema = z.object({
@@ -135,7 +141,7 @@ export const formVendorSchema = z.object({
   }),
   phone: z.string().min(11, {
     message: "Informe o número de telefone."
-  }),
+  }).optional(),
   deliver: z.string(),
   volume_purchases: z.number(),
   purchases: z.number({ coerce: true }),
