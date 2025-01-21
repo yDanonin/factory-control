@@ -102,10 +102,16 @@ export const FormFieldsMachine: React.FC<FormFieldsMachine> = ({ form }) => {
         key="location_status"
         control={form.control}
         name="location_status"
-        render={({ field }) => (
+        render={({ field }) => {
+          const numericToStatusKey: Record<number, keyof typeof Status> = {
+            0: "suspenso",
+            1: "operacional"
+          };
+          const selectedStatusKey = numericToStatusKey[field.value];
+          return (
           <FormItem>
             <FormLabel htmlFor="location_status">Status de Localização</FormLabel>
-            <Select onValueChange={field.onChange} value={field.value}>
+            <Select onValueChange={field.onChange} value={Status[selectedStatusKey]}>
               <FormControl>
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione o status de localização" />
@@ -115,7 +121,8 @@ export const FormFieldsMachine: React.FC<FormFieldsMachine> = ({ form }) => {
             </Select>
             <FormMessage />
           </FormItem>
-        )}
+        );
+      }}
       />
     </>
   );
