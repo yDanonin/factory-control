@@ -6,6 +6,7 @@ import { z } from "zod";
 import { Loader2 } from "lucide-react";
 import axios, { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
+import { useRouter } from 'next/navigation';
 import { Form } from "@/components/ui/form";
 import { Status } from "@/types/common.types";
 import { Vendor } from "@/types/vendor.types";
@@ -67,6 +68,15 @@ interface ModalEditProps {
 export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+
+  const [open, setOpen] = useState(false);
+  const router = useRouter();
+
+  const handleDialogClose = () => {
+    form.reset(); // Reset form to default values
+    setOpen(false);
+    router.refresh();
+  };
 
   let typeSchema:
     | z.ZodType<Partial<Customer> | z.ZodType<Partial<Employee>> | z.ZodType<Partial<Machine>>>
@@ -189,7 +199,7 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
             </DialogHeader>
             <DialogFooter className="absolute bottom-0 right-0 p-10">
               <DialogClose asChild>
-                <Button type="button" variant="secondary" disabled={isLoading ? true : false}>
+                <Button type="button" variant="secondary" disabled={isLoading ? true : false}  onClick={handleDialogClose}>
                   Fechar
                 </Button>
               </DialogClose>
