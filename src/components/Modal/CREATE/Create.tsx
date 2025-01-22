@@ -68,12 +68,11 @@ interface ModalEditProps {
 export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
   const handleDialogClose = () => {
-    form.reset(); // Reset form to default values
+    form.reset();
     setOpen(false);
     router.refresh();
   };
@@ -169,6 +168,8 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
     try {
       await axios.post(`/api/${apiCallByType}`, formattedData);
       setIsLoading(false);
+      form.reset();
+      router.refresh();
       toast({
         title: "Registro",
         description: `${nameModal} foi criado com sucesso.`
