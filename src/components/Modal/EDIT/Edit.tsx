@@ -1,11 +1,12 @@
 "use client";
 
-import React, { memo, useState } from "react";
+import React, { memo, useState, useEffect } from "react";
 
 import { z } from "zod";
 import { Loader2 } from "lucide-react";
 import axios, { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
+import { useRouter } from 'next/navigation';
 import { Form } from "@/components/ui/form";
 import { Status } from "@/types/common.types";
 import { Vendor } from "@/types/vendor.types";
@@ -78,6 +79,14 @@ interface ModalEditProps {
 export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const [open, setOpen] = useState(false);
+  const router = useRouter();
+
+  const handleDialogClose = () => {
+    form.reset();
+    setOpen(false);
+    router.refresh();
+  };
 
   let typeSchema:
     | z.ZodType<Partial<Customer> | z.ZodType<Partial<Employee>> | z.ZodType<Partial<Machine>>>
@@ -171,6 +180,8 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
       console.log("formated data", formattedData);
       await axios.patch(`/api/${apiCallByType}/${idRowData}`, formattedData);
       setIsLoading(false);
+      form.reset();
+      router.refresh();
       toast({
         title: "Registro",
         description: `${nameModal} foi editado com sucesso.`
@@ -201,7 +212,7 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
             <div className="grid grid-cols-3 gap-4">{formFields}</div>
             <DialogFooter className="absolute bottom-0 right-0 p-10">
               <DialogClose asChild>
-                <Button type="button" variant="secondary" disabled={isLoading ? true : false}>
+                <Button type="button" variant="secondary" disabled={isLoading ? true : false} onClick={handleDialogClose}>
                   Fechar
                 </Button>
               </DialogClose>
