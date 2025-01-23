@@ -200,7 +200,7 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
             </DialogHeader>
             <DialogFooter className="absolute bottom-0 right-0 p-10">
               <DialogClose asChild>
-                <Button type="button" variant="secondary" disabled={isLoading ? true : false}  onClick={handleDialogClose}>
+                <Button type="button" variant="secondary" disabled={ isLoading }  onClick={handleDialogClose}>
                   Fechar
                 </Button>
               </DialogClose>
