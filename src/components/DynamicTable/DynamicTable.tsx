@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 
 import "./DynamicTable.css";
-import { ChevronDown } from "lucide-react";
+import { ArrowUpDown, ChevronDown } from "lucide-react";
 import { Spinner } from "@nextui-org/react";
 import Modal from "@/components/Modal/Modal";
 // import { Vendor } from "@/types/vendor.types";
@@ -57,7 +57,7 @@ const DynamicTable: React.FC<TableProps> = ({ columns, data, isLoadingSpinner, f
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
   const table = useReactTable({
-    data,
+    data: data as DataRow[],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -135,8 +135,17 @@ const DynamicTable: React.FC<TableProps> = ({ columns, data, isLoadingSpinner, f
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                    <TableHead
+                      key={header.id}
+                      onClick={header.column.getToggleSortingHandler()}
+                      className={header.column.getCanSort() ? "cursor-pointer select-none" : ""}
+                    >
+                      <div className="flex items-center space-x-2">
+                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                        {header.column.getCanSort() && (
+                          <ArrowUpDown className="ml-2 h-4 w-4" />
+                      )}
+                      </div>
                     </TableHead>
                   );
                 })}

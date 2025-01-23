@@ -47,27 +47,33 @@ export default function Page() {
   const columns = [
     {
       header: "Nome",
-      accessorKey: "name"
+      accessorKey: "name",
+      sortable: true,
     },
     {
       header: "Nome da loja",
-      accessorKey: "store_name"
+      accessorKey: "store_name",
+      sortable: true,
     },
     {
       header: "Num. telefone",
-      accessorKey: "phone"
+      accessorKey: "phone",
+      sortable: true,
     },
     {
       header: "Num. celular",
-      accessorKey: "cel_number"
+      accessorKey: "cel_number",
+      sortable: true,
     },
     {
       header: "Cnpj",
-      accessorKey: "cnpj"
+      accessorKey: "cnpj",
+      sortable: true,
     },
     {
       header: "Entrega",
-      accessorKey: "deliver"
+      accessorKey: "deliver",
+      sortable: true,
     },
     {
       id: "actions",

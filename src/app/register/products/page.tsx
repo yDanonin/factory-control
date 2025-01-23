@@ -47,27 +47,33 @@ export default function Page() {
   const columns = [
     {
       header: "Nome",
-      accessorKey: "name"
+      accessorKey: "name",
+      sortable: true,
     },
     {
       header: "Vendas",
-      accessorKey: "sales"
+      accessorKey: "sales",
+      sortable: true,
     },
     {
       header: "Volume de vendas",
-      accessorKey: "volume_sales"
+      accessorKey: "volume_sales",
+      sortable: true,
     },
     {
       header: "Faturamento",
-      accessorKey: "invoicing"
+      accessorKey: "invoicing",
+      sortable: true,
     },
     {
       header: "Modelo",
-      accessorKey: "model"
+      accessorKey: "model",
+      sortable: true,
     },
     {
       header: "Tamanho",
-      accessorKey: "size"
+      accessorKey: "size",
+      sortable: true,
     },
     {
       id: "actions",

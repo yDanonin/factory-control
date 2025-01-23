@@ -47,15 +47,18 @@ export default function Page() {
   const columns = [
     {
       header: "Nome do processo",
-      accessorKey: "process_name"
+      accessorKey: "process_name",
+      sortable: true,
     },
     {
       header: "Status",
-      accessorKey: "status"
+      accessorKey: "status",
+      sortable: true,
     },
     {
       header: "Qtd. Trabalhadores",
-      accessorKey: "workers"
+      accessorKey: "workers",
+      sortable: true,
     },
     {
       id: "actions",
