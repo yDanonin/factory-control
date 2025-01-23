@@ -47,23 +47,28 @@ export default function Page() {
   const columns = [
     {
       header: "Modelo",
-      accessorKey: "model"
+      accessorKey: "model",
+      sortable: true,
     },
     {
       header: "Número da máquina",
-      accessorKey: "machine_number"
+      accessorKey: "machine_number",
+      sortable: true,
     },
     {
       header: "Status",
-      accessorKey: "status"
+      accessorKey: "status",
+      sortable: true,
     },
     {
       header: "Localização",
-      accessorKey: "location"
+      accessorKey: "location",
+      sortable: true,
     },
     {
       header: "Status da localização",
-      accessorKey: "location_status"
+      accessorKey: "location_status",
+      sortable: true,
     },
     {
       id: "actions",

@@ -49,39 +49,48 @@ export default function Page() {
   const columns = [
     {
       header: "Nome",
-      accessorKey: "name"
+      accessorKey: "name",
+      sortable: true,
     },
     {
       header: "Status",
-      accessorKey: "status"
+      accessorKey: "status",
+      sortable: true,
     },
     {
       header: "Num. telefone",
-      accessorKey: "phone"
+      accessorKey: "phone",
+      sortable: true,
     },
     {
       header: "Num. celular",
-      accessorKey: "cel_number"
+      accessorKey: "cel_number",
+      sortable: true,
     },
     {
       header: "Email",
-      accessorKey: "email"
+      accessorKey: "email",
+      sortable: true,
     },
     {
       header: "Loja",
-      accessorKey: "store_name"
+      accessorKey: "store_name",
+      sortable: true,
     },
     {
       header: "Cpf/Cnpj",
-      accessorKey: "cpf"
+      accessorKey: "cpf",
+      sortable: true,
     },
     {
       header: "Limite de crédito",
-      accessorKey: "credit_limit"
+      accessorKey: "credit_limit",
+      sortable: true,
     },
     {
       header: "Dívidas",
-      accessorKey: "debts"
+      accessorKey: "debts",
+      sortable: true,
     },
     {
       id: "actions",

@@ -48,27 +48,33 @@ export default function Page() {
   const columns = [
     {
       header: "Nome",
-      accessorKey: "name"
+      accessorKey: "name",
+      sortable: true,
     },
     {
       header: "Cpf",
-      accessorKey: "cpf"
+      accessorKey: "cpf",
+      sortable: true,
     },
     {
       header: "Num. telefone",
-      accessorKey: "phone"
+      accessorKey: "phone",
+      sortable: true,
     },
     {
       header: "Num. celular",
-      accessorKey: "cel_number"
+      accessorKey: "cel_number",
+      sortable: true,
     },
     {
       header: "Salário",
-      accessorKey: "salary"
+      accessorKey: "salary",
+      sortable: true,
     },
     {
       header: "Admissão",
-      accessorKey: "admission"
+      accessorKey: "admission",
+      sortable: true,
     },
     {
       id: "actions",
