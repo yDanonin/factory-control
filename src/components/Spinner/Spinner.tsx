@@ -3,12 +3,14 @@ import React from "react";
 type Props = {
   message?: string;
   visible: boolean;
+  color?: string;
 };
-const Spinner: React.FC<Props> = ({ message, visible }) => {
+const Spinner: React.FC<Props> = ({ message, visible, color = "#fff" }) => {
   if (!visible) return <></>;
 
   return (
-    <div className="w-screen h-screen h-50 bg-black/75 fixed top-0 left-0 flex justify-center items-center flex-col">
+    <div className="w-screen h-screen h-50 bg-black/75 fixed top-0 left-0 flex justify-center items-center flex-col"
+    style={{ zIndex: 9999 }}>
       <svg width="38" height="38" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg" stroke="#fff">
         <g fill="none" fillRule="evenodd">
           <g transform="translate(1 1)" strokeWidth="2">
