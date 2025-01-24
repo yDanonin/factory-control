@@ -8,6 +8,7 @@ import Modal from "@/components/Modal/Modal";
 import { MoreHorizontal } from "lucide-react";
 import { Dialog } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import Spinner from "@/components/Spinner";
 import { Vacation } from "@/types/vacation.types";
 import DynamicTable from "@/components/DynamicTable";
 import { DataRow, TableColumn } from "@/models/TableColumn";
@@ -110,15 +111,21 @@ export const VacationPage = () => {
   }, []);
 
   return (
-    <main className="main-layout">
-      <DynamicTable
-            isLoadingSpinner={isLoading}
-            columns={columns}
-            data={data}
-            filterFields={arrayFilterFieldsByAcessorKey}
-            typeRegister="Vacation"
-          />
-    </main>
-   
+    <>
+      {isLoading && (
+        <div className="fullscreen-spinner">
+          <Spinner visible={true} color="default" message="Loading Page..."/>
+        </div>
+      )}
+      <main className="main-layout">
+        <DynamicTable
+              isLoadingSpinner={isLoading}
+              columns={columns}
+              data={data}
+              filterFields={arrayFilterFieldsByAcessorKey}
+              typeRegister="Vacation"
+            />
+      </main>
+    </>
   );
 }
