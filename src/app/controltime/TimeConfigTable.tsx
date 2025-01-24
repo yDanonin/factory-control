@@ -18,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { AlertDialog } from "@/components/ui/alert-dialog";
+import Spinner from "@/components/Spinner";
 
 export const TimeConfigTable = () => {
   const [data, setData] = useState<TimeConfiguration[]>([]);
@@ -96,14 +97,20 @@ export const TimeConfigTable = () => {
   }, []);
 
   return (
-    <main className="main-layout">
-      <DynamicTable
-            isLoadingSpinner={isLoading}
-            columns={columns}
-            data={data}
-            filterFields={arrayFilterFieldsByAcessorKey}
-          />
-    </main>
-   
+    <>
+      {isLoading && (
+        <div className="fullscreen-spinner">
+          <Spinner visible={true} color="default" message="Loading Page..."/>
+        </div>
+      )}
+      <main className="main-layout">
+        <DynamicTable
+              isLoadingSpinner={isLoading}
+              columns={columns}
+              data={data}
+              filterFields={arrayFilterFieldsByAcessorKey}
+            />
+      </main>
+    </>
   );
 }
