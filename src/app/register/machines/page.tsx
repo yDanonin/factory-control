@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import "./Machines.css";
 import axios from "axios";
 import Aside from "@/components/Aside";
+import Spinner from "@/components/Spinner";
 import { useRouter } from "next/navigation";
 import { Row } from "@tanstack/react-table";
 import Modal from "@/components/Modal/Modal";
@@ -128,20 +129,27 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="page-layout">
-      <nav className="aside-layout">
-        <Aside />
-      </nav>
-      <main className="main-layout">
-        <Header title="Maquinas"/>
-        <DynamicTable
-          isLoadingSpinner={isLoading}
-          columns={columns}
-          data={data}
-          filterFields={arrayFilterFieldsByAcessorKey}
-          typeRegister="Machine"
-        />
-      </main>
-    </div>
+    <>
+      {isLoading && (
+        <div className="fullscreen-spinner">
+          <Spinner visible={true} color="default" message="Loading Page..."/>
+        </div>
+      )}
+      <div className="page-layout">
+        <nav className="aside-layout">
+          <Aside />
+        </nav>
+        <main className="main-layout">
+          <Header title="Maquinas"/>
+          <DynamicTable
+            isLoadingSpinner={isLoading}
+            columns={columns}
+            data={data}
+            filterFields={arrayFilterFieldsByAcessorKey}
+            typeRegister="Machine"
+          />
+        </main>
+      </div>
+    </>
   );
 }
