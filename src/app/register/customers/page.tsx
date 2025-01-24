@@ -83,16 +83,6 @@ export default function Page() {
       sortable: true,
     },
     {
-      header: "Limite de crédito",
-      accessorKey: "credit_limit",
-      sortable: true,
-    },
-    {
-      header: "Dívidas",
-      accessorKey: "debts",
-      sortable: true,
-    },
-    {
       id: "actions",
       enableHiding: false,
       cell: ({ row }: { row: Row<DataRow> }) => {
