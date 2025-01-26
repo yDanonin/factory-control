@@ -16,6 +16,7 @@ import { Machine } from "@/types/machine.types";
 import { Customer } from "@/types/customer.types";
 import { Procedure } from "@/types/procedure.types";
 import { Vacation } from "@/types/vacation.types";
+import { Order } from "@/types/order.types";
 import { TimeConfiguration } from "@/types/time-configuration.types";
 import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,6 +30,7 @@ import { FormFieldsMachine } from "../FormFieldsObjectsEdit/FormFieldsMachine";
 import { FormFieldsEmployee } from "../FormFieldsObjectsEdit/FormFieldsEmployee";
 import { FormFieldsCustomer } from "../FormFieldsObjectsEdit/FormFieldsCustomer";
 import { FormFieldsProcedure } from "../FormFieldsObjectsEdit/FormFieldsProcedure";
+import { FormFieldsOrder } from "../FormFieldsObjectsEdit/FormFieldsOrder";
 import {
   formCustomerSchema,
   formEmployeeSchema,
@@ -37,7 +39,8 @@ import {
   formProductSchema,
   formVendorSchema,
   formVacationSchema,
-  formTimeConfigurationSchema
+  formTimeConfigurationSchema,
+  formOrderSchema
 } from "@/schemas/FormSchemas";
 import {
   Dialog,
@@ -72,7 +75,8 @@ interface ModalEditProps {
     | Partial<Product>
     | Partial<Vendor>
     | Partial<Vacation>
-    | Partial<TimeConfiguration>;
+    | Partial<TimeConfiguration>
+    | Partial<Order>;
   idRowData?: number;
 }
 
@@ -94,7 +98,8 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
     | z.ZodType<Partial<Product>>
     | z.ZodType<Partial<Vendor>>
     | z.ZodType<Partial<Vacation>>
-    | z.ZodType<Partial<TimeConfiguration>>;
+    | z.ZodType<Partial<TimeConfiguration>>
+    | z.ZodType<Partial<Order>>;
 
   let apiCallByType: string;
   let formFields;
@@ -132,6 +137,10 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
       typeSchema = formTimeConfigurationSchema;
       apiCallByType = "time-configurations";
       break;
+    case "Order":
+      typeSchema = formOrderSchema;
+      apiCallByType = "orders";
+      break;
     default:
       throw new Error(`Invalid typeRegister: ${typeRegister}`);
   }
@@ -166,6 +175,9 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
       break;
     case "TimeConfiguration":
       formFields = <FormFieldsTimeConfiguration form={form} />
+      break;
+    case "Order":
+      formFields = <FormFieldsOrder form={form} />
       break;
     default:
       formFields = <div>erro</div>;

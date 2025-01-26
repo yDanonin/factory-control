@@ -11,6 +11,7 @@ import { Form } from "@/components/ui/form";
 import { Status } from "@/types/common.types";
 import { Vendor } from "@/types/vendor.types";
 import { Vacation } from "@/types/vacation.types";
+import { Order } from "@/types/order.types";
 import { Button } from "@/components/ui/button";
 import { Product } from "@/types/product.types";
 import { Machine } from "@/types/machine.types";
@@ -27,6 +28,7 @@ import { FormFieldsMachine } from "../FormFieldsObjectsCreate/FormFieldsMachine"
 import { FormFieldsEmployee } from "../FormFieldsObjectsCreate/FormFieldsEmployee";
 import { FormFieldsCustomer } from "../FormFieldsObjectsCreate/FormFieldsCustomer";
 import { FormFieldsProcedure } from "../FormFieldsObjectsCreate/FormFieldsProcedure";
+import { FormFieldsOrder } from "../FormFieldsObjectsCreate/FormFieldsOrder";
 import {
   formCustomerSchema,
   formEmployeeSchema,
@@ -34,7 +36,8 @@ import {
   formProcedureSchema,
   formProductSchema,
   formVendorSchema,
-  formVacationSchema
+  formVacationSchema,
+  formOrderSchema
 } from "@/schemas/FormSchemas";
 import {
   customerDefaultValues,
@@ -43,7 +46,8 @@ import {
   procedureDefaultValues,
   productDefaultValues,
   vendorDefaultValues,
-  vacationDefaultValues
+  vacationDefaultValues,
+  orderDefaultValues
 } from "@/schemas/DefaultValuesForm";
 import {
   DialogContent,
@@ -82,7 +86,8 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
     | z.ZodType<Partial<Procedure>>
     | z.ZodType<Partial<Product>>
     | z.ZodType<Partial<Vendor>>
-    | z.ZodType<Partial<Vacation>>;
+    | z.ZodType<Partial<Vacation>>
+    | z.ZodType<Partial<Order>>;
 
   let apiCallByType: string;
   let objDefaultValues;
@@ -124,6 +129,11 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
       objDefaultValues = vacationDefaultValues;
       apiCallByType = "employees/vacations";
       break;
+    case "Order":
+      typeSchema = formOrderSchema;
+      objDefaultValues = orderDefaultValues;
+      apiCallByType = "orders";
+      break;
     default:
       throw new Error(`Invalid typeRegister: ${typeRegister}`);
   }
@@ -155,6 +165,9 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
       break;
     case "Vacation":
       formFields1 = <FormFieldsVacation form={form} />;
+      break;
+    case "Order":
+      formFields1 = <FormFieldsOrder form={form} />;
       break;
     default:
       formFields1 = <div>erro</div>;

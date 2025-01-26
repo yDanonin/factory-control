@@ -195,7 +195,24 @@ export const formTimeConfigurationSchema = z.object({
   work_start: z.string(),
   work_end: z.string(),
   late_limit_in_minutes: z.number({ coerce: true })
-})
+});
+
+export const formOrderSchema = z.object({
+  order_id: z.number({ coerce: true }),
+  final_price: z.number({ coerce: true }),
+  date: z.date(),
+  created_at: z.date(),
+  updated_at: z.date(),
+  customer_id: z.number({ coerce: true }),
+  products: z
+    .array(
+      z.object({
+        product_id: z.number({ coerce: true }),
+        quantity: z.number({ coerce: true }),
+      })
+    )
+    .min(1, { message: "Adicione ao menos um produto." }),
+});
 
 function validaCep(cep: string) {
   return /^\d{8}$/.test(cep.replace(/[^\d]+/g, ""));
