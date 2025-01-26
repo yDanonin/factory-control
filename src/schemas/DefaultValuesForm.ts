@@ -91,4 +91,13 @@ export const vacationDefaultValues = {
   start_date: new Date(),
   end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
   sold_days: 0,
-}
+};
+
+export const orderDefaultValues = {
+  final_price: "",
+  date: undefined,
+  created_at: new Date(),
+  updated_at: new Date(),
+  customer_id: "",
+  products: [],
+};
