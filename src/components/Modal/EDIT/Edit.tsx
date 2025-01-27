@@ -86,10 +86,11 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  const handleDialogClose = () => {
-    form.reset();
-    setOpen(false);
-    router.refresh();
+  const handleDialogOpenChange = (isOpen: boolean) => {
+    if (!isOpen) {
+      form.reset();
+    }
+    setOpen(isOpen);
   };
 
   let typeSchema:
@@ -213,7 +214,7 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
   console.log(isLoading);
 
   return (
-    <Dialog>
+    <Dialog  open={open} onOpenChange={handleDialogOpenChange}>
       <DialogTrigger>Editar {nameModal}</DialogTrigger>
       <Form {...form}>
         <DialogContent className="min-w-full min-h-full">
@@ -224,7 +225,7 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
             <div className="grid grid-cols-3 gap-4">{formFields}</div>
             <DialogFooter className="absolute bottom-0 right-0 p-10">
               <DialogClose asChild>
-                <Button type="button" variant="secondary" disabled={ isLoading } onClick={handleDialogClose}>
+                <Button type="button" variant="secondary" disabled={ isLoading }>
                   Fechar
                 </Button>
               </DialogClose>
