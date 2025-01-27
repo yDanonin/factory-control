@@ -85,15 +85,27 @@ export default function Page() {
               <DropdownMenuItem
                 className="cursor-pointer"
                 onClick={() => router.push(`/receive/orders/${row.original.id}`)}
+                onPointerLeave={(event) => event.preventDefault()}
+                onPointerMove={(event) => event.preventDefault()}
               >
                 Ver detalhes do pedido
               </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onSelect={(event) => event.preventDefault()}
+                onPointerLeave={(event) => event.preventDefault()}
+                onPointerMove={(event) => event.preventDefault()}
+              >
                 <Dialog>
                   <Modal typeModal="EDIT" typeRegister="Order" nameModal="pedido" rowData={row.original} />
                 </Dialog>
               </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onSelect={(event) => event.preventDefault()}
+                onPointerLeave={(event) => event.preventDefault()}
+                onPointerMove={(event) => event.preventDefault()}
+              >
                 <Dialog>
                   <Modal typeModal="DELETE" typeRegister="Order" nameModal="pedido" idRowData={row.original.id} />
                 </Dialog>

@@ -64,7 +64,12 @@ export default function Page({ params }: { params: { id: string } }) {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
+                        <DropdownMenuItem
+                          className="cursor-pointer"
+                          onSelect={(event) => event.preventDefault()}
+                          onPointerLeave={(event) => event.preventDefault()}
+                          onPointerMove={(event) => event.preventDefault()}
+                        >
                           <Dialog>
                             <Modal
                               typeModal="EDIT"
@@ -75,7 +80,12 @@ export default function Page({ params }: { params: { id: string } }) {
                             />
                           </Dialog>
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
+                        <DropdownMenuItem
+                          className="cursor-pointer"
+                          onSelect={(event) => event.preventDefault()}
+                          onPointerLeave={(event) => event.preventDefault()}
+                          onPointerMove={(event) => event.preventDefault()}
+                        >
                           <Dialog>
                             <Modal
                               typeModal="DELETE"
