@@ -104,7 +104,7 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
             )}
         />
         <FormField
-        key="csutomer_id"
+        key="customer_id"
         control={form.control}
         name="customer_id"
         render={({ field }) => {
@@ -144,7 +144,7 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
                   <div key={index} className="flex items-center space-x-4">
                     <Select
                       value={product.product_id.toString()}
-                      onValueChange={(value) => updateProduct(index, "productId", value)}
+                      onValueChange={(value) => updateProduct(index, "product_id", parseInt(value))}
                     >
                       <SelectTrigger className="w-48">
                         <SelectValue placeholder="Selecione um produto" />
