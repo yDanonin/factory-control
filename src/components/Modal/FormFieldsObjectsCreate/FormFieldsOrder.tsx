@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
+import axios from "axios";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Input } from "@/components/ui/input";
@@ -40,17 +41,31 @@ const products: Product[] = [
 ];
 
 export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
-    const [selectedProducts, setSelectedProducts] = useState<OrderItem[]>([]);
-    const addProduct = () => {setSelectedProducts([...selectedProducts, { product_id: "", quantity: undefined }]);};
-    const removeProduct = (index: number) => {setSelectedProducts(selectedProducts.filter((_, i) => i !== index));};
-    const updateProduct = (index: number, field: string, value: any) => {
-        const updatedProducts = [...selectedProducts];
-        updatedProducts[index] = { 
-          ...updatedProducts[index], 
-          [field]: value 
-        };
-        setSelectedProducts(updatedProducts);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [selectedProducts, setSelectedProducts] = useState<OrderItem[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+        try {
+            const resp = await axios.get("/api/products");
+            setProducts(resp.data.data);
+        } catch (err) {
+            console.error(err);
+        }
     };
+    fetchProducts();
+  }, []);
+
+  const addProduct = () => {setSelectedProducts([...selectedProducts, { product_id: "", quantity: undefined }]);};
+  const removeProduct = (index: number) => {setSelectedProducts(selectedProducts.filter((_, i) => i !== index));};
+  const updateProduct = (index: number, field: string, value: any) => {
+    const updatedProducts = [...selectedProducts];
+    updatedProducts[index] = { 
+      ...updatedProducts[index], 
+      [field]: field === "product_id" ? Number(value) : value 
+    };
+    setSelectedProducts(updatedProducts);
+  };
 
   return (
     <>
