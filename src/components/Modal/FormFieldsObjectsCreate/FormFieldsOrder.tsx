@@ -33,13 +33,6 @@ function mapEnumToSelectItems<T extends string>(enumObj: EnumType<T>): JSX.Eleme
   ));
 }
 
-// Fixed list of products
-const products: Product[] = [
-    { id: 1, status: Status.operacional, volume_sales: 0, sales: 0, invoicing: 0, name: "Product A", model: "Model A", size: "A", character: "A", moldes: 1, equivalency: 1, created_at: new Date(), updated_at: new Date() },
-    { id: 2, status: Status.operacional, volume_sales: 0, sales: 0, invoicing: 0, name: "Product B", model: "Model A", size: "A", character: "A", moldes: 1, equivalency: 1, created_at: new Date(), updated_at: new Date() },
-    { id: 3, status: Status.operacional, volume_sales: 0, sales: 0, invoicing: 0, name: "Product C", model: "Model A", size: "A", character: "A", moldes: 1, equivalency: 1, created_at: new Date(), updated_at: new Date() },
-];
-
 export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProducts, setSelectedProducts] = useState<OrderItem[]>([]);
@@ -54,6 +47,17 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
         }
     };
     fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    form.setValue('products', selectedProducts);
+  }, [selectedProducts, form]);
+
+  useEffect(() => {
+    const currentProducts = form.getValues('products');
+    if (currentProducts?.length) {
+      setSelectedProducts(currentProducts);
+    }
   }, []);
 
   const addProduct = () => {setSelectedProducts([...selectedProducts, { product_id: "", quantity: undefined }]);};
