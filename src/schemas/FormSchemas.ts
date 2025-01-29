@@ -211,7 +211,7 @@ export const formOrderSchema = z.object({
         quantity: z.number({ coerce: true }),
       })
     )
-    .min(1, { message: "Adicione ao menos um produto." }),
+    .nonempty({ message: "Adicione ao menos um produto." }),
 });
 
 function validaCep(cep: string) {
