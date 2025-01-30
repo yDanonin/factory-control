@@ -214,6 +214,16 @@ export const formOrderSchema = z.object({
     .nonempty({ message: "Adicione ao menos um produto." }),
 });
 
+export const formMaterialOrderSchema = z.object({
+  date: z.date(),
+  amount: z.number({ coerce: true }),
+  unit: z.string(),
+  storage_location: z.string(),
+  received_by: z.string(),
+  product_id: z.number({ coerce: true }),
+  vendor_id: z.number({ coerce: true }),
+});
+
 function validaCep(cep: string) {
   return /^\d{8}$/.test(cep.replace(/[^\d]+/g, ""));
 }

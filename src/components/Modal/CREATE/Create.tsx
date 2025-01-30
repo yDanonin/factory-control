@@ -29,6 +29,7 @@ import { FormFieldsEmployee } from "../FormFieldsObjectsCreate/FormFieldsEmploye
 import { FormFieldsCustomer } from "../FormFieldsObjectsCreate/FormFieldsCustomer";
 import { FormFieldsProcedure } from "../FormFieldsObjectsCreate/FormFieldsProcedure";
 import { FormFieldsOrder } from "../FormFieldsObjectsCreate/FormFieldsOrder";
+import { FormFieldsMaterialOrder } from "../FormFieldsObjectsCreate/FormFieldsMaterialOrder";
 import {
   formCustomerSchema,
   formEmployeeSchema,
@@ -37,7 +38,8 @@ import {
   formProductSchema,
   formVendorSchema,
   formVacationSchema,
-  formOrderSchema
+  formOrderSchema,
+  formMaterialOrderSchema
 } from "@/schemas/FormSchemas";
 import {
   customerDefaultValues,
@@ -47,7 +49,8 @@ import {
   productDefaultValues,
   vendorDefaultValues,
   vacationDefaultValues,
-  orderDefaultValues
+  orderDefaultValues,
+  materialOrderDefaultValues
 } from "@/schemas/DefaultValuesForm";
 import {
   DialogContent,
@@ -134,6 +137,11 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
       objDefaultValues = orderDefaultValues;
       apiCallByType = "orders";
       break;
+    case "MaterialOrder":
+      typeSchema = formMaterialOrderSchema;
+      objDefaultValues = materialOrderDefaultValues;
+      apiCallByType = "material-orders";
+      break;
     default:
       throw new Error(`Invalid typeRegister: ${typeRegister}`);
   }
@@ -168,6 +176,9 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
       break;
     case "Order":
       formFields1 = <FormFieldsOrder form={form} />;
+      break;
+    case "MaterialOrder":
+      formFields1 = <FormFieldsMaterialOrder form={form} />;
       break;
     default:
       formFields1 = <div>erro</div>;

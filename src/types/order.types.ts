@@ -1,3 +1,4 @@
+import { Customer } from "./customer.types";
 import { OrderItem } from "./order-item.types";
 
 export type Order = {
@@ -6,7 +7,7 @@ export type Order = {
   date: Date;
   created_at: Date;
   updated_at: Date;
-  customer_id: number;
+  customer: Customer;
   items: OrderItem[];
 };
 
