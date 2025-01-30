@@ -47,26 +47,23 @@ export const FormFieldsMaterialOrder: React.FC<FormFieldsMaterialOrder> = ({ for
             )}
         />
         <FormField
-            key="amount"
-            control={form.control}
-            name="final_price"
-            render={({ field }) => (
-            <FormItem>
-                <FormLabel htmlFor="final_price">Preço Final</FormLabel>
-                <FormControl>
-                    <div className="relative ml-auto flex-1">
-                    <span className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground">R$</span>
-                    <Input
-                        id="final_price"
-                        type="number"
-                        {...field}
-                        className="w-full rounded-lg bg-background pl-8 pt-2.5"
-                    />
-                    </div>
-                </FormControl>
-                <FormMessage />
-            </FormItem>
-            )}
+          key="amount"
+          control={form.control}
+          name="amount"
+          render={({ field }) => (
+          <FormItem>
+              <FormLabel htmlFor="amount">Quantidade</FormLabel>
+              <FormControl>
+                <Input
+                    id="amount"
+                    type="number"
+                    {...field}
+                    placeholder="Insira a quantidade"
+                />
+              </FormControl>
+              <FormMessage />
+          </FormItem>
+          )}
         />
 
         <FormField
