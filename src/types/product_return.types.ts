@@ -1,5 +1,5 @@
 import { Order } from "./order.types";
-import { ReturnedLabel } from "./returned_labels";
+import { ReturnedLabel } from "./returned_labels.types";
 
 export type ProductReturn = {
   id: number;

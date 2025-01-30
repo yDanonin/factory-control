@@ -13,7 +13,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { getBooleanLabel } from "@/services/formatInputs";
-import { ReturnedLabel } from "@/types/returned_labels";
+import { ReturnedLabel } from "@/types/returned_labels.types";
 import { Select, SelectContent, SelectTrigger, SelectValue } from "@radix-ui/react-select";
 
 interface FormFieldsProductReturn {

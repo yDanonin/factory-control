@@ -11,7 +11,6 @@ import DataList from "@/components/DataList";
 import Modal from "@/components/Modal/Modal";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
-import { Order } from "@/types/order.types";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -20,20 +19,21 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { MaterialOrder } from "@/types/material-order.types";
 
 export default function Page({ params }: { params: { id: string } }) {
-  const [order, setorder] = useState<Order>();
+  const [materialOrder, setMaterialOrder] = useState<MaterialOrder>();
 
   const router = useRouter();
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      const response = await fetch(`/api/orders/${params.id}`);
+    const fetchMaterialOrders = async () => {
+      const response = await fetch(`/api/material-orders/${params.id}`);
       const data = await response.json();
-      setorder(data);
+      setMaterialOrder(data);
     };
 
-    fetchOrders();
+    fetchMaterialOrders();
   }, [params.id]);
 
   return (
@@ -43,16 +43,16 @@ export default function Page({ params }: { params: { id: string } }) {
       </nav>
       <main className="main-layout">
         <div className="grid px-20 pb-4 gap-4">
-          <Header title="Informações do Pedido" backTo="/receive/orders" />
-          {order && (
+          <Header title="Informações do Material Produtivo" backTo="/receive/material-orders" />
+          {materialOrder && (
             <div>
               <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
                 <CardHeader className="flex flex-row items-start bg-muted/50">
                   <div className="grid gap-0.5">
-                    <CardTitle className="group flex items-center gap-2 text-lg">{order.id}</CardTitle>
+                    <CardTitle className="group flex items-center gap-2 text-lg">{materialOrder.id}</CardTitle>
                     <CardDescription>
                       <div className="text-xs text-muted-foreground">
-                        Data de registro: {new Date(order.created_at).toLocaleString()}
+                        Data de registro: {new Date(materialOrder.created_at).toLocaleString()}
                       </div>
                     </CardDescription>
                   </div>
@@ -69,10 +69,10 @@ export default function Page({ params }: { params: { id: string } }) {
                           <Dialog>
                             <Modal
                               typeModal="EDIT"
-                              typeRegister="Order"
+                              typeRegister="MaterialOrder"
                               nameModal="pedido"
-                              rowData={order}
-                              idRowData={order.id}
+                              rowData={materialOrder}
+                              idRowData={materialOrder.id}
                             />
                           </Dialog>
                         </DropdownMenuItem>
@@ -80,12 +80,12 @@ export default function Page({ params }: { params: { id: string } }) {
                           <Dialog>
                             <Modal
                               typeModal="DELETE"
-                              typeRegister="Order"
+                              typeRegister="MaterialOrder"
                               nameModal="pedido"
-                              rowData={order}
-                              idRowData={order.id}
+                              rowData={materialOrder}
+                              idRowData={materialOrder.id}
                               onDelete={() => {
-                                router.push("/receive/orders");
+                                router.push("/receive/material-orders");
                               }}
                             />
                           </Dialog>
@@ -97,12 +97,16 @@ export default function Page({ params }: { params: { id: string } }) {
                 <CardContent className="p-6 text-sm">
                   <div className="grid gap-3">
                     <div className="font-semibold">Informações gerais</div>
-                    {order && (
+                    {materialOrder && (
                       <DataList
                         items={[
-                          { title: "Identificador", data: order.id.toString() },
-                          { title: "ID do Cliente", data: order.customer.id.toString() },
-                          { title: "valor final", data: order.final_price.toString() },
+                          { title: "Identificador", data: materialOrder.id.toString() },
+                          { title: "Quantidade", data: materialOrder.amount.toString() },
+                          { title: "Unidade de medida", data: materialOrder.unit.toString() },
+                          { title: "Local de armazenamento", data: materialOrder.storage_location.toString() },
+                          { title: "Recebido por", data: materialOrder.received_by.toString() },
+                          { title: "ID do produto", data: materialOrder.product.id.toString() },
+                          { title: "ID do fornecedor", data: materialOrder.vendor.id.toString() },
                         ]}
                       />
                     )}
@@ -112,8 +116,8 @@ export default function Page({ params }: { params: { id: string } }) {
                 <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
                   <div className="text-xs text-muted-foreground">
                     Última atualização:{" "}
-                    <time dateTime={new Date(order.updated_at).toString()}>
-                      {new Date(order.updated_at).toLocaleString()}
+                    <time dateTime={new Date(materialOrder.updated_at).toString()}>
+                      {new Date(materialOrder.updated_at).toLocaleString()}
                     </time>
                   </div>
                 </CardFooter>

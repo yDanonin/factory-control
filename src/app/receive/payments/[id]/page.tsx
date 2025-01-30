@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 
-import VMasker from "vanilla-masker";
 import Aside from "@/components/Aside";
 import Header from "@/components/Header";
 import { MoreVertical } from "lucide-react";
@@ -11,7 +10,6 @@ import DataList from "@/components/DataList";
 import Modal from "@/components/Modal/Modal";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
-import { Order } from "@/types/order.types";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -20,20 +18,21 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { Payment } from "@/types/payment.types";
 
 export default function Page({ params }: { params: { id: string } }) {
-  const [order, setorder] = useState<Order>();
+  const [payment, setPayment] = useState<Payment>();
 
   const router = useRouter();
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      const response = await fetch(`/api/orders/${params.id}`);
+    const fetchPayment = async () => {
+      const response = await fetch(`/api/payments/${params.id}`);
       const data = await response.json();
-      setorder(data);
+      setPayment(data);
     };
 
-    fetchOrders();
+    fetchPayment();
   }, [params.id]);
 
   return (
@@ -43,16 +42,16 @@ export default function Page({ params }: { params: { id: string } }) {
       </nav>
       <main className="main-layout">
         <div className="grid px-20 pb-4 gap-4">
-          <Header title="Informações do Pedido" backTo="/receive/orders" />
-          {order && (
+          <Header title="Informações do Pagamento" backTo="/receive/payments" />
+          {payment && (
             <div>
               <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
                 <CardHeader className="flex flex-row items-start bg-muted/50">
                   <div className="grid gap-0.5">
-                    <CardTitle className="group flex items-center gap-2 text-lg">{order.id}</CardTitle>
+                    <CardTitle className="group flex items-center gap-2 text-lg">{payment.id}</CardTitle>
                     <CardDescription>
                       <div className="text-xs text-muted-foreground">
-                        Data de registro: {new Date(order.created_at).toLocaleString()}
+                        Data de registro: {new Date(payment.created_at).toLocaleString()}
                       </div>
                     </CardDescription>
                   </div>
@@ -69,10 +68,10 @@ export default function Page({ params }: { params: { id: string } }) {
                           <Dialog>
                             <Modal
                               typeModal="EDIT"
-                              typeRegister="Order"
+                              typeRegister="Payment"
                               nameModal="pedido"
-                              rowData={order}
-                              idRowData={order.id}
+                              rowData={payment}
+                              idRowData={payment.id}
                             />
                           </Dialog>
                         </DropdownMenuItem>
@@ -80,12 +79,12 @@ export default function Page({ params }: { params: { id: string } }) {
                           <Dialog>
                             <Modal
                               typeModal="DELETE"
-                              typeRegister="Order"
+                              typeRegister="Payment"
                               nameModal="pedido"
-                              rowData={order}
-                              idRowData={order.id}
+                              rowData={payment}
+                              idRowData={payment.id}
                               onDelete={() => {
-                                router.push("/receive/orders");
+                                router.push("/receive/payments");
                               }}
                             />
                           </Dialog>
@@ -97,23 +96,25 @@ export default function Page({ params }: { params: { id: string } }) {
                 <CardContent className="p-6 text-sm">
                   <div className="grid gap-3">
                     <div className="font-semibold">Informações gerais</div>
-                    {order && (
+                    {payment && (
                       <DataList
                         items={[
-                          { title: "Identificador", data: order.id.toString() },
-                          { title: "ID do Cliente", data: order.customer.id.toString() },
-                          { title: "valor final", data: order.final_price.toString() },
+                          { title: "Identificador", data: payment.id.toString() },
+                          { title: "ID do pedido", data: payment.order.id.toString() },
+                          { title: "Total pago", data: payment.amount_paid.toString() },
+                          { title: "Restante a ser pago", data: payment.remaining.toString() },
+                          { title: "Metodo de pagamento", data: payment.payment_method.toString() },
                         ]}
                       />
                     )}
                   </div>
                   <Separator className="my-4" />
                 </CardContent>
-                <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
+                <CardFooter className="flex flex-row items-center bpayment-t bg-muted/50 px-6 py-3">
                   <div className="text-xs text-muted-foreground">
                     Última atualização:{" "}
-                    <time dateTime={new Date(order.updated_at).toString()}>
-                      {new Date(order.updated_at).toLocaleString()}
+                    <time dateTime={new Date(payment.updated_at).toString()}>
+                      {new Date(payment.updated_at).toLocaleString()}
                     </time>
                   </div>
                 </CardFooter>

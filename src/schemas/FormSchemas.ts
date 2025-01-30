@@ -242,6 +242,13 @@ export const formProductReturnSchema = z.object({
   .nonempty({ message: "Adicione ao menos um produto." }),
 });
 
+export const formPaymentSchema = z.object({
+  amount_paid: z.number({ coerce: true }),
+  payment_method: z.string(),
+  date: z.date(),
+  order_id: z.number({ coerce: true }),
+});
+
 function validaCep(cep: string) {
   return /^\d{8}$/.test(cep.replace(/[^\d]+/g, ""));
 }
