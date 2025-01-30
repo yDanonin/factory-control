@@ -39,7 +39,8 @@ import {
   formVendorSchema,
   formVacationSchema,
   formOrderSchema,
-  formMaterialOrderSchema
+  formMaterialOrderSchema,
+  formProductReturnSchema
 } from "@/schemas/FormSchemas";
 import {
   customerDefaultValues,
@@ -50,7 +51,8 @@ import {
   vendorDefaultValues,
   vacationDefaultValues,
   orderDefaultValues,
-  materialOrderDefaultValues
+  materialOrderDefaultValues,
+  productReturnDefaultValues
 } from "@/schemas/DefaultValuesForm";
 import {
   DialogContent,
@@ -60,6 +62,9 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog";
+import { FormFieldsProductReturn } from "../FormFieldsObjectsCreate/FormFieldsProductReturn";
+import { ProductReturn, ProductReturnRegister } from "@/types/product_return";
+import { MaterialOrder } from "@/types/material-order.types";
 
 /* Explaining this component. First of all, formFields will create all the Inputs to forms
    with the type that it received from objDefaultValues. But some things that have to be clear,
@@ -90,7 +95,9 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
     | z.ZodType<Partial<Product>>
     | z.ZodType<Partial<Vendor>>
     | z.ZodType<Partial<Vacation>>
-    | z.ZodType<Partial<Order>>;
+    | z.ZodType<Partial<Order>>
+    | z.ZodType<Partial<MaterialOrder>>
+    | z.ZodType<Partial<ProductReturnRegister>>;
 
   let apiCallByType: string;
   let objDefaultValues;
@@ -142,6 +149,11 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
       objDefaultValues = materialOrderDefaultValues;
       apiCallByType = "material-orders";
       break;
+    case "ProductReturn":
+      typeSchema = formProductReturnSchema;
+      objDefaultValues = productReturnDefaultValues;
+      apiCallByType = "product-returns";
+      break;
     default:
       throw new Error(`Invalid typeRegister: ${typeRegister}`);
   }
@@ -180,11 +192,13 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
     case "MaterialOrder":
       formFields1 = <FormFieldsMaterialOrder form={form} />;
       break;
+    case "ProductReturn":
+      formFields1 = <FormFieldsProductReturn form={form} />;
+      break;
     default:
       formFields1 = <div>erro</div>;
       break;
   }
-
   async function onSubmit(data: z.infer<typeof typeSchema>) {
     // Add as second argument of formatObject the enums that'll be treated to be send their indexes.
     const formattedData = formatObject(data, [Classification, Status]);

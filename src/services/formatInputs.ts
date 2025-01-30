@@ -45,6 +45,18 @@ const booleanLabels: BooleanLabels = {
   status: {
     0: "suspenso",
     1: "operacional"
+  },
+  replacement_necessary: {
+    0: "Não",
+    1: "Sim"
+  },
+  resold: {
+    0: "Não",
+    1: "Sim"
+  },
+  opened: {
+    0: "Não",
+    1: "Sim"
   }
 };
 

@@ -111,3 +111,14 @@ export const materialOrderDefaultValues = {
   product_id: "",
   vendor_id: "",
 };
+
+export const productReturnDefaultValues = {
+  product_return: {
+    date: undefined,
+    replacement_necessary: "",
+    resold: "",
+    return_reason: "",
+    order_id: 0,
+  },
+  returned_labels: []
+};

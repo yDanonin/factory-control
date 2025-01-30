@@ -74,9 +74,9 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
   return (
     <>
         <FormField
-            key="final_price"
+            key="order.final_price"
             control={form.control}
-            name="final_price"
+            name="order.final_price"
             render={({ field }) => (
             <FormItem>
                 <FormLabel htmlFor="final_price">Preço Final</FormLabel>
@@ -96,9 +96,9 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
             )}
         />
         <FormField
-            key="date"
+            key="order.date"
             control={form.control}
-            name="date"
+            name="order.date"
             render={({ field }) => (
             <FormItem className="flex flex-col justify-between">
                 <FormLabel htmlFor="date">Data do Pedido</FormLabel>
@@ -123,9 +123,9 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
             )}
         />
         <FormField
-        key="customer_id"
+        key="order.customer_id"
         control={form.control}
-        name="customer_id"
+        name="order.customer_id"
         render={({ field }) => {
           return (
             <FormItem>
