@@ -23,9 +23,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import Header from "@/components/Header";
+import { Payment } from "@/types/payment.types";
 
 export default function Page() {
-  const [data, setData] = useState<Order[]>([]);
+  const [data, setData] = useState<Payment[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -58,13 +59,23 @@ export default function Page() {
       sortable: true,
     },
     {
-      header: "Valor final",
-      accessorKey: "final_price",
+      header: "Valor pago",
+      accessorKey: "amount_paid",
       sortable: true,
     },
     {
-      header: "ID do Cliente",
-      accessorKey: "customer_id",
+      header: "Restante a ser pago",
+      accessorKey: "remaining",
+      sortable: true,
+    },
+    {
+      header: "Método de pagamento",
+      accessorKey: "payment_method",
+      sortable: true,
+    },
+    {
+      header: "Id do pedido",
+      accessorKey: "order.id",
       sortable: true,
     },
     {
@@ -86,16 +97,16 @@ export default function Page() {
                 className="cursor-pointer"
                 onClick={() => router.push(`/receive/payments/${row.original.id}`)}
               >
-                Ver detalhes do pedido
+                Ver detalhes do pagamento
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
                 <Dialog>
-                  <Modal typeModal="EDIT" typeRegister="Order" nameModal="pedido" rowData={row.original} />
+                  <Modal typeModal="EDIT" typeRegister="Payment" nameModal="pagamento" rowData={row.original} />
                 </Dialog>
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
                 <Dialog>
-                  <Modal typeModal="DELETE" typeRegister="Order" nameModal="pedido" idRowData={row.original.id} />
+                  <Modal typeModal="DELETE" typeRegister="Payment" nameModal="pagamento" idRowData={row.original.id} />
                 </Dialog>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -124,13 +135,13 @@ export default function Page() {
           <Aside />
         </nav>
         <main className="main-layout">
-          <Header title="Pedidos" />
+          <Header title="Pagamentos" />
           <DynamicTable
             isLoadingSpinner={isLoading}
             columns={columns}
             data={data}
             filterFields={arrayFilterFieldsByAcessorKey}
-            typeRegister="Order"
+            typeRegister="Payment"
           />
         </main>
       </div>

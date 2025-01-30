@@ -96,16 +96,16 @@ export default function Page() {
                 className="cursor-pointer"
                 onClick={() => router.push(`/receive/product-returns/${row.original.id}`)}
               >
-                Ver detalhes do pedido
+                Ver detalhes da devolução
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
                 <Dialog>
-                  <Modal typeModal="EDIT" typeRegister="ProductReturn" nameModal="pedido" rowData={row.original} />
+                  <Modal typeModal="EDIT" typeRegister="ProductReturn" nameModal="devolução" rowData={row.original} />
                 </Dialog>
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
                 <Dialog>
-                  <Modal typeModal="DELETE" typeRegister="ProductReturn" nameModal="pedido" idRowData={row.original.id} />
+                  <Modal typeModal="DELETE" typeRegister="ProductReturn" nameModal="devolução" idRowData={row.original.id} />
                 </Dialog>
               </DropdownMenuItem>
             </DropdownMenuContent>

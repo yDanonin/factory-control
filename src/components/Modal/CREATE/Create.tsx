@@ -40,7 +40,8 @@ import {
   formVacationSchema,
   formOrderSchema,
   formMaterialOrderSchema,
-  formProductReturnSchema
+  formProductReturnSchema,
+  formPaymentSchema
 } from "@/schemas/FormSchemas";
 import {
   customerDefaultValues,
@@ -52,7 +53,8 @@ import {
   vacationDefaultValues,
   orderDefaultValues,
   materialOrderDefaultValues,
-  productReturnDefaultValues
+  productReturnDefaultValues,
+  paymentDefaultValues
 } from "@/schemas/DefaultValuesForm";
 import {
   DialogContent,
@@ -63,8 +65,10 @@ import {
   DialogTrigger
 } from "@/components/ui/dialog";
 import { FormFieldsProductReturn } from "../FormFieldsObjectsCreate/FormFieldsProductReturn";
-import { ProductReturn, ProductReturnRegister } from "@/types/product_return";
+import { ProductReturn, ProductReturnRegister } from "@/types/product_return.types";
 import { MaterialOrder } from "@/types/material-order.types";
+import { FormFieldsPayment } from "../FormFieldsObjectsCreate/FormFieldsPayment";
+import { PaymentRegister } from "@/types/payment.types";
 
 /* Explaining this component. First of all, formFields will create all the Inputs to forms
    with the type that it received from objDefaultValues. But some things that have to be clear,
@@ -97,7 +101,8 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
     | z.ZodType<Partial<Vacation>>
     | z.ZodType<Partial<Order>>
     | z.ZodType<Partial<MaterialOrder>>
-    | z.ZodType<Partial<ProductReturnRegister>>;
+    | z.ZodType<Partial<ProductReturnRegister>>
+    | z.ZodType<Partial<PaymentRegister>>;
 
   let apiCallByType: string;
   let objDefaultValues;
@@ -154,6 +159,11 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
       objDefaultValues = productReturnDefaultValues;
       apiCallByType = "product-returns";
       break;
+    case "Payment":
+      typeSchema = formPaymentSchema;
+      objDefaultValues = paymentDefaultValues;
+      apiCallByType = "payments";
+      break;
     default:
       throw new Error(`Invalid typeRegister: ${typeRegister}`);
   }
@@ -195,10 +205,14 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
     case "ProductReturn":
       formFields1 = <FormFieldsProductReturn form={form} />;
       break;
+    case "Payment":
+      formFields1 = <FormFieldsPayment form={form} />;
+      break;
     default:
       formFields1 = <div>erro</div>;
       break;
   }
+  FormFieldsPayment
   async function onSubmit(data: z.infer<typeof typeSchema>) {
     // Add as second argument of formatObject the enums that'll be treated to be send their indexes.
     const formattedData = formatObject(data, [Classification, Status]);

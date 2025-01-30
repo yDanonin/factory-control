@@ -122,3 +122,10 @@ export const productReturnDefaultValues = {
   },
   returned_labels: []
 };
+
+export const paymentDefaultValues = {
+  amount_paid: undefined,
+  payment_method: "",
+  date: new Date(),
+  order_id: undefined,
+};

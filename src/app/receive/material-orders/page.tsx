@@ -107,16 +107,16 @@ export default function Page() {
                 className="cursor-pointer"
                 onClick={() => router.push(`/receive/material-orders/${row.original.id}`)}
               >
-                Ver detalhes do pedido
+                Ver detalhes do material produtivo
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
                 <Dialog>
-                  <Modal typeModal="EDIT" typeRegister="MaterialOrder" nameModal="pedido" rowData={row.original} />
+                  <Modal typeModal="EDIT" typeRegister="MaterialOrder" nameModal="material produtivo" rowData={row.original} />
                 </Dialog>
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
                 <Dialog>
-                  <Modal typeModal="DELETE" typeRegister="MaterialOrder" nameModal="pedido" idRowData={row.original.id} />
+                  <Modal typeModal="DELETE" typeRegister="MaterialOrder" nameModal="material produtivo" idRowData={row.original.id} />
                 </Dialog>
               </DropdownMenuItem>
             </DropdownMenuContent>

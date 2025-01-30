@@ -42,7 +42,8 @@ import {
   formTimeConfigurationSchema,
   formOrderSchema,
   formMaterialOrderSchema,
-  formProductReturnSchema
+  formProductReturnSchema,
+  formPaymentSchema
 } from "@/schemas/FormSchemas";
 import {
   Dialog,
@@ -67,6 +68,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import { FormFieldsMaterialOrder } from "../FormFieldsObjectsEdit/FormFieldsMaterialOrder";
 import { FormFieldsProductReturn } from "../FormFieldsObjectsEdit/FormFieldsProductReturn";
+import { MaterialOrder } from "@/types/material-order.types";
+import { ProductReturnRegister } from "@/types/product_return.types";
+import { PaymentRegister } from "@/types/payment.types";
+import { FormFieldsPayment } from "../FormFieldsObjectsEdit/FormFieldsPayment";
 
 interface ModalEditProps {
   nameModal: string;
@@ -104,7 +109,10 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
     | z.ZodType<Partial<Vendor>>
     | z.ZodType<Partial<Vacation>>
     | z.ZodType<Partial<TimeConfiguration>>
-    | z.ZodType<Partial<Order>>;
+    | z.ZodType<Partial<Order>>
+    | z.ZodType<Partial<MaterialOrder>>
+    | z.ZodType<Partial<ProductReturnRegister>>
+    | z.ZodType<Partial<PaymentRegister>>;
 
   let apiCallByType: string;
   let formFields;
@@ -154,6 +162,10 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
       typeSchema = formProductReturnSchema;
       apiCallByType = "product-returns";
       break;
+    case "Payment":
+      typeSchema = formPaymentSchema;
+      apiCallByType = "payments";
+      break;
     default:
       throw new Error(`Invalid typeRegister: ${typeRegister}`);
   }
@@ -198,6 +210,9 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
     case "ProductReturn":
       formFields = <FormFieldsProductReturn form={form} />
       break;
+    case "Payment":
+      formFields = <FormFieldsPayment form={form} />
+      break;
     default:
       formFields = <div>erro</div>;
       break;
@@ -240,7 +255,7 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
             <DialogHeader>
               <DialogTitle>Editando {nameModal}</DialogTitle>
             </DialogHeader>
-            <div className="grid grid-cols-3 gap-4">{formFields}</div>
+            <div className="pt-4 grid grid-cols-3 gap-4">{formFields}</div>
             <DialogFooter className="absolute bottom-0 right-0 p-10">
               <DialogClose asChild>
                 <Button type="button" variant="secondary" disabled={ isLoading }>
