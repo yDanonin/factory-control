@@ -41,7 +41,8 @@ import {
   formVacationSchema,
   formTimeConfigurationSchema,
   formOrderSchema,
-  formMaterialOrderSchema
+  formMaterialOrderSchema,
+  formProductReturnSchema
 } from "@/schemas/FormSchemas";
 import {
   Dialog,
@@ -65,6 +66,7 @@ import {
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
 import { FormFieldsMaterialOrder } from "../FormFieldsObjectsEdit/FormFieldsMaterialOrder";
+import { FormFieldsProductReturn } from "../FormFieldsObjectsEdit/FormFieldsProductReturn";
 
 interface ModalEditProps {
   nameModal: string;
@@ -148,6 +150,10 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
       typeSchema = formMaterialOrderSchema;
       apiCallByType = "material-orders";
       break;
+    case "ProductReturn":
+      typeSchema = formProductReturnSchema;
+      apiCallByType = "product-returns";
+      break;
     default:
       throw new Error(`Invalid typeRegister: ${typeRegister}`);
   }
@@ -188,6 +194,9 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
       break;
     case "MaterialOrder":
       formFields = <FormFieldsMaterialOrder form={form} />
+      break;
+    case "ProductReturn":
+      formFields = <FormFieldsProductReturn form={form} />
       break;
     default:
       formFields = <div>erro</div>;

@@ -53,18 +53,28 @@ export default function Page() {
       sortable: true,
     },
     {
+      header: "Id do pedido",
+      accessorKey: "order.id",
+      sortable: true,
+    },
+    {
       header: "Data",
       accessorKey: "date",
       sortable: true,
     },
     {
-      header: "Valor final",
-      accessorKey: "final_price",
+      header: "Precisa repor?",
+      accessorKey: "replacement_necessary",
       sortable: true,
     },
     {
-      header: "ID do Cliente",
-      accessorKey: "customer_id",
+      header: "Revendido?",
+      accessorKey: "resold",
+      sortable: true,
+    },
+    {
+      header: "Motivo do retorno",
+      accessorKey: "return_reason",
       sortable: true,
     },
     {
@@ -90,12 +100,12 @@ export default function Page() {
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
                 <Dialog>
-                  <Modal typeModal="EDIT" typeRegister="Order" nameModal="pedido" rowData={row.original} />
+                  <Modal typeModal="EDIT" typeRegister="ProductReturn" nameModal="pedido" rowData={row.original} />
                 </Dialog>
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
                 <Dialog>
-                  <Modal typeModal="DELETE" typeRegister="Order" nameModal="pedido" idRowData={row.original.id} />
+                  <Modal typeModal="DELETE" typeRegister="ProductReturn" nameModal="pedido" idRowData={row.original.id} />
                 </Dialog>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -124,13 +134,13 @@ export default function Page() {
           <Aside />
         </nav>
         <main className="main-layout">
-          <Header title="Pedidos" />
+          <Header title="Devoluções" />
           <DynamicTable
             isLoadingSpinner={isLoading}
             columns={columns}
             data={data}
             filterFields={arrayFilterFieldsByAcessorKey}
-            typeRegister="Order"
+            typeRegister="ProductReturn"
           />
         </main>
       </div>

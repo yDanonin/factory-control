@@ -72,7 +72,7 @@ export const FormFieldsMaterialOrder: React.FC<FormFieldsMaterialOrder> = ({ for
           name="unit"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="nome_loja">Unidade de medida</FormLabel>
+              <FormLabel htmlFor="unit">Unidade de medida</FormLabel>
               <FormControl>
                 <Input id="unit" {...field} placeholder="Insira a unidade de medida"/>
               </FormControl>

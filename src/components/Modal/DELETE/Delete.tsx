@@ -44,7 +44,9 @@ export const Delete: React.FC<ModalEditProps> = ({ nameModal, typeRegister, idRo
   } else if (typeRegister === "Order"){
     apiCallByType = "orders";
   } else if (typeRegister === "MaterialOrder"){
-      apiCallByType = "material-orders";
+    apiCallByType = "material-orders";
+  } else if (typeRegister === "ProductReturn"){
+    apiCallByType = "product-returns";
   } else {
     throw new Error(`Invalid typeRegister: ${typeRegister}`);
   }

@@ -224,6 +224,24 @@ export const formMaterialOrderSchema = z.object({
   vendor_id: z.number({ coerce: true }),
 });
 
+export const formProductReturnSchema = z.object({
+  product_return: z.object({
+    date: z.date(),
+    replacement_necessary: z.string(),
+    resold:  z.string(),
+    return_reason:  z.string(),
+    order_id: z.number(),
+  }),
+  returned_labels: z.array(
+    z.object({
+      ticket_code: z.string(),
+      opened: z.string(),
+      quantity: z.number({ coerce: true }),
+    })
+  )
+  .nonempty({ message: "Adicione ao menos um produto." }),
+});
+
 function validaCep(cep: string) {
   return /^\d{8}$/.test(cep.replace(/[^\d]+/g, ""));
 }
