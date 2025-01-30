@@ -40,7 +40,8 @@ import {
   formVendorSchema,
   formVacationSchema,
   formTimeConfigurationSchema,
-  formOrderSchema
+  formOrderSchema,
+  formMaterialOrderSchema
 } from "@/schemas/FormSchemas";
 import {
   Dialog,
@@ -63,6 +64,7 @@ import {
   AlertDialogDescription,
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
+import { FormFieldsMaterialOrder } from "../FormFieldsObjectsEdit/FormFieldsMaterialOrder";
 
 interface ModalEditProps {
   nameModal: string;
@@ -142,6 +144,10 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
       typeSchema = formOrderSchema;
       apiCallByType = "orders";
       break;
+    case "MaterialOrder":
+      typeSchema = formMaterialOrderSchema;
+      apiCallByType = "material-orders";
+      break;
     default:
       throw new Error(`Invalid typeRegister: ${typeRegister}`);
   }
@@ -179,6 +185,9 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
       break;
     case "Order":
       formFields = <FormFieldsOrder form={form} />
+      break;
+    case "MaterialOrder":
+      formFields = <FormFieldsMaterialOrder form={form} />
       break;
     default:
       formFields = <div>erro</div>;

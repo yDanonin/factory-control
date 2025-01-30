@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 
-import axios from "axios";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Input } from "@/components/ui/input";
@@ -16,6 +15,7 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/comp
 import { Product } from "@/types/product.types";
 import { Status } from "@/types/common.types";
 import { OrderItem } from "@/types/order-item.types";
+import axios from "axios";
 
 interface FormFieldsOrder {
   form: UseFormReturn;
@@ -146,6 +146,7 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
           );
         }}
       />
+      {products && (
         <FormField
           control={form.control}
           name="products"
@@ -194,7 +195,7 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
               </div>
             </FormItem>
            )}
-        />
+        />)}
       </>
   );
 };

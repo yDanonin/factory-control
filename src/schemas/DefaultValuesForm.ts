@@ -101,3 +101,13 @@ export const orderDefaultValues = {
   customer_id: "",
   products: [],
 };
+
+export const materialOrderDefaultValues = {
+  amount: "",
+  unit: "",
+  date: undefined,
+  storage_location: "",
+  received_by: "",
+  product_id: "",
+  vendor_id: "",
+};

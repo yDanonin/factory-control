@@ -33,7 +33,8 @@ export default function Page() {
     const fetchData = async () => {
       try {
         const resp = await axios.get("/api/orders");
-        setData(resp.data.data);
+        console.log(resp)
+        setData(resp.data);
       } catch (err) {
         console.error(err);
       } finally {
@@ -64,7 +65,7 @@ export default function Page() {
     },
     {
       header: "ID do Cliente",
-      accessorKey: "customer_id",
+      accessorKey: "customer.id",
       sortable: true,
     },
     {

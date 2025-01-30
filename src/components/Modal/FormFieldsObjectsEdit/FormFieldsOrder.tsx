@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
@@ -14,6 +14,8 @@ import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue } from "@
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Product } from "@/types/product.types";
 import { Status } from "@/types/common.types";
+import axios from "axios";
+import Spinner from "@/components/Spinner";
 
 interface FormFieldsOrder {
   form: UseFormReturn;
@@ -31,13 +33,26 @@ function mapEnumToSelectItems<T extends string>(enumObj: EnumType<T>): JSX.Eleme
   ));
 }
 
-// Fixed list of products
-const products: Product[] = [
-    { id: 1, status: Status.operacional, volume_sales: 0, sales: 0, invoicing: 0, name: "Product A", model: "Model A", size: "A", character: "A", moldes: 1, equivalency: 1, created_at: new Date(), updated_at: new Date() },
-    { id: 2, status: Status.operacional, volume_sales: 0, sales: 0, invoicing: 0, name: "Product B", model: "Model A", size: "A", character: "A", moldes: 1, equivalency: 1, created_at: new Date(), updated_at: new Date() },
-    { id: 3, status: Status.operacional, volume_sales: 0, sales: 0, invoicing: 0, name: "Product C", model: "Model A", size: "A", character: "A", moldes: 1, equivalency: 1, created_at: new Date(), updated_at: new Date() },
-];
 export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
+  const [products, setProduct] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const resp = await axios.get("/api/products");
+          console.log(resp)
+          setProduct(resp.data);
+        } catch (err) {
+          console.error(err);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      fetchData();
+    }, []);
+
     const [selectedProducts, setSelectedProducts] = useState<{ productId: string; quantity: number }[]>([]);
     const addProduct = () => {setSelectedProducts([...selectedProducts, { productId: "", quantity: 1 }]);};
     const removeProduct = (index: number) => {setSelectedProducts(selectedProducts.filter((_, i) => i !== index));};
@@ -49,6 +64,11 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
 
   return (
     <>
+        {isLoading && (
+          <div className="fullscreen-spinner">
+            <Spinner visible={true} color="default" message="Loading Page..."/>
+          </div>
+        )}
         <FormField
             key="final_price"
             control={form.control}
