@@ -49,20 +49,18 @@ export const FormFieldsMaterialOrder: React.FC<FormFieldsMaterialOrder> = ({ for
         <FormField
             key="amount"
             control={form.control}
-            name="final_price"
+            name="amount"
             render={({ field }) => (
             <FormItem>
-                <FormLabel htmlFor="final_price">Preço Final</FormLabel>
+                <FormLabel htmlFor="amount">Quantidade</FormLabel>
                 <FormControl>
-                    <div className="relative ml-auto flex-1">
-                    <span className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground">R$</span>
-                    <Input
-                        id="final_price"
-                        type="number"
-                        {...field}
-                        className="w-full rounded-lg bg-background pl-8 pt-2.5"
-                    />
-                    </div>
+                  <Input
+                      id="amount"
+                      type="number"
+                      {...field}
+                      placeholder="Insira a quantidade"
+                      className="w-full rounded-lg bg-background pl-8 pt-2.5"
+                  />
                 </FormControl>
                 <FormMessage />
             </FormItem>
@@ -75,7 +73,7 @@ export const FormFieldsMaterialOrder: React.FC<FormFieldsMaterialOrder> = ({ for
           name="unit"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="nome_loja">Unidade de medida</FormLabel>
+              <FormLabel htmlFor="unit">Unidade de medida</FormLabel>
               <FormControl>
                 <Input id="unit" {...field} placeholder="Insira a unidade de medida"/>
               </FormControl>
@@ -115,19 +113,19 @@ export const FormFieldsMaterialOrder: React.FC<FormFieldsMaterialOrder> = ({ for
         />
 
         <FormField
-          key="product_id"
+          key="product.id"
           control={form.control}
-          name="product_id"
+          name="product.id"
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel htmlFor="product_id">ID do produto</FormLabel>
+                <FormLabel htmlFor="product.id">ID do produto</FormLabel>
                 <FormControl>
                   <Input
-                    id="product_id"
+                    id="product.id"
                     type="number"
                     {...field}
-                    {...form.register("product_id", {
+                    {...form.register("product.id", {
                       valueAsNumber: true
                     })}
                     placeholder="Insira o ID do produto"
@@ -141,19 +139,19 @@ export const FormFieldsMaterialOrder: React.FC<FormFieldsMaterialOrder> = ({ for
 
 
         <FormField
-          key="vendor_id"
+          key="vendor.id"
           control={form.control}
-          name="vendor_id"
+          name="vendor.id"
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel htmlFor="vendor_id">ID do fornecedor</FormLabel>
+                <FormLabel htmlFor="vendor.id">ID do fornecedor</FormLabel>
                 <FormControl>
                   <Input
-                    id="vendor_id"
+                    id="vendor.id"
                     type="number"
                     {...field}
-                    {...form.register("vendor_id", {
+                    {...form.register("vendor.id", {
                       valueAsNumber: true
                     })}
                     placeholder="Insira o ID do fornecedor"
