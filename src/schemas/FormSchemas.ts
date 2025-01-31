@@ -258,10 +258,16 @@ export const formProductReturnSchema = z.object({
 });
 
 export const formPaymentSchema = z.object({
-  amount_paid: z.number({ coerce: true }),
-  payment_method: z.string(),
-  date: z.date(),
-  order_id: z.number({ coerce: true }),
+  amount_paid: z.number({ coerce: true, invalid_type_error: "Informe o valor do total pago." }).positive({
+    message: "Informe o valor do total pago."
+  }),
+  payment_method: z.string().min(1, {
+    message: "Informe o método de pagamento."
+  }),
+  date: z.date({ required_error: "Informe a data." }),
+  order_id: z.number({ coerce: true, invalid_type_error: "Informe o ID do pedido." }).positive({
+    message: "Informe o Id do pedido."
+  }),
 });
 
 function validaCep(cep: string) {
