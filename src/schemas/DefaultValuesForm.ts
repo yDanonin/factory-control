@@ -8,7 +8,7 @@ export const employeeDefaultValues = {
   cpf: "",
   classification: Classification.funcionario,
   salary: undefined,
-  admission: new Date(),
+  admission: undefined,
   dismissal_date: undefined
 };
 
@@ -87,17 +87,15 @@ export const vendorDefaultValues = {
 };
 
 export const vacationDefaultValues = {
-  employee_id: 0,
+  employee_id: "",
   start_date: new Date(),
   end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-  sold_days: 0,
+  sold_days: "",
 };
 
 export const orderDefaultValues = {
   final_price: "",
   date: undefined,
-  created_at: new Date(),
-  updated_at: new Date(),
   customer_id: "",
   products: [],
 };
@@ -118,14 +116,14 @@ export const productReturnDefaultValues = {
     replacement_necessary: "",
     resold: "",
     return_reason: "",
-    order_id: 0,
+    order_id: "",
   },
   returned_labels: []
 };
 
 export const paymentDefaultValues = {
-  amount_paid: undefined,
+  amount_paid: "",
   payment_method: "",
-  date: new Date(),
-  order_id: undefined,
+  date: undefined,
+  order_id: "",
 };
