@@ -122,8 +122,8 @@ export const productReturnDefaultValues = {
 };
 
 export const paymentDefaultValues = {
-  amount_paid: undefined,
+  amount_paid: "",
   payment_method: "",
-  date: new Date(),
-  order_id: undefined,
+  date: undefined,
+  order_id: "",
 };
