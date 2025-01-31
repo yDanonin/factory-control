@@ -95,8 +95,10 @@ export const formMachineSchema = z.object({
   model: z.string().min(2, {
     message: "Informe o modelo."
   }),
-  machine_number: z.number({ coerce: true }),
-  location: z.string(),
+  machine_number: z.number({ coerce: true, invalid_type_error: "Informe o número da máquina." }),
+  location: z.string().min(1, {
+    message: "Informe a localização."
+  }),
   status: z.nativeEnum(Status),
   location_status: z.nativeEnum(Status)
 });
