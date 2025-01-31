@@ -87,10 +87,10 @@ export const vendorDefaultValues = {
 };
 
 export const vacationDefaultValues = {
-  employee_id: 0,
+  employee_id: "",
   start_date: new Date(),
   end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-  sold_days: 0,
+  sold_days: "",
 };
 
 export const orderDefaultValues = {

@@ -195,10 +195,14 @@ export const signInFormSchema = z.object({
 });
 
 export const formVacationSchema = z.object({
-  employee_id: z.number({ coerce: true }),
-  start_date: z.date(),
-  end_date: z.date(),
-  sold_days: z.number({ coerce: true })
+  employee_id: z.number({ coerce: true }).positive({
+    message: "Informe o ID do funcionário."
+  }),
+  start_date: z.date({ required_error: "Informe a data de início." }),
+  end_date: z.date({ required_error: "Informe a data de término." }),
+  sold_days: z.number({ coerce: true }).positive({
+    message: "Informe a quantidade de dias vendidos."
+  }),
 });
 
 export const formTimeConfigurationSchema = z.object({
