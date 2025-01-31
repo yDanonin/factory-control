@@ -116,7 +116,7 @@ export const productReturnDefaultValues = {
     replacement_necessary: "",
     resold: "",
     return_reason: "",
-    order_id: 0,
+    order_id: "",
   },
   returned_labels: []
 };
