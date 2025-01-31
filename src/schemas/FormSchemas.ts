@@ -147,9 +147,13 @@ export const formVendorSchema = z.object({
     message: "Informe o número de telefone."
   }).optional(),
   deliver: z.string(),
-  volume_purchases: z.number({ coerce: true }),
-  purchases: z.number({ coerce: true }),
-  invoicing: z.number({ coerce: true }),
+  volume_purchases: z.number({ coerce: true, invalid_type_error: "Informe o volume de compras." }),
+  purchases: z.number({ coerce: true }).positive({
+    message: "Informe o valor das compras."
+  }),
+  invoicing: z.number({ coerce: true }).positive({
+    message: "Informe o faturamento."
+  }),
   status: z.nativeEnum(Status),
   address: z.object({
     zip_code: z
