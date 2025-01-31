@@ -113,14 +113,20 @@ export const formProductSchema = z.object({
   name: z.string().min(2, {
     message: "Informe o nome."
   }),
-  model: z.string(),
-  size: z.string(),
-  sales: z.number({ coerce: true }),
-  volume_sales: z.number({ coerce: true }),
-  invoicing: z.number({ coerce: true }),
+  model: z.string().min(1, {
+    message: "Informe o modelo."
+  }),
+  size: z.string().min(1, {
+    message: "Informe o tamanho."
+  }),
+  sales: z.number({ coerce: true, invalid_type_error: "Informe o número de vendas." }),
+  volume_sales: z.number({ coerce: true, invalid_type_error: "Informe o volume de vendas." }),
+  invoicing: z.number({ coerce: true }).positive({
+    message: "Informe o valor das compras."
+  }),
   character: z.string(),
-  moldes: z.number({ coerce: true }),
-  equivalency: z.number({ coerce: true }),
+  moldes: z.number({ coerce: true, invalid_type_error: "Informe os moldes." }),
+  equivalency: z.number({ coerce: true, invalid_type_error: "Informe a equivalência." }),
   status: z.nativeEnum(Status)
 });
 
