@@ -107,7 +107,7 @@ export const formProcedureSchema = z.object({
   process_name: z.string().min(2, {
     message: "Informe o nome do processo."
   }),
-  workers: z.number({ coerce: true }),
+  workers: z.number({ coerce: true, invalid_type_error: "Informe o número de trabalhadores." }),
   status: z.nativeEnum(Status)
 });
 
