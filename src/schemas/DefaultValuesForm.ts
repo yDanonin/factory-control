@@ -8,7 +8,7 @@ export const employeeDefaultValues = {
   cpf: "",
   classification: Classification.funcionario,
   salary: undefined,
-  admission: new Date(),
+  admission: undefined,
   dismissal_date: undefined
 };
 
