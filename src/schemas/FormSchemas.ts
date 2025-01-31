@@ -230,13 +230,25 @@ export const formOrderSchema = z.object({
 });
 
 export const formMaterialOrderSchema = z.object({
-  date: z.date(),
-  amount: z.number({ coerce: true }),
-  unit: z.string(),
-  storage_location: z.string(),
-  received_by: z.string(),
-  product_id: z.number({ coerce: true }),
-  vendor_id: z.number({ coerce: true }),
+  date: z.date({ required_error: "Informe a data." }),
+  amount: z.number({ coerce: true }).positive({
+    message: "Informe a quantidade."
+  }),
+  unit: z.string().min(1, {
+    message: "Informe a unidade de medida."
+  }),
+  storage_location: z.string().min(2, {
+    message: "Informe o local de armazenamento."
+  }),
+  received_by: z.string().min(2, {
+    message: "Informe o nome de quem recebeu."
+  }),
+  product_id: z.number({ coerce: true, invalid_type_error: "Informe o ID do produto." }).positive({
+    message: "Informe o Id do produto."
+  }),
+  vendor_id: z.number({ coerce: true, invalid_type_error: "Informe o ID do fornecedor." }).positive({
+    message: "Informe o Id do fornecedor."
+  }),
 });
 
 export const formProductReturnSchema = z.object({
