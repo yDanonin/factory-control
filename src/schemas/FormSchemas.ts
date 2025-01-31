@@ -241,11 +241,19 @@ export const formMaterialOrderSchema = z.object({
 
 export const formProductReturnSchema = z.object({
   product_return: z.object({
-    date: z.date(),
-    replacement_necessary: z.string(),
-    resold:  z.string(),
-    return_reason:  z.string(),
-    order_id: z.number(),
+    date: z.date({ required_error: "Informe a data." }),
+    replacement_necessary: z.string().min(1, {
+      message: "Informe se é necessário substituição."
+    }),
+    resold:  z.string().min(1, {
+      message: "Informe se é revenda."
+    }),
+    return_reason:  z.string().min(1, {
+      message: "Informe o motivo da devolução."
+    }),
+    order_id: z.number({ coerce: true, invalid_type_error: "Informe o ID do pedido." }).positive({
+      message: "Informe o Id do pedido."
+    }),
   }),
   returned_labels: z.array(
     z.object({
