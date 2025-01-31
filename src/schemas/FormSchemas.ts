@@ -87,7 +87,7 @@ export const formEmployeeSchema = z.object({
   }),
   classification: z.nativeEnum(Classification),
   salary: z.number({ coerce: true }).optional(),
-  admission: z.date(),
+  admission: z.date({ required_error: "Informe a data de admissão." }),
   dismissal_date: z.date().optional()
 });
 
@@ -208,12 +208,13 @@ export const formTimeConfigurationSchema = z.object({
 });
 
 export const formOrderSchema = z.object({
-  order_id: z.number({ coerce: true }),
-  final_price: z.number({ coerce: true }),
-  date: z.date(),
-  created_at: z.date(),
-  updated_at: z.date(),
-  customer_id: z.number({ coerce: true }),
+  final_price: z.number({ coerce: true }).positive({
+    message: "Informe o faturamento."
+  }),
+  date: z.date({ required_error: "Informe a data." }),
+  customer_id: z.number({ coerce: true }).positive({
+    message: "Informe o Id do cliente."
+  }),
   products: z
     .array(
       z.object({
