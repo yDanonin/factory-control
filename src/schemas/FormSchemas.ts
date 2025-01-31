@@ -13,23 +13,21 @@ export const formCustomerSchema = z
     cel_number: z.string().min(11, {
       message: "Informe o número de celular."
     }),
-    email: z.string().email().min(2, {
-      message: "Informe o email."
-    }),
+    email: z.string().email({ message: "Informe o email."}),
     store_name: z.string().min(2, {
       message: "Informe o nome da loja."
     }),
-    credit_limit: z.number({ coerce: true }).min(0, {
+    credit_limit: z.number({ coerce: true }).positive({
       message: "Informe o limite de crédito."
     }),
-    debts: z.number({ coerce: true }).min(0, {
+    debts: z.number({ coerce: true }).positive({
       message: "Informe o débito."
     }),
     cpf: z.string().optional(),
     cnpj: z.string().optional(),
-    deliver: z.string(),
-    pontalti: z.string(),
-    secondary_line: z.string(),
+    deliver: z.string({ message: "Informe se é entrega ou retirada." }),
+    pontalti: z.string({ message: "Informe se é da Pontalti." }),
+    secondary_line: z.string({ message: "Informe se é linha secundária." }),
     status: z.nativeEnum(Status),
     address: z.object({
       zip_code: z
