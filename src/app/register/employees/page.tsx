@@ -76,6 +76,16 @@ export default function Page() {
       header: "Admissão",
       accessorKey: "admission",
       sortable: true,
+      cell: ({ row }: { row: Row<DataRow> }) => {
+        const date = new Date(row.getValue("admission"));
+        return <>{date.toLocaleDateString('pt-BR', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })}</>;
+      },
     },
     {
       id: "actions",

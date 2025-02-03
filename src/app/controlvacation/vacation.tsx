@@ -49,11 +49,31 @@ export const VacationPage = () => {
     },
     {
       header: "Data de inicio",
-      accessorKey: "start_date"
+      accessorKey: "start_date",
+      cell: ({ row }: { row: Row<DataRow> }) => {
+        const date = new Date(row.getValue("start_date"));
+        return <>{date.toLocaleDateString('pt-BR', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })}</>;
+      }
     },
     {
       header: "Data final",
-      accessorKey: "end_date"
+      accessorKey: "end_date",
+      cell: ({ row }: { row: Row<DataRow> }) => {
+        const date = new Date(row.getValue("end_date"));
+        return <>{date.toLocaleDateString('pt-BR', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })}</>;
+      }
     },
     {
       header: "Total de dias vendidos",
