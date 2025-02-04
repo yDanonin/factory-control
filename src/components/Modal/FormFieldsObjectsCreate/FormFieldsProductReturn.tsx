@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
@@ -23,15 +23,44 @@ interface FormFieldsProductReturn {
 export const FormFieldsProductReturn: React.FC<FormFieldsProductReturn> = ({ form }) => {
   const [selectedLabels, setSelectedLabels] = useState<ReturnedLabel[]>([]);
 
-  const addLabel = () => {setSelectedLabels([...selectedLabels, { ticket_code: "", opened: false, quantity: 0}]);};
+  useEffect(() => {
+    const formData = form.getValues();
+    console.log('Form Structure:', {
+      product_return: {
+        date: formData.product_return?.date,
+        order_id: formData.product_return?.order_id,
+        replacement_necessary: formData.product_return?.replacement_necessary,
+        resold: formData.product_return?.resold,
+        return_reason: formData.product_return?.return_reason
+      },
+      returned_labels: formData.returned_labels
+    });
+    
+    console.log('Validation State:', form.formState.errors);
+  }, [form]);
+
+  useEffect(() => {
+    form.setValue('returned_labels', selectedLabels);
+  }, [selectedLabels, form]);
+
+  const addLabel = () => {
+    const newLabels = [...selectedLabels, { 
+      ticket_code: "", 
+      opened: false, 
+      quantity: 0
+    }];
+    setSelectedLabels(newLabels);
+    form.setValue('returned_labels', newLabels);
+  };
   const removeLabel = (index: number) => {setSelectedLabels(selectedLabels.filter((_, i) => i !== index));};
   const updateLabel = (index: number, field: string, value: any) => {
     const updatedLabels = [...selectedLabels];
     updatedLabels[index] = { 
       ...updatedLabels[index], 
-      [field]: field === "product_id" ? Number(value) : value 
+      [field]: value 
     };
     setSelectedLabels(updatedLabels);
+    form.setValue('returned_labels', updatedLabels);
   };
 
   return (
@@ -162,7 +191,7 @@ export const FormFieldsProductReturn: React.FC<FormFieldsProductReturn> = ({ for
 
         <FormField
           control={form.control}
-          name="products"
+          name="returned_labels"
           render={({ field }) => (
             <FormItem>
               <div className="space-y-4">
@@ -175,9 +204,11 @@ export const FormFieldsProductReturn: React.FC<FormFieldsProductReturn> = ({ for
                 <div className="max-h-[200px] overflow-y-auto space-y-4">
                 {selectedLabels.map((returned_labels, index) => (
                   <div key={index} className="flex items-center space-x-4">
-
-                    <Input id="returned_labels.ticket_code" {...field} placeholder="Insira o código da etiqueta"/>
-
+                    <Input id="returned_labels.ticket_code"
+                      value={returned_labels.ticket_code}
+                      onChange={(e) => updateLabel(index, "ticket_code", e.target.value)}
+                      placeholder="Insira o código da etiqueta"
+                    />
                     <FormField
                       key="returned_labels.opened"
                       control={form.control}
@@ -186,7 +217,13 @@ export const FormFieldsProductReturn: React.FC<FormFieldsProductReturn> = ({ for
                         <FormItem>
                           <FormLabel htmlFor="opened">Foi aberto?</FormLabel>
                           <FormControl>
-                            <RadioGroup onValueChange={field.onChange}>
+                            <RadioGroup 
+                              value={returned_labels.opened}
+                              onValueChange={(value) => {
+                                updateLabel(index, "opened", value);
+                                field.onChange(selectedLabels);
+                              }}
+                            >
                               <FormItem className="flex items-center space-x-3 space-y-0">
                                 <FormControl>
                                   <RadioGroupItem value="true" id={`option-one-opened`} />
