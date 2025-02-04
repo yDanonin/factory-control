@@ -35,14 +35,14 @@ function mapEnumToSelectItems<T extends string>(enumObj: EnumType<T>): JSX.Eleme
 
 export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
   const [products, setProduct] = useState<Product[]>([]);
+  const [selectedProducts, setSelectedProducts] = useState<OrderItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   
     useEffect(() => {
       const fetchData = async () => {
         try {
           const resp = await axios.get("/api/products");
-          console.log(resp)
-          setProduct(resp.data);
+          setProduct(resp.data.data);
         } catch (err) {
           console.error(err);
         } finally {
@@ -53,13 +53,51 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
       fetchData();
     }, []);
 
-    const [selectedProducts, setSelectedProducts] = useState<{ productId: string; quantity: number }[]>([]);
-    const addProduct = () => {setSelectedProducts([...selectedProducts, { productId: "", quantity: 1 }]);};
-    const removeProduct = (index: number) => {setSelectedProducts(selectedProducts.filter((_, i) => i !== index));};
+    useEffect(() => {
+      const fetchProducts = async () => {
+          try {
+              const resp = await axios.get("/api/products");
+              setProducts(resp.data.data);
+          } catch (err) {
+              console.error(err);
+          }
+      };
+      fetchProducts();
+    }, []);
+  
+    useEffect(() => {
+      form.setValue('products', selectedProducts);
+    }, [selectedProducts, form]);
+  
+    useEffect(() => {
+      const currentProducts = form.getValues('products');
+      if (currentProducts?.length) {
+        setSelectedProducts(currentProducts);
+      }
+    }, []);
+  
+    useEffect(() => {
+      const formValues = form.getValues();
+    }, [form, selectedProducts]);
+
+    const addProduct = () => {
+      const newProducts = [...selectedProducts, { product_id: "", quantity: undefined }];
+      setSelectedProducts(newProducts);
+      form.setValue('products', newProducts);
+    };
+    const removeProduct = (index: number, field: string, value: number) => {
+      const newProducts = selectedProducts.filter((_, i) => i !== index);
+      setSelectedProducts(newProducts);
+      form.setValue('products', newProducts);
+    };
     const updateProduct = (index: number, field: string, value: any) => {
-        const updatedProducts = [...selectedProducts];
-        updatedProducts[index] = { ...updatedProducts[index], [field]: value };
-        setSelectedProducts(updatedProducts);
+      const updatedProducts = [...selectedProducts];
+      updatedProducts[index] = { 
+        ...updatedProducts[index], 
+        [field]: field === 'product_id' ? Number(value) : value
+      };
+      setSelectedProducts(updatedProducts);
+      form.setValue('products', updatedProducts);
     };
 
   return (
@@ -103,7 +141,7 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
                     <FormControl>
                     <Button
                         variant={"outline"}
-                        className={cn("w-[240px] pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
+                        className={cn("pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
                     >
                         {field.value ? format(field.value, "PPP") : <span>Escolha uma data</span>}
                         <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
@@ -118,43 +156,60 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
             </FormItem>
             )}
         />
-        <div className="space-y-4">
-        <FormLabel>Produtos</FormLabel>
-        {selectedProducts.map((product, index) => (
-          <div key={index} className="flex items-center space-x-4">
-            <Select
-              value={product.productId}
-              onValueChange={(value) => updateProduct(index, "productId", value)}
-            >
-              <SelectTrigger className="w-48">
-                <SelectValue placeholder="Selecione um produto" />
-              </SelectTrigger>
-              <SelectContent>
-                {products.map((p) => (
-                  <SelectItem key={p.id} value={p.id.toString()}>
-                    {p.name}
-                  </SelectItem>
+        {products && (
+        <FormField
+          control={form.control}
+          name="products"
+          render={({ field }) => (
+            <FormItem>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <FormLabel>Produtos</FormLabel>
+                  <Button type="button" onClick={addProduct}>
+                    Adicionar Produto
+                  </Button>
+                </div>
+                <div className="max-h-[200px] overflow-y-auto space-y-4">
+                {selectedProducts.map((product, index) => (
+                  <div key={index} className="flex items-center space-x-4">
+                    <Select
+                      value={product.product_id.toString()}
+                      onValueChange={(value) => {
+                        updateProduct(index, "product_id", parseInt(value));
+                        field.onChange(selectedProducts);
+                      }}
+                    >
+                      <SelectTrigger className="w-48">
+                        <SelectValue placeholder="Selecione um produto" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {products.map((p) => (
+                          <SelectItem key={p.id} value={p.id.toString()}>
+                            {p.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Input
+                      type="number"
+                      value={product.quantity}
+                      onChange={(e) => {
+                        updateProduct(index, "quantity", parseInt(e.target.value));
+                        field.onChange(selectedProducts);
+                      }}
+                      className="w-20"
+                      placeholder="Qtd."
+                    />
+                    <Button type="button" onClick={() => removeProduct(index)} variant="destructive">
+                      Remover
+                    </Button>
+                  </div>
                 ))}
-              </SelectContent>
-            </Select>
-            <Input
-              type="number"
-              value={product.quantity}
-              onChange={(e) =>
-                updateProduct(index, "quantity", parseInt(e.target.value) || 1)
-              }
-              className="w-20"
-              min="1"
-            />
-            <Button type="button" onClick={() => removeProduct(index)} variant="destructive">
-              Remover
-            </Button>
-          </div>
-        ))}
-        <Button type="button" onClick={addProduct}>
-          Adicionar Produto
-        </Button>
-        </div>
+                </div>
+              </div>
+            </FormItem>
+           )}
+        />)}
     </>
   );
 };
