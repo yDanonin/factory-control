@@ -60,23 +60,36 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
     }
   }, []);
 
-  const addProduct = () => {setSelectedProducts([...selectedProducts, { product_id: "", quantity: undefined }]);};
-  const removeProduct = (index: number) => {setSelectedProducts(selectedProducts.filter((_, i) => i !== index));};
+  useEffect(() => {
+    const formValues = form.getValues();
+  }, [form, selectedProducts]);
+
+  const addProduct = () => {
+    const newProducts = [...selectedProducts, { product_id: "", quantity: undefined }];
+    setSelectedProducts(newProducts);
+    form.setValue('products', newProducts);
+  };
+  const removeProduct = (index: number, field: string, value: number) => {
+    const newProducts = selectedProducts.filter((_, i) => i !== index);
+    setSelectedProducts(newProducts);
+    form.setValue('products', newProducts);
+  };
   const updateProduct = (index: number, field: string, value: any) => {
     const updatedProducts = [...selectedProducts];
     updatedProducts[index] = { 
       ...updatedProducts[index], 
-      [field]: field === "product_id" ? Number(value) : value 
+      [field]: field === 'product_id' ? Number(value) : value
     };
     setSelectedProducts(updatedProducts);
+    form.setValue('products', updatedProducts);
   };
 
   return (
     <>
         <FormField
-            key="order.final_price"
+            key="final_price"
             control={form.control}
-            name="order.final_price"
+            name="final_price"
             render={({ field }) => (
             <FormItem>
                 <FormLabel htmlFor="final_price">Preço Final</FormLabel>
@@ -96,9 +109,9 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
             )}
         />
         <FormField
-            key="order.date"
+            key="date"
             control={form.control}
-            name="order.date"
+            name="date"
             render={({ field }) => (
             <FormItem className="flex flex-col justify-between">
                 <FormLabel htmlFor="date">Data do Pedido</FormLabel>
@@ -123,9 +136,9 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
             )}
         />
         <FormField
-        key="order.customer_id"
+        key="customer_id"
         control={form.control}
-        name="order.customer_id"
+        name="customer_id"
         render={({ field }) => {
           return (
             <FormItem>
@@ -164,7 +177,10 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
                   <div key={index} className="flex items-center space-x-4">
                     <Select
                       value={product.product_id.toString()}
-                      onValueChange={(value) => updateProduct(index, "product_id", parseInt(value))}
+                      onValueChange={(value) => {
+                        updateProduct(index, "product_id", parseInt(value));
+                        field.onChange(selectedProducts);
+                      }}
                     >
                       <SelectTrigger className="w-48">
                         <SelectValue placeholder="Selecione um produto" />
@@ -180,9 +196,10 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
                     <Input
                       type="number"
                       value={product.quantity}
-                      onChange={(e) =>
-                        updateProduct(index, "quantity", parseInt(e.target.value))
-                      }
+                      onChange={(e) => {
+                        updateProduct(index, "quantity", parseInt(e.target.value));
+                        field.onChange(selectedProducts);
+                      }}
                       className="w-20"
                       placeholder="Qtd."
                     />
