@@ -14,6 +14,7 @@ import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue } from "@
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Product } from "@/types/product.types";
 import { Status } from "@/types/common.types";
+import { OrderItem } from "@/types/order-item.types";
 import axios from "axios";
 import Spinner from "@/components/Spinner";
 
@@ -34,7 +35,7 @@ function mapEnumToSelectItems<T extends string>(enumObj: EnumType<T>): JSX.Eleme
 }
 
 export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
-  const [products, setProduct] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [selectedProducts, setSelectedProducts] = useState<OrderItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   
@@ -42,7 +43,7 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
       const fetchData = async () => {
         try {
           const resp = await axios.get("/api/products");
-          setProduct(resp.data.data);
+          setProducts(resp.data.data);
         } catch (err) {
           console.error(err);
         } finally {
@@ -81,7 +82,7 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
     }, [form, selectedProducts]);
 
     const addProduct = () => {
-      const newProducts = [...selectedProducts, { product_id: "", quantity: undefined }];
+      const newProducts = [...selectedProducts, { product_id: 0, quantity: 0 }];
       setSelectedProducts(newProducts);
       form.setValue('products', newProducts);
     };
@@ -200,7 +201,7 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
                       className="w-20"
                       placeholder="Qtd."
                     />
-                    <Button type="button" onClick={() => removeProduct(index)} variant="destructive">
+                    <Button type="button" onClick={() => removeProduct(index, 'product_id', selectedProducts[index].product_id)} variant="destructive">
                       Remover
                     </Button>
                   </div>
