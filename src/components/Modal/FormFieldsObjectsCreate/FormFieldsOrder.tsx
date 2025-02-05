@@ -65,7 +65,7 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
   }, [form, selectedProducts]);
 
   const addProduct = () => {
-    const newProducts = [...selectedProducts, { product_id: "", quantity: undefined }];
+    const newProducts = [...selectedProducts, { product_id: 0, quantity: 0 }];
     setSelectedProducts(newProducts);
     form.setValue('products', newProducts);
   };
@@ -203,7 +203,7 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
                       className="w-20"
                       placeholder="Qtd."
                     />
-                    <Button type="button" onClick={() => removeProduct(index)} variant="destructive">
+                    <Button type="button" onClick={() => removeProduct(index, 'product_id', selectedProducts[index].product_id)} variant="destructive">
                       Remover
                     </Button>
                   </div>
