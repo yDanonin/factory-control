@@ -172,8 +172,11 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
 
   const form = useForm<z.infer<typeof typeSchema>>({
     resolver: zodResolver(typeSchema),
-    defaultValues: rowData,
-    disabled: isLoading
+    defaultValues: {
+      ...rowData,
+      order_id: rowData?.order?.id,
+      date: rowData?.date ? new Date(rowData?.date) : new Date()
+    }
   });
 
   switch (typeRegister) {
