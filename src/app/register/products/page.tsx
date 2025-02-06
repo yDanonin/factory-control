@@ -94,10 +94,17 @@ export default function Page() {
               <DropdownMenuItem
                 className="cursor-pointer"
                 onClick={() => router.push(`/register/Products/${row.original.id}`)}
+                onPointerLeave={(event) => event.preventDefault()}
+                onPointerMove={(event) => event.preventDefault()}
               >
                 Ver detalhes do produto
               </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onSelect={(event) => event.preventDefault()}
+                onPointerLeave={(event) => event.preventDefault()}
+                onPointerMove={(event) => event.preventDefault()}
+              >
                 <Dialog>
                   <Modal
                     typeModal="EDIT"
@@ -108,7 +115,12 @@ export default function Page() {
                   />
                 </Dialog>
               </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onSelect={(event) => event.preventDefault()}
+                onPointerLeave={(event) => event.preventDefault()}
+                onPointerMove={(event) => event.preventDefault()}
+              >
                 <Dialog>
                   <Modal
                     typeModal="DELETE"
