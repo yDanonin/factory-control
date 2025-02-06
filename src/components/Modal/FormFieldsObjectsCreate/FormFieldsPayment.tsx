@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
@@ -45,9 +45,9 @@ export const FormFieldsPayment: React.FC<FormFieldsPayment> = ({ form }) => {
           }}
         />
         <FormField
-            key="product_return.date"
+            key="date"
             control={form.control}
-            name="product_return.date"
+            name="date"
             render={({ field }) => (
             <FormItem className="flex flex-col justify-between">
                 <FormLabel htmlFor="date">Data do Pedido</FormLabel>
