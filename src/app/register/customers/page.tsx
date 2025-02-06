@@ -106,14 +106,22 @@ export default function Page() {
               >
                 Ver detalhes do cliente
               </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()} onPointerLeave={(event) => event.preventDefault()}
-                onPointerMove={(event) => event.preventDefault()}>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onSelect={(event) => event.preventDefault()}
+                onPointerLeave={(event) => event.preventDefault()}
+                onPointerMove={(event) => event.preventDefault()}
+              >
                 <Dialog>
                   <Modal typeModal="EDIT" typeRegister="Customer" nameModal="cliente" rowData={row.original} />
                 </Dialog>
               </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()} onPointerLeave={(event) => event.preventDefault()}
-                onPointerMove={(event) => event.preventDefault()}>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onSelect={(event) => event.preventDefault()}
+                onPointerLeave={(event) => event.preventDefault()}
+                onPointerMove={(event) => event.preventDefault()}
+              >
                 <Dialog>
                   <Modal typeModal="DELETE" typeRegister="Customer" nameModal="cliente" idRowData={row.original.id} />
                 </Dialog>
