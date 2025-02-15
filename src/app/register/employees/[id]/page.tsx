@@ -267,7 +267,7 @@ export default function Page({ params }: { params: { id: string } }) {
             )}
             <div className="w-1/2">
               <div className="text-muted-foreground text-center font-semibold mb-2">Histórico de Horas Trabalhadas</div>
-              <ClocksEmployee data={workHours} />
+              <ClocksEmployee data={workHours} id={employee?.id.toString()}/>
             </div>
           </div>
 
