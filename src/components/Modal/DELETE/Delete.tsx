@@ -4,7 +4,24 @@ import { Loader2 } from "lucide-react";
 import axios, { AxiosError } from "axios";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from 'next/navigation';
+import { Status } from "@/types/common.types";
+import { Vendor } from "@/types/vendor.types";
+import { Product } from "@/types/product.types";
+import { Machine } from "@/types/machine.types";
+import { Customer } from "@/types/customer.types";
+import { Procedure } from "@/types/procedure.types";
+import { Vacation } from "@/types/vacation.types";
+import { Order } from "@/types/order.types";
+import { TimeConfiguration } from "@/types/time-configuration.types";
+import { MaterialOrder } from "@/types/material-order.types";
+import { ProductReturnRegister } from "@/types/product_return.types";
+import { PaymentRegister } from "@/types/payment.types";
+import { User } from "@/types/user.types";
+import { Price } from "@/types/price.types";
+import { MessageConfig } from "@/types/message.types";
 import {
+  Dialog,
   DialogContent,
   DialogClose,
   DialogDescription,
@@ -14,43 +31,78 @@ import {
   DialogTrigger
 } from "@/components/ui/dialog";
 
-interface ModalEditProps {
+interface ModalDeleteProps {
   nameModal: string;
-  typeRegister: string;
-  idRowData?: number;
+  typeRegister: TypeRegister;
+  idRowData?: number | string;
   onDelete?: () => void;
 }
 
-export const Delete: React.FC<ModalEditProps> = ({ nameModal, typeRegister, idRowData, onDelete }) => {
-  const [isLoading, setIsLoading] = useState(false);
+type TypeRegister = "Customer" | "Employee" | "Machine" | "Procedure" | "Product" | "Vendor" | "Vacation" | "TimeConfiguration" | "Order" | "MaterialOrder" | "ProductReturn" | "Payment" | "User" | "Price" | "MessageConfig" | "Invoice";
 
+export const Delete = ({ nameModal, typeRegister, idRowData, onDelete }: ModalDeleteProps) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const { toast } = useToast();
+  const router = useRouter();
+
+  const handleDialogOpenChange = (isOpen: boolean) => {
+    setOpen(isOpen);
+  };
 
   let apiCallByType: string;
-  if (typeRegister === "Customer") {
-    apiCallByType = "customers";
-  } else if (typeRegister === "Employee") {
-    apiCallByType = "employees";
-  } else if (typeRegister === "Machine") {
-    apiCallByType = "machines";
-  } else if (typeRegister === "Procedure") {
-    apiCallByType = "procedures";
-  } else if (typeRegister === "Product") {
-    apiCallByType = "products";
-  } else if (typeRegister === "Vendor") {
-    apiCallByType = "vendors";
-  } else if (typeRegister === "Vacation") {
-    apiCallByType = "employees/vacations";
-  } else if (typeRegister === "Order"){
-    apiCallByType = "orders";
-  } else if (typeRegister === "MaterialOrder"){
-    apiCallByType = "material-orders";
-  } else if (typeRegister === "ProductReturn"){
-    apiCallByType = "product-returns";
-  } else if (typeRegister === "Payment"){
-    apiCallByType = "payments";
-  } else {
-    throw new Error(`Invalid typeRegister: ${typeRegister}`);
+
+  switch (typeRegister) {
+    case "Customer":
+      apiCallByType = "customers";
+      break;
+    case "Employee":
+      apiCallByType = "employees";
+      break;
+    case "Machine":
+      apiCallByType = "machines";
+      break;
+    case "Procedure":
+      apiCallByType = "procedures";
+      break;
+    case "Product":
+      apiCallByType = "products";
+      break;
+    case "Vendor":
+      apiCallByType = "vendors";
+      break;
+    case "Vacation":
+      apiCallByType = "employees/vacations";
+      break;
+    case "TimeConfiguration":
+      apiCallByType = "time-configurations";
+      break;
+    case "Order":
+      apiCallByType = "orders";
+      break;
+    case "MaterialOrder":
+      apiCallByType = "material-orders";
+      break;
+    case "ProductReturn":
+      apiCallByType = "product-returns";
+      break;
+    case "Payment":
+      apiCallByType = "payments";
+      break;
+    case "User":
+      apiCallByType = "users";
+      break;
+    case "Price":
+      apiCallByType = "prices";
+      break;
+    case "MessageConfig":
+      apiCallByType = "messages/config";
+      break;
+    case "Invoice":
+      apiCallByType = "invoices";
+      break;
+    default:
+      throw new Error(`Invalid typeRegister: ${typeRegister}`);
   }
 
   async function deleteData() {
@@ -58,10 +110,15 @@ export const Delete: React.FC<ModalEditProps> = ({ nameModal, typeRegister, idRo
     try {
       await axios.delete(`/api/${apiCallByType}/${idRowData}`);
       setIsLoading(false);
+      router.refresh();
       toast({
         title: "Excluir",
         description: `${nameModal} foi excluído com sucesso.`
       });
+      setOpen(false);
+      if (onDelete) {
+        onDelete();
+      }
     } catch (err) {
       const error = err as AxiosError;
       console.error(error);
@@ -74,28 +131,19 @@ export const Delete: React.FC<ModalEditProps> = ({ nameModal, typeRegister, idRo
     }
   }
 
-  const afterDelete = () => {
-    if(onDelete) {
-      return onDelete()
-    } 
-    else {
-      return location.reload()
-    }
-  }
-
   return (
-    <>
+    <Dialog open={open} onOpenChange={handleDialogOpenChange}>
       <DialogTrigger>Deletar {nameModal}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Tem certeza que deseja deletar este {nameModal}</DialogTitle>
+          <DialogTitle>Tem certeza que deseja deletar este {nameModal}?</DialogTitle>
           <DialogDescription>
             Esta ação não poderá ser desfeita. Tenha certeza que você está deletando o {nameModal} correto.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <DialogClose asChild>
-            <Button type="button" variant="secondary">
+            <Button type="button" variant="secondary" disabled={isLoading}>
               Fechar
             </Button>
           </DialogClose>
@@ -105,10 +153,10 @@ export const Delete: React.FC<ModalEditProps> = ({ nameModal, typeRegister, idRo
               Deletando...
             </Button>
           ) : (
-            <Button onClick={() => deleteData().then(() => {afterDelete()})}>Deletar</Button>
+            <Button variant="destructive" onClick={deleteData}>Deletar</Button>
           )}
         </DialogFooter>
       </DialogContent>
-    </>
+    </Dialog>
   );
 };

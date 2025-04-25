@@ -30,6 +30,12 @@ import { FormFieldsCustomer } from "../FormFieldsObjectsCreate/FormFieldsCustome
 import { FormFieldsProcedure } from "../FormFieldsObjectsCreate/FormFieldsProcedure";
 import { FormFieldsOrder } from "../FormFieldsObjectsCreate/FormFieldsOrder";
 import { FormFieldsMaterialOrder } from "../FormFieldsObjectsCreate/FormFieldsMaterialOrder";
+import { FormFieldsProductReturn } from "../FormFieldsObjectsCreate/FormFieldsProductReturn";
+import { FormFieldsPayment } from "../FormFieldsObjectsCreate/FormFieldsPayment";
+import { FormFieldsUser } from "../FormFieldsObjectsCreate/FormFieldsUser";
+import { User } from "@/types/user.types";
+import { Price } from "@/types/price.types";
+import { FormFieldsPrice } from "../FormFieldsObjectsCreate/FormFieldsPrice";
 import {
   formCustomerSchema,
   formEmployeeSchema,
@@ -41,7 +47,11 @@ import {
   formOrderSchema,
   formMaterialOrderSchema,
   formProductReturnSchema,
-  formPaymentSchema
+  formPaymentSchema,
+  formUserSchema,
+  formPriceSchema,
+  formMessageConfigSchema,
+  formInvoiceSchema
 } from "@/schemas/FormSchemas";
 import {
   customerDefaultValues,
@@ -54,7 +64,11 @@ import {
   orderDefaultValues,
   materialOrderDefaultValues,
   productReturnDefaultValues,
-  paymentDefaultValues
+  paymentDefaultValues,
+  userDefaultValues,
+  priceDefaultValues,
+  messageConfigDefaultValues,
+  invoiceDefaultValues
 } from "@/schemas/DefaultValuesForm";
 import {
   DialogContent,
@@ -64,22 +78,34 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog";
-import { FormFieldsProductReturn } from "../FormFieldsObjectsCreate/FormFieldsProductReturn";
-import { ProductReturn, ProductReturnRegister } from "@/types/product_return.types";
 import { MaterialOrder } from "@/types/material-order.types";
-import { FormFieldsPayment } from "../FormFieldsObjectsCreate/FormFieldsPayment";
+import { ProductReturn, ProductReturnRegister } from "@/types/product_return.types";
 import { PaymentRegister } from "@/types/payment.types";
+import { FormFieldsMessageConfig } from "../FormFieldsObjectsCreate/FormFieldsMessageConfig";
+import { FormFieldsInvoice } from "../FormFieldsObjectsCreate/FormFieldsInvoice";
 
-/* Explaining this component. First of all, formFields will create all the Inputs to forms
-   with the type that it received from objDefaultValues. But some things that have to be clear,
-   the order of some if's is important. So for example, the Date Input have to be before the object input.
-   The application have only two enums as attributes in the actual system. So one of the if's is modified
-   directly and not dynamically (the other one is in a rdio group).
-*/
 interface ModalEditProps {
   nameModal: string;
-  typeRegister: string;
+  typeRegister: TypeRegister;
 }
+
+type TypeRegister = "Customer" | "Employee" | "Machine" | "Procedure" | "Product" | "Vendor" | "Vacation" | "Order" | "MaterialOrder" | "ProductReturn" | "Payment" | "User" | "Price" | "MessageConfig" | "Invoice";
+
+type FormData = z.infer<typeof formCustomerSchema> |
+  z.infer<typeof formEmployeeSchema> |
+  z.infer<typeof formMachineSchema> |
+  z.infer<typeof formProcedureSchema> |
+  z.infer<typeof formProductSchema> |
+  z.infer<typeof formVendorSchema> |
+  z.infer<typeof formVacationSchema> |
+  z.infer<typeof formOrderSchema> |
+  z.infer<typeof formMaterialOrderSchema> |
+  z.infer<typeof formProductReturnSchema> |
+  z.infer<typeof formPaymentSchema> |
+  z.infer<typeof formUserSchema> |
+  z.infer<typeof formPriceSchema> |
+  z.infer<typeof formMessageConfigSchema> |
+  z.infer<typeof formInvoiceSchema>;
 
 export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -93,17 +119,7 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
     router.refresh();
   };
 
-  let typeSchema:
-    | z.ZodType<Partial<Customer> | z.ZodType<Partial<Employee>> | z.ZodType<Partial<Machine>>>
-    | z.ZodType<Partial<Procedure>>
-    | z.ZodType<Partial<Product>>
-    | z.ZodType<Partial<Vendor>>
-    | z.ZodType<Partial<Vacation>>
-    | z.ZodType<Partial<Order>>
-    | z.ZodType<Partial<MaterialOrder>>
-    | z.ZodType<Partial<ProductReturnRegister>>
-    | z.ZodType<Partial<PaymentRegister>>;
-
+  let typeSchema: z.ZodType<FormData>;
   let apiCallByType: string;
   let objDefaultValues;
   let formFields1;
@@ -164,13 +180,33 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
       objDefaultValues = paymentDefaultValues;
       apiCallByType = "payments";
       break;
+    case "User":
+      typeSchema = formUserSchema;
+      objDefaultValues = userDefaultValues;
+      apiCallByType = "users";
+      break;
+    case "Price":
+      typeSchema = formPriceSchema;
+      objDefaultValues = priceDefaultValues;
+      apiCallByType = "prices";
+      break;
+    case "MessageConfig":
+      typeSchema = formMessageConfigSchema;
+      objDefaultValues = messageConfigDefaultValues;
+      apiCallByType = "messages/config";
+      break;
+    case "Invoice":
+      typeSchema = formInvoiceSchema;
+      objDefaultValues = invoiceDefaultValues;
+      apiCallByType = "invoices";
+      break;
     default:
       throw new Error(`Invalid typeRegister: ${typeRegister}`);
   }
 
-  const form = useForm<z.infer<typeof typeSchema>>({
+  const form = useForm<FormData>({
     resolver: zodResolver(typeSchema),
-    defaultValues: objDefaultValues,
+    defaultValues: objDefaultValues as any,
     disabled: isLoading
   });
 
@@ -208,14 +244,25 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
     case "Payment":
       formFields1 = <FormFieldsPayment form={form} />;
       break;
+    case "User":
+      formFields1 = <FormFieldsUser form={form} />;
+      break;
+    case "Price":
+      formFields1 = <FormFieldsPrice form={form} />;
+      break;
+    case "MessageConfig":
+      formFields1 = <FormFieldsMessageConfig form={form} />;
+      break;
+    case "Invoice":
+      formFields1 = <FormFieldsInvoice form={form} />;
+      break;
     default:
       formFields1 = <div>erro</div>;
       break;
   }
-  FormFieldsPayment
-  async function onSubmit(data: z.infer<typeof typeSchema>) {
-    // Add as second argument of formatObject the enums that'll be treated to be send their indexes.
-    const formattedData = formatObject(data, [Classification, Status]);
+
+  async function onSubmit(data: FormData) {
+    const formattedData = formatObject(data as any, [Classification, Status]);
     setIsLoading(true);
     try {
       await axios.post(`/api/${apiCallByType}`, formattedData);
@@ -252,7 +299,7 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
             </DialogHeader>
             <DialogFooter className="absolute bottom-0 right-0 p-10">
               <DialogClose asChild>
-                <Button type="button" variant="secondary" disabled={ isLoading }  onClick={handleDialogClose}>
+                <Button type="button" variant="secondary" disabled={isLoading} onClick={handleDialogClose}>
                   Fechar
                 </Button>
               </DialogClose>

@@ -76,27 +76,27 @@ export const menuItensControle = [
   {
     id: 0,
     item: "Envio de Mensagens",
-    route: "/blabla"
+    route: "/control/send-messages"
   },
   {
     id: 1,
     item: "Preços",
-    route: "/blabla"
+    route: "/control/prices"
   },
   {
     id: 2,
     item: "Emissão Nota Fiscal",
-    route: "/blabla"
+    route: "/control/invoices"
   },
   {
     id: 3,
     item: "Usuários da sistema",
-    route: "/blabla"
+    route: "/control/users"
   },
   {
     id: 4,
     item: "Calendário",
-    route: "/blabla"
+    route: "/control/calendar"
   }
 ];
 

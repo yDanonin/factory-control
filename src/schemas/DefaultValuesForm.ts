@@ -127,3 +127,41 @@ export const paymentDefaultValues = {
   date: undefined,
   order_id: "",
 };
+
+export const userDefaultValues = {
+  name: "",
+  email: "",
+  password: "",
+  isAdmin: false
+};
+
+export const priceDefaultValues = {
+  product_id: 0,
+  customer_id: undefined,
+  production_cost: 0,
+  operational_margin: 0,
+  final_price: 0,
+  second_line_price: undefined,
+  frozen_until: undefined,
+  status: Status.operacional
+};
+
+export const messageConfigDefaultValues = {
+  customer_id: 0,
+  can_whatsapp: false,
+  can_whatsapp_attachments: false,
+  can_telegram: false,
+  can_telegram_attachments: false,
+  can_email: false,
+  can_email_attachments: false
+};
+
+export const invoiceDefaultValues = {
+  order_id: '',
+  number: '',
+  status: '',
+  type: '',
+  issue_date: '',
+  recipient: '',
+  note: ''
+};

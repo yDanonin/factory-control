@@ -4,6 +4,7 @@ import { Edit } from "./EDIT/Edit";
 import { Delete } from "./DELETE/Delete";
 import { Customer } from "@/types/customer.types";
 import { Employee } from "@/types/employee.types";
+import { User } from "@/types/user.types";
 
 type TypeModal = "CREATE" | "EDIT" | "DELETE";
 
@@ -12,7 +13,7 @@ interface ModalProps {
   nameModal: string;
   typeRegister: string;
   idRowData?: number;
-  rowData?: Partial<Customer> | Partial<Employee>;
+  rowData?: Partial<Customer> | Partial<Employee> | Partial<User>;
   onDelete?: () => void;
 }
 

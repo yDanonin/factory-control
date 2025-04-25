@@ -194,6 +194,19 @@ export const signInFormSchema = z.object({
   })
 });
 
+export const formUserSchema = z.object({
+  name: z.string().min(2, {
+    message: "Informe o nome."
+  }),
+  email: z.string().email({
+    message: "Informe um email válido."
+  }),
+  password: z.string().min(6, {
+    message: "A senha deve ter no mínimo 6 caracteres."
+  }),
+  isAdmin: z.boolean().default(false)
+});
+
 export const formVacationSchema = z.object({
   employee_id: z.number({ coerce: true }).positive({
     message: "Informe o ID do funcionário."
@@ -288,6 +301,39 @@ export const formPaymentSchema = z.object({
   order_id: z.number({ coerce: true, invalid_type_error: "Informe o ID do pedido." }).positive({
     message: "Informe o Id do pedido."
   }),
+});
+
+export const formPriceSchema = z.object({
+  product_id: z.number(),
+  customer_id: z.number().optional(),
+  production_cost: z.number().min(0, "O custo de produção deve ser maior que 0"),
+  operational_margin: z.number().min(0, "A margem operacional deve ser maior que 0"),
+  final_price: z.number().min(0, "O preço final deve ser maior que 0"),
+  second_line_price: z.number().min(0, "O preço de segunda linha deve ser maior que 0").optional(),
+  frozen_until: z.date().optional(),
+  status: z.string()
+});
+
+export const formMessageConfigSchema = z.object({
+  customer_id: z.number({ coerce: true }).positive({
+    message: "Informe o ID do cliente."
+  }),
+  can_whatsapp: z.boolean(),
+  can_whatsapp_attachments: z.boolean(),
+  can_telegram: z.boolean(),
+  can_telegram_attachments: z.boolean(),
+  can_email: z.boolean(),
+  can_email_attachments: z.boolean()
+});
+
+export const formInvoiceSchema = z.object({
+  order_id: z.number({ coerce: true, invalid_type_error: 'Informe o ID do pedido.' }),
+  number: z.string().min(2, { message: 'Informe o número da nota fiscal.' }),
+  status: z.string().min(2, { message: 'Informe o status.' }),
+  type: z.string().min(2, { message: 'Informe o tipo.' }),
+  issue_date: z.string().min(2, { message: 'Informe a data de emissão.' }),
+  recipient: z.string().min(2, { message: 'Informe o destinatário.' }),
+  note: z.string().optional()
 });
 
 function validaCep(cep: string) {

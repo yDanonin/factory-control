@@ -1,0 +1,94 @@
+.page-layout {
+  @apply
+  flex
+  h-screen
+  w-full;
+}
+
+.aside-layout {
+  @apply
+  h-full;
+}
+
+.main-layout {
+  @apply
+  flex-1
+  flex
+  flex-col
+  overflow-hidden;
+}
+
+.content-container {
+  @apply
+  flex-1
+  p-8;
+}
+
+.calendar-grid {
+  @apply
+  grid
+  grid-cols-1
+  lg:grid-cols-[min-content,1fr]
+  gap-8;
+}
+
+.calendar-section {
+  @apply
+  bg-white
+  rounded-lg
+  border
+  shadow-sm
+  p-4
+  w-fit;
+}
+
+.details-section {
+  @apply
+  bg-white
+  rounded-lg
+  border
+  p-6
+  shadow-sm
+  flex-1;
+}
+
+.details-header {
+  @apply
+  mb-6
+  border-b
+  pb-4
+  text-center;
+}
+
+.status-message {
+  @apply
+  p-4
+  rounded-md
+  text-sm;
+}
+
+.status-message.loading {
+  @apply
+  bg-muted
+  text-muted-foreground;
+}
+
+.status-message.error {
+  @apply
+  bg-destructive/10
+  text-destructive;
+}
+
+.data-container {
+  @apply
+  mt-4;
+}
+
+.data-content {
+  @apply
+  bg-muted
+  p-4
+  rounded-md
+  overflow-auto
+  text-sm;
+} 

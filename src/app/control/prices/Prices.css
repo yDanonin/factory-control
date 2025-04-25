@@ -1,0 +1,19 @@
+.table {
+  @apply w-full border-collapse;
+}
+
+.tableh {
+  @apply bg-gray-100 text-left p-4 border-b;
+}
+
+.tabled {
+  @apply p-4 border-b;
+}
+
+.btn {
+  @apply bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600;
+}
+
+.fullscreen-spinner {
+  @apply fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50;
+} 
