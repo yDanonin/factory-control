@@ -18,6 +18,7 @@ import { Dialog } from "@/components/ui/dialog";
 import { DataRow, TableColumn } from "@/models/TableColumn";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import {
+  ColumnDef,
   ColumnFiltersState,
   SortingState,
   VisibilityState,
@@ -26,7 +27,8 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable
+  useReactTable,
+  Row
 } from "@tanstack/react-table";
 import {
   DropdownMenu,
@@ -35,9 +37,9 @@ import {
   DropdownMenuCheckboxItem
 } from "@/components/ui/dropdown-menu";
 
-interface TableProps {
-  columns: TableColumn<DataRow>[];
-  data: unknown;
+interface TableProps<T extends DataRow> {
+  columns: ColumnDef<T>[];
+  data: T[];
   // data:
   //   | Partial<Customer>[]
   //   | Partial<Employee>[]
@@ -45,19 +47,19 @@ interface TableProps {
   //   | Partial<Procedure>[]
   //   | Partial<Product>[]
   //   | Partial<Vendor>[];
-  filterFields?: TableColumn<DataRow>[];
+  filterFields?: TableColumn<T>[];
   typeRegister?: string;
   isLoadingSpinner?: boolean;
 }
 
-const DynamicTable: React.FC<TableProps> = ({ columns, data, isLoadingSpinner, filterFields = [], typeRegister }) => {
+function DynamicTable<T extends DataRow>({ columns, data, isLoadingSpinner, filterFields = [], typeRegister }: TableProps<T>) {
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
   const table = useReactTable({
-    data: data as DataRow[],
+    data,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -75,11 +77,49 @@ const DynamicTable: React.FC<TableProps> = ({ columns, data, isLoadingSpinner, f
     }
   });
 
+  const rows = table.getRowModel().rows;
+
+  const renderTableBody = () => {
+    if (isLoadingSpinner) {
+      return (
+        <TableRow>
+          <TableCell colSpan={columns.length} className="h-24 text-center">
+            <Spinner color="default" />
+          </TableCell>
+        </TableRow>
+      );
+    }
+
+    if (!rows || rows.length === 0) {
+      return (
+        <TableRow>
+          <TableCell colSpan={columns.length} className="h-24 text-center">
+            Sem resultados.
+          </TableCell>
+        </TableRow>
+      );
+    }
+
+    return rows.map((row) => (
+      <TableRow
+        key={row.id}
+        data-state={row.getIsSelected() && "selected"}
+        className={row.getValue("status") === "Suspenso" ? "bg-red-100" : ""}
+      >
+        {row.getVisibleCells().map((cell) => (
+          <TableCell key={cell.id}>
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </TableCell>
+        ))}
+      </TableRow>
+    ));
+  };
+
   return (
     <div className={typeRegister ? "w-full p-4" : "w-full"}>
       {typeRegister && (
         <div className="flex items-center py-4 gap-4 flex-wrap">
-          {filterFields && (
+          {filterFields && filterFields.length > 0 && (
             <div className="w-full grid grid-cols-4 gap-4">
               {filterFields.map((filterField, index) => (
                 <div key={index}>
@@ -120,7 +160,7 @@ const DynamicTable: React.FC<TableProps> = ({ columns, data, isLoadingSpinner, f
                       checked={column.getIsVisible()}
                       onCheckedChange={(value) => column.toggleVisibility(!!value)}
                     >
-                      {column.columnDef.header}
+                      {String(column.columnDef.header)}
                     </DropdownMenuCheckboxItem>
                   );
                 })}
@@ -144,7 +184,7 @@ const DynamicTable: React.FC<TableProps> = ({ columns, data, isLoadingSpinner, f
                         {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                         {header.column.getCanSort() && (
                           <ArrowUpDown className="ml-2 h-4 w-4" />
-                      )}
+                        )}
                       </div>
                     </TableHead>
                   );
@@ -153,31 +193,7 @@ const DynamicTable: React.FC<TableProps> = ({ columns, data, isLoadingSpinner, f
             ))}
           </TableHeader>
           <TableBody>
-            {isLoadingSpinner ? (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  <Spinner color="default" />
-                </TableCell>
-              </TableRow>
-            ) : table.getRowModel().rows?.length > 0 ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  className={row?.getValue("status") === "Suspenso" ? "bg-red-100" : ""}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  Sem resultados.
-                </TableCell>
-              </TableRow>
-            )}
+            {renderTableBody()}
           </TableBody>
         </Table>
       </div>
@@ -198,6 +214,6 @@ const DynamicTable: React.FC<TableProps> = ({ columns, data, isLoadingSpinner, f
       </div>
     </div>
   );
-};
+}
 
 export default DynamicTable;

@@ -43,7 +43,11 @@ import {
   formOrderSchema,
   formMaterialOrderSchema,
   formProductReturnSchema,
-  formPaymentSchema
+  formPaymentSchema,
+  formUserSchema,
+  formPriceSchema,
+  formMessageConfigSchema,
+  formInvoiceSchema
 } from "@/schemas/FormSchemas";
 import {
   Dialog,
@@ -69,13 +73,23 @@ import {
 import { FormFieldsMaterialOrder } from "../FormFieldsObjectsEdit/FormFieldsMaterialOrder";
 import { FormFieldsProductReturn } from "../FormFieldsObjectsEdit/FormFieldsProductReturn";
 import { MaterialOrder } from "@/types/material-order.types";
-import { ProductReturnRegister } from "@/types/product_return.types";
+import { ProductReturn } from "@/types/product_return.types";
 import { PaymentRegister } from "@/types/payment.types";
 import { FormFieldsPayment } from "../FormFieldsObjectsEdit/FormFieldsPayment";
+import { FormFieldsPrice } from "../FormFieldsObjectsEdit/FormFieldsPrice";
+import { User } from "@/types/user.types";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Price } from "@/types/price.types";
+import { MessageConfig } from "@/types/message.types";
+import { FormFieldsMessageConfig } from "../FormFieldsObjectsEdit/FormFieldsMessageConfig";
+import { FormFieldsInvoice } from "../FormFieldsObjectsEdit/FormFieldsInvoice";
+import { invoiceDefaultValues } from "@/schemas/DefaultValuesForm";
 
 interface ModalEditProps {
   nameModal: string;
-  typeRegister: string;
+  typeRegister: TypeRegister;
   rowData?:
     | Partial<Customer>
     | Partial<Employee>
@@ -85,14 +99,22 @@ interface ModalEditProps {
     | Partial<Vendor>
     | Partial<Vacation>
     | Partial<TimeConfiguration>
-    | Partial<Order>;
-  idRowData?: number;
+    | Partial<Order>
+    | Partial<MaterialOrder>
+    | Partial<ProductReturn>
+    | Partial<PaymentRegister>
+    | Partial<User>
+    | Partial<Price>
+    | Partial<MessageConfig>;
+  idRowData?: number | string;
 }
+
+type TypeRegister = "Customer" | "Employee" | "Machine" | "Procedure" | "Product" | "Vendor" | "Vacation" | "TimeConfiguration" | "Order" | "MaterialOrder" | "ProductReturn" | "Payment" | "User" | "Price" | "MessageConfig" | "Invoice";
 
 export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
   const [open, setOpen] = useState(false);
+  const { toast } = useToast();
   const router = useRouter();
 
   const handleDialogOpenChange = (isOpen: boolean) => {
@@ -102,18 +124,7 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
     setOpen(isOpen);
   };
 
-  let typeSchema:
-    | z.ZodType<Partial<Customer> | z.ZodType<Partial<Employee>> | z.ZodType<Partial<Machine>>>
-    | z.ZodType<Partial<Procedure>>
-    | z.ZodType<Partial<Product>>
-    | z.ZodType<Partial<Vendor>>
-    | z.ZodType<Partial<Vacation>>
-    | z.ZodType<Partial<TimeConfiguration>>
-    | z.ZodType<Partial<Order>>
-    | z.ZodType<Partial<MaterialOrder>>
-    | z.ZodType<Partial<ProductReturnRegister>>
-    | z.ZodType<Partial<PaymentRegister>>;
-
+  let typeSchema;
   let apiCallByType: string;
   let formFields;
 
@@ -166,25 +177,80 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
       typeSchema = formPaymentSchema;
       apiCallByType = "payments";
       break;
+    case "User":
+      typeSchema = formUserSchema;
+      apiCallByType = "users";
+      break;
+    case "Price":
+      typeSchema = formPriceSchema;
+      apiCallByType = "prices";
+      break;
+    case "MessageConfig":
+      typeSchema = formMessageConfigSchema;
+      apiCallByType = "messages/config";
+      break;
+    case "Invoice":
+      typeSchema = formInvoiceSchema;
+      apiCallByType = "invoices";
+      break;
     default:
       throw new Error(`Invalid typeRegister: ${typeRegister}`);
   }
 
-  const form = useForm<z.infer<typeof typeSchema>>({
-    resolver: zodResolver(typeSchema),
-    defaultValues: {
-      ...rowData,
-      order_id: rowData?.order?.id,
-      date: rowData?.date ? new Date(rowData?.date) : new Date()
+  const getFormDefaults = () => {
+    const defaults = { ...rowData } as any;
+    
+    switch (typeRegister) {
+      case "Order":
+      case "ProductReturn":
+        return {
+          ...defaults,
+          order_id: defaults?.order?.id,
+          date: defaults?.date ? new Date(defaults.date) : new Date()
+        };
+      case "Payment":
+        return {
+          ...defaults,
+          date: defaults?.date ? new Date(defaults.date) : new Date()
+        };
+      case "Price":
+        return {
+          product_id: defaults?.product_id || 0,
+          customer_id: defaults?.customer_id,
+          production_cost: defaults?.production_cost || 0,
+          operational_margin: defaults?.operational_margin || 0,
+          final_price: defaults?.final_price || 0,
+          second_line_price: defaults?.second_line_price,
+          frozen_until: defaults?.frozen_until ? new Date(defaults.frozen_until) : undefined,
+          status: defaults?.status || Status.operacional
+        };
+      case "Invoice":
+        return {
+          ...defaults,
+          order_id: defaults?.order_id || '',
+          number: defaults?.number || '',
+          status: defaults?.status || '',
+          type: defaults?.type || '',
+          issue_date: defaults?.issue_date || '',
+          recipient: defaults?.recipient || '',
+          note: defaults?.note || ''
+        };
+      default:
+        return defaults;
     }
+  };
+
+  const form = useForm({
+    resolver: zodResolver(typeSchema),
+    defaultValues: getFormDefaults()
   });
 
   switch (typeRegister) {
     case "Customer":
-      formFields = <FormFieldsCustomer form={form} rowData={rowData} />;
+      formFields = <FormFieldsCustomer form={form} rowData={rowData as Partial<Customer>} />;
       break;
     case "Employee":
-      formFields = <FormFieldsEmployee form={form} rowData={rowData} />;
+      formFields = <FormFieldsEmployee form={form} rowData={rowData as Partial<Employee>} />;
       break;
     case "Machine":
       formFields = <FormFieldsMachine form={form} />;
@@ -196,37 +262,93 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
       formFields = <FormFieldsProduct form={form} />;
       break;
     case "Vendor":
-      formFields = <FormFieldsVendor form={form} rowData={rowData} />;
+      formFields = <FormFieldsVendor form={form} rowData={rowData as Partial<Vendor>} />;
       break;
     case "Vacation":
-      formFields = <FormFieldsVacation form={form}/>;
+      formFields = <FormFieldsVacation form={form} />;
       break;
     case "TimeConfiguration":
-      formFields = <FormFieldsTimeConfiguration form={form} />
+      formFields = <FormFieldsTimeConfiguration form={form} />;
       break;
     case "Order":
-      formFields = <FormFieldsOrder form={form} />
+      formFields = <FormFieldsOrder form={form} />;
       break;
     case "MaterialOrder":
-      formFields = <FormFieldsMaterialOrder form={form} />
+      formFields = <FormFieldsMaterialOrder form={form} />;
       break;
     case "ProductReturn":
-      formFields = <FormFieldsProductReturn form={form} />
+      formFields = <FormFieldsProductReturn form={form} />;
       break;
     case "Payment":
-      formFields = <FormFieldsPayment form={form} />
+      formFields = <FormFieldsPayment form={form} />;
+      break;
+    case "User":
+      formFields = (
+        <div className="grid gap-4 py-4">
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="name" className="text-right">
+              Name
+            </Label>
+            <Input
+              id="name"
+              className="col-span-3"
+              {...form.register("name")}
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="email" className="text-right">
+              Email
+            </Label>
+            <Input
+              id="email"
+              type="email"
+              className="col-span-3"
+              {...form.register("email")}
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="password" className="text-right">
+              Password
+            </Label>
+            <Input
+              id="password"
+              type="password"
+              className="col-span-3"
+              {...form.register("password")}
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="isAdmin" className="text-right">
+              Admin
+            </Label>
+            <div className="col-span-3">
+              <Checkbox
+                id="isAdmin"
+                {...form.register("isAdmin")}
+              />
+            </div>
+          </div>
+        </div>
+      );
+      break;
+    case "Price":
+      formFields = <FormFieldsPrice form={form} />;
+      break;
+    case "MessageConfig":
+      formFields = <FormFieldsMessageConfig form={form} />;
+      break;
+    case "Invoice":
+      formFields = <FormFieldsInvoice form={form} />;
       break;
     default:
       formFields = <div>erro</div>;
       break;
   }
 
-  async function onSubmit(data: z.infer<typeof typeSchema>) {
-    // Add as second argument of formatObject the enums that'll be treated to be send their indexes.
+  async function onSubmit(data: any) {
     const formattedData = { id: idRowData, ...formatObject(data, [Classification, Status]) };
     setIsLoading(true);
     try {
-      console.log("formated data", formattedData);
       await axios.patch(`/api/${apiCallByType}/${idRowData}`, formattedData);
       setIsLoading(false);
       form.reset();
@@ -235,6 +357,7 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
         title: "Registro",
         description: `${nameModal} foi editado com sucesso.`
       });
+      setOpen(false);
     } catch (err) {
       const error = err as AxiosError;
       console.error(error);
@@ -247,10 +370,8 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
     }
   }
 
-  console.log(isLoading);
-
   return (
-    <Dialog  open={open} onOpenChange={handleDialogOpenChange}>
+    <Dialog open={open} onOpenChange={handleDialogOpenChange}>
       <DialogTrigger>Editar {nameModal}</DialogTrigger>
       <Form {...form}>
         <DialogContent className="min-w-full min-h-full">
@@ -261,7 +382,7 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
             <div className="pt-4 grid grid-cols-3 gap-4">{formFields}</div>
             <DialogFooter className="absolute bottom-0 right-0 p-10">
               <DialogClose asChild>
-                <Button type="button" variant="secondary" disabled={ isLoading }>
+                <Button type="button" variant="secondary" disabled={isLoading}>
                   Fechar
                 </Button>
               </DialogClose>
@@ -279,6 +400,6 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
       </Form>
     </Dialog>
   );
-}
+};
 
 // export default Edit;

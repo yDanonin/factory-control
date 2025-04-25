@@ -8,12 +8,14 @@ import { Vendor } from "@/types/vendor.types";
 import { Vacation } from "@/types/vacation.types";
 import { TimeConfiguration } from "@/types/time-configuration.types";
 import { Schedule } from "@/types/schedule.types";
+import { User } from "@/types/user.types";
+import { Invoice } from "@/types/invoice.types";
 
-export type DataRow = Customer | Employee | Machine | Procedure | Product | Vendor | Vacation | TimeConfiguration | Schedule;
+export type DataRow = Customer | Employee | Machine | Procedure | Product | Vendor | Vacation | TimeConfiguration | Schedule | User | Invoice;
 
-export type TableColumn<DataRow> = {
+export type TableColumn<T> = {
   id?: string;
-  cell?: ({ row }: { row: Row<DataRow> }) => JSX.Element;
+  cell?: ({ row }: { row: Row<T> }) => JSX.Element;
   enableHiding?: boolean;
   header?: string;
   accessorKey?: string;
