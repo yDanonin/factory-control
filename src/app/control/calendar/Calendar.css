@@ -91,4 +91,155 @@
   rounded-md
   overflow-auto
   text-sm;
+}
+
+.has-dot {
+  position: relative;
+}
+.has-dot::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.has-dot-red {
+  position: relative;
+}
+.has-dot-red::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.has-dot-yellow {
+  position: relative;
+}
+.has-dot-yellow::after {
+  content: '';
+  position: absolute;
+  top: 13px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  background: #facc15;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.has-dot-blue {
+  position: relative;
+}
+.has-dot-blue::after {
+  content: '';
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  background: #3b82f6;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.rdp-day, .h-9.w-9.p-0 {
+  position: relative;
+  /* padding-top: 16px !important; */
+}
+
+.custom-day-btn {
+  position: relative;
+  width: 40px;
+  height: 36px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: 1rem;
+  line-height: 36px;
+  text-align: center;
+}
+
+.custom-day-btn[aria-selected="true"] {
+  background: var(--primary, #2563eb);
+  color: var(--primary-foreground, #fff);
+}
+
+.custom-day-btn:focus {
+  outline: 2px solid var(--primary, #2563eb);
+  outline-offset: 2px;
+}
+
+.dot-row {
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 3px;
+  z-index: 2;
+  min-width: 0;
+  max-width: 90%;
+  overflow-x: auto;
+}
+
+.dot-row span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  display: block;
+}
+
+.day-number {
+  position: relative;
+  z-index: 1;
+  background: none;
+}
+
+.dot-red { background: #ef4444; }
+.dot-yellow { background: #facc15; }
+.dot-blue { background: #3b82f6; }
+
+.calendar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.calendar-legend-item {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.head_cell, .custom-day-btn {
+  width: 44px !important;
+  min-width: 44px !important;
+  max-width: 44px !important;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.cell {
+  padding: 0 !important;
+  margin: 0 !important;
 } 
