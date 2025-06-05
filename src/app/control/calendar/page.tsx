@@ -11,8 +11,20 @@ import { ChevronLeft } from "lucide-react";
 import "./Calendar.css";
 import { DayContent, useDayRender } from "react-day-picker";
 
+import Holidays from 'date-holidays';
+
+// Inclui município de São Paulo (código IBGE: 3550308)
+const hd = new Holidays('BR', 'SP', '3550308'); // País: BR, Estado: SP, Município: São Paulo
+
+function getFeriadosDoMes(ano: number, mes: number) {
+  const feriadosAno = hd.getHolidays(ano);
+  return feriadosAno
+    .filter(f => f.date)
+    .map(f => new Date(f.date))
+    .filter(d => d.getMonth() === mes && d.getFullYear() === ano);
+}
+
 // Exemplo de datas especiais do mês de junho de 2025
-const rawFeriados = [new Date(2025, 5, 12), new Date(2025, 5, 19)];
 const rawEntregas = [new Date(2025, 5, 12), new Date(2025, 5, 24)];
 const rawFuncionarios = [new Date(2025, 5, 19)];
 
@@ -20,13 +32,9 @@ function filterValidDates(arr: Date[]) {
   return arr.filter(d => d instanceof Date && !isNaN(d.getTime()));
 }
 
-const feriados = filterValidDates(rawFeriados);
 const entregas = filterValidDates(rawEntregas);
 const funcionarios = filterValidDates(rawFuncionarios);
 
-if (feriados.length !== rawFeriados.length) {
-  console.warn('Feriados contém datas inválidas:', rawFeriados);
-}
 if (entregas.length !== rawEntregas.length) {
   console.warn('Entregas contém datas inválidas:', rawEntregas);
 }
@@ -34,30 +42,11 @@ if (funcionarios.length !== rawFuncionarios.length) {
   console.warn('Funcionarios contém datas inválidas:', rawFuncionarios);
 }
 
-const modifiers = {
-  feriado: feriados,
-  entrega: entregas,
-  funcionario: funcionarios,
-};
-
 const modifiersClassNames = {
   feriado: 'has-dot-red',
   entrega: 'has-dot-yellow',
   funcionario: 'has-dot-blue',
 };
-
-const getDayDots = (date: Date) => {
-  if (!(date instanceof Date) || isNaN(date.getTime())) return [];
-  const dots = [];
-  if (feriados.some(d => d instanceof Date && d.getTime() === date.getTime())) dots.push('dot-red');
-  if (entregas.some(d => d instanceof Date && d.getTime() === date.getTime())) dots.push('dot-yellow');
-  if (funcionarios.some(d => d instanceof Date && d.getTime() === date.getTime())) dots.push('dot-blue');
-  return dots;
-};
-
-console.log('feriados:', feriados);
-console.log('entregas:', entregas);
-console.log('funcionarios:', funcionarios);
 
 export default function CalendarPage() {
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -65,6 +54,38 @@ export default function CalendarPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentMonth, setCurrentMonth] = useState<Date>(startOfMonth(new Date()));
+  const [feriados, setFeriados] = useState<Date[]>([]);
+  const [feriadoInfo, setFeriadoInfo] = useState<string | null>(null);
+
+  useEffect(() => {
+    const ano = currentMonth.getFullYear();
+    const mes = currentMonth.getMonth();
+    setFeriados(getFeriadosDoMes(ano, mes));
+  }, [currentMonth]);
+
+  useEffect(() => {
+    if (date && isValid(date)) {
+      // Busca o feriado do dia selecionado
+      const feriadosAno = hd.getHolidays(date.getFullYear());
+      const feriadoDoDia = feriadosAno.find(f => {
+        if (!f.date) return false;
+        const d = new Date(f.date);
+        return d.getFullYear() === date.getFullYear() && d.getMonth() === date.getMonth() && d.getDate() === date.getDate();
+      });
+      setFeriadoInfo(feriadoDoDia ? feriadoDoDia.name : null);
+    } else {
+      setFeriadoInfo(null);
+    }
+  }, [date]);
+
+  const getDayDots = (date: Date) => {
+    if (!(date instanceof Date) || isNaN(date.getTime())) return [];
+    const dots = [];
+    if (feriados.some(d => d.getTime() === date.getTime())) dots.push('dot-red');
+    if (entregas.some(d => d.getTime() === date.getTime())) dots.push('dot-yellow');
+    if (funcionarios.some(d => d.getTime() === date.getTime())) dots.push('dot-blue');
+    return dots;
+  };
 
   const handleDateSelect = async (selectedDate: Date | undefined) => {
     if (!selectedDate || !isValid(selectedDate)) return;
@@ -100,6 +121,7 @@ export default function CalendarPage() {
                 mode="single"
                 selected={date && isValid(date) ? date : undefined}
                 onSelect={handleDateSelect}
+                onMonthChange={handleMonthChange}
                 locale={ptBR}
                 className="w-full"
                 classNames={{
@@ -174,6 +196,11 @@ export default function CalendarPage() {
                     : "Selecione um dia"}
                 </h2>
               </div>
+              {feriadoInfo && (
+                <div className="status-message" style={{ background: '#fef3c7', color: '#b45309', marginBottom: 8 }}>
+                  <strong>Feriado:</strong> {feriadoInfo}
+                </div>
+              )}
               {loading && (
                 <div className="status-message loading">
                   <p>Carregando informações...</p>
