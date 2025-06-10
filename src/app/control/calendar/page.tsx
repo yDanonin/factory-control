@@ -13,8 +13,7 @@ import { DayContent, useDayRender } from "react-day-picker";
 
 import Holidays from 'date-holidays';
 
-// Inclui município de São Paulo (código IBGE: 3550308)
-const hd = new Holidays('BR', 'SP', '3550308'); // País: BR, Estado: SP, Município: São Paulo
+const hd = new Holidays('BR', 'SP', '3550308');
 
 function getFeriadosDoMes(ano: number, mes: number) {
   const feriadosAno = hd.getHolidays(ano);
@@ -24,7 +23,7 @@ function getFeriadosDoMes(ano: number, mes: number) {
     .filter(d => d.getMonth() === mes && d.getFullYear() === ano);
 }
 
-// Exemplo de datas especiais do mês de junho de 2025
+
 const rawEntregas = [new Date(2025, 5, 12), new Date(2025, 5, 24)];
 const rawFuncionarios = [new Date(2025, 5, 19)];
 
