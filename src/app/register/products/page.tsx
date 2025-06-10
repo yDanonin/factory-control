@@ -93,7 +93,7 @@ export default function Page() {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="cursor-pointer"
-                onClick={() => router.push(`/register/Products/${row.original.id}`)}
+                onClick={() => router.push(`/register/products/${row.original.id}`)}
                 onPointerLeave={(event) => event.preventDefault()}
                 onPointerMove={(event) => event.preventDefault()}
               >
