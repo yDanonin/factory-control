@@ -23,30 +23,6 @@ function getFeriadosDoMes(ano: number, mes: number) {
     .filter(d => d.getMonth() === mes && d.getFullYear() === ano);
 }
 
-
-const rawEntregas = [new Date(2025, 5, 12), new Date(2025, 5, 24)];
-const rawFuncionarios = [new Date(2025, 5, 19)];
-
-function filterValidDates(arr: Date[]) {
-  return arr.filter(d => d instanceof Date && !isNaN(d.getTime()));
-}
-
-const entregas = filterValidDates(rawEntregas);
-const funcionarios = filterValidDates(rawFuncionarios);
-
-if (entregas.length !== rawEntregas.length) {
-  console.warn('Entregas contém datas inválidas:', rawEntregas);
-}
-if (funcionarios.length !== rawFuncionarios.length) {
-  console.warn('Funcionarios contém datas inválidas:', rawFuncionarios);
-}
-
-const modifiersClassNames = {
-  feriado: 'has-dot-red',
-  entrega: 'has-dot-yellow',
-  funcionario: 'has-dot-blue',
-};
-
 export default function CalendarPage() {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [data, setData] = useState<any>(null);
@@ -55,11 +31,26 @@ export default function CalendarPage() {
   const [currentMonth, setCurrentMonth] = useState<Date>(startOfMonth(new Date()));
   const [feriados, setFeriados] = useState<Date[]>([]);
   const [feriadoInfo, setFeriadoInfo] = useState<string | null>(null);
+  const [vacationDates, setVacationDates] = useState<string[]>([]);
+  const [deliveryDates, setDeliveryDates] = useState<string[]>([]);
 
   useEffect(() => {
     const ano = currentMonth.getFullYear();
-    const mes = currentMonth.getMonth();
-    setFeriados(getFeriadosDoMes(ano, mes));
+    const mes = currentMonth.getMonth() + 1;
+    setFeriados(getFeriadosDoMes(ano, currentMonth.getMonth()));
+    const fetchMonthData = async () => {
+      try {
+        const response = await fetch(`/api/calendar?month=${String(mes).padStart(2, '0')}&year=${ano}`);
+        if (!response.ok) return;
+        const result = await response.json();
+        setVacationDates(result?.vacations?.datesWithEvents || []);
+        setDeliveryDates(result?.deliveries?.datesWithEvents || []);
+      } catch (e) {
+        setVacationDates([]);
+        setDeliveryDates([]);
+      }
+    };
+    fetchMonthData();
   }, [currentMonth]);
 
   useEffect(() => {
@@ -81,25 +72,36 @@ export default function CalendarPage() {
     if (!(date instanceof Date) || isNaN(date.getTime())) return [];
     const dots = [];
     if (feriados.some(d => d.getTime() === date.getTime())) dots.push('dot-red');
-    if (entregas.some(d => d.getTime() === date.getTime())) dots.push('dot-yellow');
-    if (funcionarios.some(d => d.getTime() === date.getTime())) dots.push('dot-blue');
+    if (vacationDates.some(d => new Date(d).toDateString() === date.toDateString())) dots.push('dot-yellow');
+    if (deliveryDates.some(d => new Date(d).toDateString() === date.toDateString())) dots.push('dot-blue');
     return dots;
+  };
+
+  const fetchData = async (selectedDate: Date) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const formattedDate = format(selectedDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+      const month = format(selectedDate, "MM");
+      const year = format(selectedDate, "yyyy");
+      const response = await fetch(`/api/calendar?month=${month}&year=${year}&date=${formattedDate}`);
+      if (!response.ok) {
+        throw new Error("Erro ao buscar dados");
+      }
+      const result = await response.json();
+      console.log(result)
+      setData(result);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erro desconhecido");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDateSelect = async (selectedDate: Date | undefined) => {
     if (!selectedDate || !isValid(selectedDate)) return;
     setDate(selectedDate);
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await axios.get(`/api/calendar-data?date=${format(selectedDate, 'yyyy-MM-dd')}`);
-      setData(response.data);
-    } catch (err) {
-      setError("Erro ao carregar dados para a data selecionada");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
+    await fetchData(selectedDate);
   };
 
   const handleMonthChange = (month: Date) => {
@@ -180,10 +182,10 @@ export default function CalendarPage() {
                   <span className="inline-block w-2 h-2 rounded-full bg-red-500 mr-1" /> Feriado
                 </span>
                 <span className="calendar-legend-item">
-                  <span className="inline-block w-2 h-2 rounded-full bg-yellow-400 mr-1" /> Entrega
+                  <span className="inline-block w-2 h-2 rounded-full bg-blue-500 mr-1" /> Entrega
                 </span>
                 <span className="calendar-legend-item">
-                  <span className="inline-block w-2 h-2 rounded-full bg-blue-500 mr-1" /> Férias
+                  <span className="inline-block w-2 h-2 rounded-full bg-yellow-400 mr-1" /> Férias
                 </span>
               </div>
             </div>
@@ -196,9 +198,24 @@ export default function CalendarPage() {
                 </h2>
               </div>
               {feriadoInfo && (
-                <div className="status-message" style={{ background: '#fef3c7', color: '#b45309', marginBottom: 8 }}>
+                <div className="status-message" style={{ background: '#fee2e2', color: '#b91c1c', marginBottom: 8 }}>
                   <strong>Feriado:</strong> {feriadoInfo}
                 </div>
+              )}
+              {data && data.vacations && Array.isArray(data.vacations.entries) &&
+                date && data.vacations.entries
+                  .filter((entry: any) => new Date(entry.date).toDateString() === date.toDateString())
+                  .map((entry: any, idx: number) => (
+                    <div key={idx} className="status-message" style={{ background: '#fef9c3', color: '#b45309', marginBottom: 8 }}>
+                      <strong>Férias:</strong> {entry.title}
+                    </div>
+                  ))
+              }
+              {data && data.deliveries && Array.isArray(data.deliveries.entries) &&
+                date && data.deliveries.entries.some((entry: any) => new Date(entry.date).toDateString() === date.toDateString()) && (
+                  <div className="status-message" style={{ background: '#dbeafe', color: '#1e40af', marginBottom: 8 }}>
+                    <strong>Entrega:</strong> {data.deliveries.entries.find((entry: any) => new Date(entry.date).toDateString() === date.toDateString())?.title}
+                  </div>
               )}
               {loading && (
                 <div className="status-message loading">
@@ -208,13 +225,6 @@ export default function CalendarPage() {
               {error && (
                 <div className="status-message error">
                   <p>{error}</p>
-                </div>
-              )}
-              {data && !loading && !error && (
-                <div className="data-container">
-                  <pre className="data-content">
-                    {JSON.stringify(data, null, 2)}
-                  </pre>
                 </div>
               )}
             </div>
