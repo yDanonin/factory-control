@@ -40,9 +40,8 @@ export default function CalendarPage() {
     setFeriados(getFeriadosDoMes(ano, currentMonth.getMonth()));
     const fetchMonthData = async () => {
       try {
-        const response = await fetch(`/api/calendar?month=${String(mes).padStart(2, '0')}&year=${ano}`);
-        if (!response.ok) return;
-        const result = await response.json();
+        const response = await axios.get(`/api/calendar?month=${String(mes).padStart(2, '0')}&year=${ano}`);
+        const result = response.data;
         setVacationDates(result?.vacations?.datesWithEvents || []);
         setDeliveryDates(result?.deliveries?.datesWithEvents || []);
       } catch (e) {
@@ -84,13 +83,8 @@ export default function CalendarPage() {
       const formattedDate = format(selectedDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
       const month = format(selectedDate, "MM");
       const year = format(selectedDate, "yyyy");
-      const response = await fetch(`/api/calendar?month=${month}&year=${year}&date=${formattedDate}`);
-      if (!response.ok) {
-        throw new Error("Erro ao buscar dados");
-      }
-      const result = await response.json();
-      console.log(result)
-      setData(result);
+      const response = await axios.get(`/api/calendar?month=${month}&year=${year}&date=${formattedDate}`);
+      setData(response.data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro desconhecido");
     } finally {
