@@ -153,7 +153,7 @@ export default function Page() {
                 onPointerMove={(event) => event.preventDefault()}
               >
                 <Dialog>
-                  <Modal typeModal="DELETE" typeRegister="MessageConfig" nameModal="configuração" idRowData={row.original.id} />
+                  <Modal typeModal="DELETE" typeRegister="MessageConfig" nameModal="configuração" idRowData={Number(row.original.id)} />
                 </Dialog>
               </DropdownMenuItem>
             </DropdownMenuContent>
