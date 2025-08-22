@@ -21,6 +21,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formatObject } from "@/services/formatInputs";
 import { Classification, Employee } from "@/types/employee.types";
+// removed SalesForecastStatus import for SalesForecast create payload
 import { FormFieldsVendor } from "../FormFieldsObjectsCreate/FormFieldsVendor";
 import { FormFieldsVacation } from "../FormFieldsObjectsCreate/FormFieldsVacation";
 import { FormFieldsProduct } from "../FormFieldsObjectsCreate/FormFieldsProduct";
@@ -51,7 +52,15 @@ import {
   formUserSchema,
   formPriceSchema,
   formMessageConfigSchema,
-  formInvoiceSchema
+  formInvoiceSchema,
+  formPackagingSchema,
+  formDeliverySchema,
+  formDeliveryPackagingSchema,
+  formCustomerPackagingSchema,
+  formStockSchema,
+  formProductionControlSchema,
+  formSalesForecastSchema,
+  formLabelPrintSchema
 } from "@/schemas/FormSchemas";
 import {
   customerDefaultValues,
@@ -68,7 +77,15 @@ import {
   userDefaultValues,
   priceDefaultValues,
   messageConfigDefaultValues,
-  invoiceDefaultValues
+  invoiceDefaultValues,
+  packagingDefaultValues,
+  deliveryDefaultValues,
+  deliveryPackagingDefaultValues,
+  customerPackagingDefaultValues,
+  stockDefaultValues,
+  productionControlDefaultValues,
+  salesForecastDefaultValues,
+  labelPrintDefaultValues
 } from "@/schemas/DefaultValuesForm";
 import {
   DialogContent,
@@ -83,13 +100,23 @@ import { ProductReturn, ProductReturnRegister } from "@/types/product_return.typ
 import { PaymentRegister } from "@/types/payment.types";
 import { FormFieldsMessageConfig } from "../FormFieldsObjectsCreate/FormFieldsMessageConfig";
 import { FormFieldsInvoice } from "../FormFieldsObjectsCreate/FormFieldsInvoice";
+import { FormFieldsPackaging } from "../FormFieldsObjectsCreate/FormFieldsPackaging";
+import { FormFieldsDelivery } from "../FormFieldsObjectsCreate/FormFieldsDelivery";
+import { FormFieldsDeliveryPackaging } from "../FormFieldsObjectsCreate/FormFieldsDeliveryPackaging";
+import { FormFieldsCustomerPackaging } from "../FormFieldsObjectsCreate/FormFieldsCustomerPackaging";
+import { FormFieldsStock } from "../FormFieldsObjectsCreate/FormFieldsStock";
+import { FormFieldsProductionControl } from "../FormFieldsObjectsCreate/FormFieldsProductionControl";
+import { FormFieldsSalesForecast } from "../FormFieldsObjectsCreate/FormFieldsSalesForecast";
+import { FormFieldsLabelPrint } from "../FormFieldsObjectsCreate/FormFieldsLabelPrint";
 
 interface ModalEditProps {
   nameModal: string;
   typeRegister: TypeRegister;
+  rowData?: any;
+  triggerLabel?: string;
 }
 
-type TypeRegister = "Customer" | "Employee" | "Machine" | "Procedure" | "Product" | "Vendor" | "Vacation" | "Order" | "MaterialOrder" | "ProductReturn" | "Payment" | "User" | "Price" | "MessageConfig" | "Invoice";
+type TypeRegister = "Customer" | "Employee" | "Machine" | "Procedure" | "Product" | "Vendor" | "Vacation" | "Order" | "MaterialOrder" | "ProductReturn" | "Payment" | "User" | "Price" | "MessageConfig" | "Invoice" | "Packaging" | "Delivery" | "DeliveryPackaging" | "CustomerPackaging" | "Stock" | "ProductionControl" | "SalesForecast" | "LabelPrint";
 
 type FormData = z.infer<typeof formCustomerSchema> |
   z.infer<typeof formEmployeeSchema> |
@@ -105,9 +132,16 @@ type FormData = z.infer<typeof formCustomerSchema> |
   z.infer<typeof formUserSchema> |
   z.infer<typeof formPriceSchema> |
   z.infer<typeof formMessageConfigSchema> |
-  z.infer<typeof formInvoiceSchema>;
+  z.infer<typeof formInvoiceSchema> |
+  z.infer<typeof formPackagingSchema> |
+  z.infer<typeof formDeliverySchema> |
+  z.infer<typeof formDeliveryPackagingSchema> |
+  z.infer<typeof formCustomerPackagingSchema> |
+  z.infer<typeof formStockSchema> |
+  z.infer<typeof formProductionControlSchema> |
+  z.infer<typeof formSalesForecastSchema>;
 
-export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) => {
+export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister, rowData, triggerLabel }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
@@ -200,6 +234,46 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
       objDefaultValues = invoiceDefaultValues;
       apiCallByType = "invoices";
       break;
+    case "Packaging":
+      typeSchema = formPackagingSchema;
+      objDefaultValues = packagingDefaultValues;
+      apiCallByType = "packaging";
+      break;
+    case "Stock":
+      typeSchema = formStockSchema;
+      objDefaultValues = stockDefaultValues;
+      apiCallByType = "stocks";
+      break;
+    case "ProductionControl":
+      typeSchema = formProductionControlSchema;
+      objDefaultValues = productionControlDefaultValues;
+      apiCallByType = "production-control";
+      break;
+    case "SalesForecast":
+      typeSchema = formSalesForecastSchema as any;
+      objDefaultValues = salesForecastDefaultValues;
+      apiCallByType = "sales-forecasts";
+      break;
+    case "LabelPrint":
+      typeSchema = formLabelPrintSchema as any;
+      objDefaultValues = labelPrintDefaultValues;
+      apiCallByType = "label-prints";
+      break;
+    case "Delivery":
+      typeSchema = formDeliverySchema;
+      objDefaultValues = deliveryDefaultValues;
+      apiCallByType = "delivery";
+      break;
+    case "DeliveryPackaging":
+      typeSchema = formDeliveryPackagingSchema;
+      objDefaultValues = deliveryPackagingDefaultValues;
+      apiCallByType = "delivery-packaging";
+      break;
+    case "CustomerPackaging":
+      typeSchema = formCustomerPackagingSchema;
+      objDefaultValues = customerPackagingDefaultValues;
+      apiCallByType = "customer-packaging";
+      break;
     default:
       throw new Error(`Invalid typeRegister: ${typeRegister}`);
   }
@@ -248,13 +322,38 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
       formFields1 = <FormFieldsUser form={form} />;
       break;
     case "Price":
-      formFields1 = <FormFieldsPrice form={form} />;
+      formFields1 = <FormFieldsPrice form={form as any} />;
       break;
     case "MessageConfig":
-      formFields1 = <FormFieldsMessageConfig form={form} />;
+      formFields1 = <FormFieldsMessageConfig form={form as any} />;
       break;
     case "Invoice":
-      formFields1 = <FormFieldsInvoice form={form} />;
+      formFields1 = <FormFieldsInvoice form={form as any} />;
+      break;
+    case "Packaging":
+      formFields1 = <FormFieldsPackaging form={form} />;
+      break;
+    case "Stock":
+      formFields1 = <FormFieldsStock form={form} />;
+      break;
+    case "ProductionControl":
+      formFields1 = <FormFieldsProductionControl form={form} />;
+      break;
+    case "Delivery":
+      formFields1 = <FormFieldsDelivery form={form} />;
+      break;
+    case "SalesForecast":
+      formFields1 = <FormFieldsSalesForecast form={form} />;
+      break;
+    case "LabelPrint":
+      formFields1 = <FormFieldsLabelPrint form={form} />;
+      break;
+    case "DeliveryPackaging":
+      formFields1 = <FormFieldsDeliveryPackaging form={form} deliveryId={rowData?.delivery_id} />;
+      break;
+    case "CustomerPackaging":
+      // Reutilizaremos um novo form field específico
+      formFields1 = <FormFieldsCustomerPackaging form={form} packagingId={rowData?.packaging_id} />;
       break;
     default:
       formFields1 = <div>erro</div>;
@@ -262,7 +361,8 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
   }
 
   async function onSubmit(data: FormData) {
-    const formattedData = formatObject(data as any, [Classification, Status]);
+    const enumsToReplace = typeRegister === "SalesForecast" ? [] : [Classification, Status];
+    const formattedData = formatObject(data as any, enumsToReplace as any);
     setIsLoading(true);
     try {
       await axios.post(`/api/${apiCallByType}`, formattedData);
@@ -288,15 +388,15 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister }) =>
   return (
     <>
       <DialogTrigger asChild>
-        <Button variant="default">Criar {nameModal}</Button>
+        <Button variant="default">{triggerLabel ?? `Criar ${nameModal}`}</Button>
       </DialogTrigger>
       <Form {...form}>
         <DialogContent className="min-w-full min-h-full">
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <DialogHeader>
               <DialogTitle>Criando {nameModal}</DialogTitle>
-              <div className="pt-4 grid grid-cols-3 gap-4">{formFields1}</div>
             </DialogHeader>
+            <div className="pt-4 grid grid-cols-3 gap-4">{formFields1}</div>
             <DialogFooter className="absolute bottom-0 right-0 p-10">
               <DialogClose asChild>
                 <Button type="button" variant="secondary" disabled={isLoading} onClick={handleDialogClose}>

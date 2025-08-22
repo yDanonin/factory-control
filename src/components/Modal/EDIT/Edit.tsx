@@ -47,7 +47,15 @@ import {
   formUserSchema,
   formPriceSchema,
   formMessageConfigSchema,
-  formInvoiceSchema
+  formInvoiceSchema,
+  formPackagingSchema,
+  formDeliverySchema,
+  formDeliveryPackagingSchema,
+  formCustomerPackagingSchema,
+  formStockSchema,
+  formProductionControlSchema,
+  formSalesForecastSchema,
+  formLabelPrintSchema
 } from "@/schemas/FormSchemas";
 import {
   Dialog,
@@ -83,9 +91,20 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Price } from "@/types/price.types";
 import { MessageConfig } from "@/types/message.types";
+import { Packaging } from "@/types/packaging.types";
+import { Delivery } from "@/types/delivery.types";
 import { FormFieldsMessageConfig } from "../FormFieldsObjectsEdit/FormFieldsMessageConfig";
 import { FormFieldsInvoice } from "../FormFieldsObjectsEdit/FormFieldsInvoice";
-import { invoiceDefaultValues } from "@/schemas/DefaultValuesForm";
+import { FormFieldsPackaging } from "../FormFieldsObjectsEdit/FormFieldsPackaging";
+import { FormFieldsDelivery } from "../FormFieldsObjectsEdit/FormFieldsDelivery";
+import { FormFieldsDeliveryPackaging } from "../FormFieldsObjectsEdit/FormFieldsDeliveryPackaging";
+import { FormFieldsCustomerPackaging } from "../FormFieldsObjectsEdit/FormFieldsCustomerPackaging";
+import { FormFieldsStock } from "../FormFieldsObjectsEdit/FormFieldsStock";
+import { FormFieldsProductionControl } from "../FormFieldsObjectsEdit/FormFieldsProductionControl";
+import { FormFieldsSalesForecast } from "../FormFieldsObjectsEdit/FormFieldsSalesForecast";
+import { FormFieldsLabelPrint } from "../FormFieldsObjectsEdit/FormFieldsLabelPrint";
+import { invoiceDefaultValues, packagingDefaultValues, deliveryDefaultValues, deliveryPackagingDefaultValues } from "@/schemas/DefaultValuesForm";
+import { SalesForecastStatusLabel } from "@/types/sales-forecast.types";
 
 interface ModalEditProps {
   nameModal: string;
@@ -105,11 +124,13 @@ interface ModalEditProps {
     | Partial<PaymentRegister>
     | Partial<User>
     | Partial<Price>
-    | Partial<MessageConfig>;
+    | Partial<MessageConfig>
+    | Partial<Packaging>
+    | Partial<Delivery>;
   idRowData?: number | string;
 }
 
-type TypeRegister = "Customer" | "Employee" | "Machine" | "Procedure" | "Product" | "Vendor" | "Vacation" | "TimeConfiguration" | "Order" | "MaterialOrder" | "ProductReturn" | "Payment" | "User" | "Price" | "MessageConfig" | "Invoice";
+type TypeRegister = "Customer" | "Employee" | "Machine" | "Procedure" | "Product" | "Vendor" | "Vacation" | "TimeConfiguration" | "Order" | "MaterialOrder" | "ProductReturn" | "Payment" | "User" | "Price" | "MessageConfig" | "Invoice" | "Packaging" | "Delivery" | "DeliveryPackaging" | "CustomerPackaging" | "Stock" | "ProductionControl" | "SalesForecast" | "LabelPrint";
 
 export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditProps) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -193,6 +214,38 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
       typeSchema = formInvoiceSchema;
       apiCallByType = "invoices";
       break;
+    case "Packaging":
+      typeSchema = formPackagingSchema;
+      apiCallByType = "packaging";
+      break;
+    case "Stock":
+      typeSchema = formStockSchema;
+      apiCallByType = "stocks";
+      break;
+    case "ProductionControl":
+      typeSchema = formProductionControlSchema;
+      apiCallByType = "production-control";
+      break;
+    case "SalesForecast":
+      typeSchema = formSalesForecastSchema;
+      apiCallByType = "sales-forecasts";
+      break;
+    case "LabelPrint":
+      typeSchema = formLabelPrintSchema;
+      apiCallByType = "label-prints";
+      break;
+    case "Delivery":
+      typeSchema = formDeliverySchema;
+      apiCallByType = "delivery";
+      break;
+    case "DeliveryPackaging":
+      typeSchema = formDeliveryPackagingSchema;
+      apiCallByType = "delivery-packaging";
+      break;
+    case "CustomerPackaging":
+      typeSchema = formCustomerPackagingSchema;
+      apiCallByType = "customer-packaging";
+      break;
     default:
       throw new Error(`Invalid typeRegister: ${typeRegister}`);
   }
@@ -200,6 +253,17 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
   const getFormDefaults = () => {
     const defaults = { ...rowData } as any;
     
+    const normalizeSalesForecastStatus = (value: unknown): number | undefined => {
+      if (typeof value === "number") return value;
+      if (typeof value === "string") {
+        const asNumber = Number(value);
+        if (!Number.isNaN(asNumber)) return asNumber;
+        const found = Object.entries(SalesForecastStatusLabel).find(([k, label]) => label === value);
+        if (found) return Number(found[0]);
+      }
+      return undefined;
+    };
+
     switch (typeRegister) {
       case "Order":
       case "ProductReturn":
@@ -234,6 +298,14 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
           issue_date: defaults?.issue_date || '',
           recipient: defaults?.recipient || '',
           note: defaults?.note || ''
+        };
+      case "SalesForecast":
+        return {
+          ...defaults,
+          customer_id: defaults?.customer?.id,
+          product_id: defaults?.product?.id,
+          status: normalizeSalesForecastStatus(defaults?.status),
+          next_estimated_date: defaults?.next_estimated_date ? new Date(defaults.next_estimated_date) : undefined,
         };
       default:
         return defaults;
@@ -340,13 +412,38 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
     case "Invoice":
       formFields = <FormFieldsInvoice form={form} />;
       break;
+    case "Packaging":
+      formFields = <FormFieldsPackaging form={form} />;
+      break;
+    case "Delivery":
+      formFields = <FormFieldsDelivery form={form} />;
+      break;
+    case "DeliveryPackaging":
+      formFields = <FormFieldsDeliveryPackaging form={form} />;
+      break;
+    case "Stock":
+      formFields = <FormFieldsStock form={form} />;
+      break;
+    case "ProductionControl":
+      formFields = <FormFieldsProductionControl form={form} />;
+      break;
+    case "SalesForecast":
+      formFields = <FormFieldsSalesForecast form={form} />;
+      break;
+    case "LabelPrint":
+      formFields = <FormFieldsLabelPrint form={form} />;
+      break;
+    case "CustomerPackaging":
+      formFields = <FormFieldsCustomerPackaging form={form} />;
+      break;
     default:
       formFields = <div>erro</div>;
       break;
   }
 
   async function onSubmit(data: any) {
-    const formattedData = { id: idRowData, ...formatObject(data, [Classification, Status]) };
+    const enumsToReplace = typeRegister === "SalesForecast" ? [] : [Classification, Status];
+    const formattedData = { id: idRowData, ...formatObject(data, enumsToReplace) };
     setIsLoading(true);
     try {
       await axios.patch(`/api/${apiCallByType}/${idRowData}`, formattedData);

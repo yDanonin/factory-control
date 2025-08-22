@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { Status } from "@/types/common.types";
 import { Classification } from "@/types/employee.types";
+import { SalesForecastStatus } from "@/types/sales-forecast.types";
+import { z as zod } from "zod";
 
 export const formCustomerSchema = z
   .object({
@@ -334,6 +336,82 @@ export const formInvoiceSchema = z.object({
   issue_date: z.string().min(2, { message: 'Informe a data de emissão.' }),
   recipient: z.string().min(2, { message: 'Informe o destinatário.' }),
   note: z.string().optional()
+});
+
+export const formPackagingSchema = z.object({
+  name: z.string().min(2, {
+    message: "Informe o nome da embalagem."
+  }),
+  quantity: z.number({ coerce: true }).positive({
+    message: "Informe a quantidade."
+  }),
+  storage_location: z.string().min(2, {
+    message: "Informe o local de armazenamento."
+  })
+});
+
+export const formDeliverySchema = z.object({
+  order_id: z.number({ coerce: true }).positive({
+    message: "Informe o ID do pedido."
+  }),
+  status: z.number({ coerce: true }).min(1).max(3, {
+    message: "Informe o status da entrega."
+  }),
+  delivery_date: z.date({
+    required_error: "Informe a data de entrega."
+  })
+});
+
+export const formDeliveryPackagingSchema = z.object({
+  delivery_id: z.number({ coerce: true }).positive({
+    message: "Informe o ID da entrega."
+  }),
+  packaging_id: z.number({ coerce: true }).positive({
+    message: "Informe o ID da embalagem."
+  }),
+  quantity: z.number({ coerce: true }).positive({
+    message: "Informe a quantidade."
+  })
+});
+
+export const formCustomerPackagingSchema = z.object({
+  customer_id: z.number({ coerce: true }).positive({
+    message: "Informe o ID do cliente."
+  }),
+  packaging_id: z.number({ coerce: true }).positive({
+    message: "Informe o ID da embalagem."
+  }),
+  pontalti_brand: z.boolean()
+});
+
+export const formStockSchema = z.object({
+  amount: z.number({ coerce: true }).min(0, { message: "Informe a quantidade (>= 0)." }),
+  location: z.string().min(1, { message: "Informe o local." }),
+  product_id: z.number({ coerce: true }).positive({ message: "Informe o ID do produto." })
+});
+
+export const formProductionControlSchema = z.object({
+  order_id: z.number({ coerce: true }).positive({ message: "Informe o ID do pedido." }),
+  status: z.number({ coerce: true }).min(0, { message: "Informe o status." }),
+  material_disponibility: z.number({ coerce: true }).min(0, { message: "Informe a disponibilidade de material." })
+});
+
+export const formSalesForecastSchema = z.object({
+  customer_id: z.number({ coerce: true }).positive({ message: "Informe o ID do cliente." }),
+  product_id: z.number({ coerce: true }).positive({ message: "Informe o ID do produto." }),
+  status: z.nativeEnum(SalesForecastStatus),
+  reason: z.string().optional(),
+  next_estimated_date: z.date().optional(),
+  frequency_days: z.number({ coerce: true }).int().positive().optional(),
+  quantity: z.string().min(1, { message: "Informe a quantidade." }),
+  created_by: z.string().optional(),
+  updated_by: z.string().optional(),
+});
+
+export const formLabelPrintSchema = z.object({
+  order_id: z.number({ coerce: true }).positive({ message: "Informe o ID do pedido." }),
+  created_by: z.string().optional(),
+  updated_by: z.string().optional(),
 });
 
 function validaCep(cep: string) {

@@ -104,37 +104,37 @@ export const menuItensProducao = [
   {
     id: 0,
     item: "Entregas",
-    route: "/blabla"
+    route: "/production/delivery"
   },
   {
     id: 1,
     item: "Lista á produzir",
-    route: "/blabla"
+    route: "/production/production-control"
   },
   {
     id: 2,
     item: "Estoque",
-    route: "/blabla"
+    route: "/production/stocks"
   },
   {
     id: 3,
     item: "Previsão de venda",
-    route: "/blabla"
+    route: "/production/sales-forecast"
   },
   {
     id: 4,
     item: "Impressão de etiquetas",
-    route: "/blabla"
+    route: "/production/print-labels"
   },
   {
     id: 5,
     item: "Embalagens",
-    route: "/blabla"
+    route: "/production/packaging"
   },
   {
     id: 6,
     item: "Online",
-    route: "/blabla"
+    route: "/production/online"
   }
 ];
 

@@ -20,6 +20,8 @@ import { PaymentRegister } from "@/types/payment.types";
 import { User } from "@/types/user.types";
 import { Price } from "@/types/price.types";
 import { MessageConfig } from "@/types/message.types";
+import { Packaging } from "@/types/packaging.types";
+import { Delivery } from "@/types/delivery.types";
 import {
   Dialog,
   DialogContent,
@@ -38,7 +40,7 @@ interface ModalDeleteProps {
   onDelete?: () => void;
 }
 
-type TypeRegister = "Customer" | "Employee" | "Machine" | "Procedure" | "Product" | "Vendor" | "Vacation" | "TimeConfiguration" | "Order" | "MaterialOrder" | "ProductReturn" | "Payment" | "User" | "Price" | "MessageConfig" | "Invoice";
+type TypeRegister = "Customer" | "Employee" | "Machine" | "Procedure" | "Product" | "Vendor" | "Vacation" | "TimeConfiguration" | "Order" | "MaterialOrder" | "ProductReturn" | "Payment" | "User" | "Price" | "MessageConfig" | "Invoice" | "Packaging" | "Delivery" | "DeliveryPackaging" | "CustomerPackaging" | "Stock" | "ProductionControl" | "SalesForecast" | "LabelPrint";
 
 export const Delete = ({ nameModal, typeRegister, idRowData, onDelete }: ModalDeleteProps) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -100,6 +102,30 @@ export const Delete = ({ nameModal, typeRegister, idRowData, onDelete }: ModalDe
       break;
     case "Invoice":
       apiCallByType = "invoices";
+      break;
+    case "Packaging":
+      apiCallByType = "packaging";
+      break;
+    case "Delivery":
+      apiCallByType = "delivery";
+      break;
+    case "DeliveryPackaging":
+      apiCallByType = "delivery-packaging";
+      break;
+    case "CustomerPackaging":
+      apiCallByType = "customer-packaging";
+      break;
+    case "Stock":
+      apiCallByType = "stocks";
+      break;
+    case "ProductionControl":
+      apiCallByType = "production-control";
+      break;
+    case "SalesForecast":
+      apiCallByType = "sales-forecasts";
+      break;
+    case "LabelPrint":
+      apiCallByType = "label-prints";
       break;
     default:
       throw new Error(`Invalid typeRegister: ${typeRegister}`);
