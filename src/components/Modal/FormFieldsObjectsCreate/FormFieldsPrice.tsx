@@ -7,13 +7,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { z } from "zod";
-import { formPriceSchema } from "@/schemas/FormSchemas";
+// Keeping form prop untyped to be reusable across contexts
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Status } from "@/types/common.types";
 
 interface FormFieldsPriceProps {
-  form: UseFormReturn<z.infer<typeof formPriceSchema>>;
+  form: UseFormReturn<any>;
 }
 
 export function FormFieldsPrice({ form }: FormFieldsPriceProps) {

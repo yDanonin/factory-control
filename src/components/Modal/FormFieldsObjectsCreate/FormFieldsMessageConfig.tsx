@@ -8,11 +8,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { z } from "zod";
-import { formMessageConfigSchema } from "@/schemas/FormSchemas";
+// Intentionally left generic to accept any form
 
 interface FormFieldsMessageConfigProps {
-  form: UseFormReturn<z.infer<typeof formMessageConfigSchema>>;
+  form: UseFormReturn<any>;
 }
 
 export function FormFieldsMessageConfig({ form }: FormFieldsMessageConfigProps) {

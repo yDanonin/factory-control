@@ -10,8 +10,14 @@ import { TimeConfiguration } from "@/types/time-configuration.types";
 import { Schedule } from "@/types/schedule.types";
 import { User } from "@/types/user.types";
 import { Invoice } from "@/types/invoice.types";
+import { Packaging } from "@/types/packaging.types";
+import { Delivery } from "@/types/delivery.types";
+import { Stock } from "@/types/stock.types";
+import { ProductionControl } from "@/types/production-control.types";
+import { SalesForecast } from "@/types/sales-forecast.types";
+import { LabelPrint } from "@/types/label-print.types";
 
-export type DataRow = Customer | Employee | Machine | Procedure | Product | Vendor | Vacation | TimeConfiguration | Schedule | User | Invoice;
+export type DataRow = Customer | Employee | Machine | Procedure | Product | Vendor | Vacation | TimeConfiguration | Schedule | User | Invoice | Packaging | Delivery | Stock | ProductionControl | SalesForecast | LabelPrint;
 
 export type TableColumn<T> = {
   id?: string;

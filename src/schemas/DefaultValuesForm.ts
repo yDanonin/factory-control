@@ -165,3 +165,57 @@ export const invoiceDefaultValues = {
   recipient: '',
   note: ''
 };
+
+export const packagingDefaultValues = {
+  name: '',
+  quantity: '',
+  storage_location: ''
+};
+
+export const deliveryDefaultValues = {
+  order_id: '',
+  status: 1,
+  delivery_date: new Date()
+};
+
+export const deliveryPackagingDefaultValues = {
+  delivery_id: 0,
+  packaging_id: 0,
+  quantity: 1
+};
+
+export const customerPackagingDefaultValues = {
+  customer_id: 0,
+  packaging_id: 0,
+  pontalti_brand: false
+};
+
+export const stockDefaultValues = {
+  amount: 0,
+  location: "",
+  product_id: 0
+};
+
+export const productionControlDefaultValues = {
+  order_id: 0,
+  status: 0,
+  material_disponibility: 0
+};
+
+export const salesForecastDefaultValues = {
+  customer_id: 0,
+  product_id: 0,
+  status: 2,
+  reason: undefined,
+  next_estimated_date: undefined,
+  frequency_days: undefined,
+  quantity: "0",
+  created_by: undefined,
+  updated_by: undefined,
+};
+
+export const labelPrintDefaultValues = {
+  order_id: 0,
+  created_by: undefined,
+  updated_by: undefined,
+};

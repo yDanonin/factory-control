@@ -13,11 +13,12 @@ interface ModalProps {
   nameModal: string;
   typeRegister: string;
   idRowData?: number;
-  rowData?: Partial<Customer> | Partial<Employee> | Partial<User>;
+  rowData?: any;
   onDelete?: () => void;
+  triggerLabel?: string;
 }
 
-const Modal: React.FC<ModalProps> = ({ typeModal, rowData, nameModal, typeRegister, idRowData, onDelete }) => {
+const Modal: React.FC<ModalProps> = ({ typeModal, rowData, nameModal, typeRegister, idRowData, onDelete, triggerLabel }) => {
   useEffect(() => {
     if (rowData) {
       console.log("Edit component mounted or rowData changed", rowData);
@@ -28,7 +29,7 @@ const Modal: React.FC<ModalProps> = ({ typeModal, rowData, nameModal, typeRegist
   if (typeModal === "CREATE") {
     designModalByType = (
       <>
-        <Create nameModal={nameModal} typeRegister={typeRegister} />
+        <Create nameModal={nameModal} typeRegister={typeRegister} rowData={rowData} triggerLabel={triggerLabel} />
       </>
     );
   } else if (typeModal === "EDIT") {

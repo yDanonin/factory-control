@@ -3,13 +3,9 @@ import { UseFormReturn } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { z } from "zod";
-import { formInvoiceSchema } from "@/schemas/FormSchemas";
-
-type InvoiceFormType = z.infer<typeof formInvoiceSchema>;
-
+// Keep form generic to avoid tight coupling in modal context
 interface Props {
-  form: UseFormReturn<InvoiceFormType>;
+  form: UseFormReturn<any>;
 }
 
 export const FormFieldsInvoice: React.FC<Props> = ({ form }) => (

@@ -6,15 +6,15 @@ import "./DynamicTable.css";
 import { ArrowUpDown, ChevronDown } from "lucide-react";
 import { Spinner } from "@nextui-org/react";
 import Modal from "@/components/Modal/Modal";
-// import { Vendor } from "@/types/vendor.types";
+import { Vendor } from "@/types/vendor.types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
-// import { Machine } from "@/types/machine.types";
-// import { Product } from "@/types/product.types";
-// import { Customer } from "@/types/customer.types";
-// import { Employee } from "@/types/employee.types";
-// import { Procedure } from "@/types/procedure.types";
+import { Machine } from "@/types/machine.types";
+import { Product } from "@/types/product.types";
+import { Customer } from "@/types/customer.types";
+import { Employee } from "@/types/employee.types";
+import { Procedure } from "@/types/procedure.types";
 import { DataRow, TableColumn } from "@/models/TableColumn";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import {
@@ -39,14 +39,14 @@ import {
 
 interface TableProps<T extends DataRow> {
   columns: ColumnDef<T>[];
-  data: T[];
-  // data:
-  //   | Partial<Customer>[]
-  //   | Partial<Employee>[]
-  //   | Partial<Machine>[]
-  //   | Partial<Procedure>[]
-  //   | Partial<Product>[]
-  //   | Partial<Vendor>[];
+  // data: T[];
+  data:
+    | Partial<Customer>[]
+    | Partial<Employee>[]
+    | Partial<Machine>[]
+    | Partial<Procedure>[]
+    | Partial<Product>[]
+    | Partial<Vendor>[];
   filterFields?: TableColumn<T>[];
   typeRegister?: string;
   isLoadingSpinner?: boolean;
@@ -58,8 +58,11 @@ function DynamicTable<T extends DataRow>({ columns, data, isLoadingSpinner, filt
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
+  // Garantir que data seja sempre um array
+  const safeData = data || [];
+
   const table = useReactTable({
-    data,
+    data: safeData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -77,7 +80,7 @@ function DynamicTable<T extends DataRow>({ columns, data, isLoadingSpinner, filt
     }
   });
 
-  const rows = table.getRowModel().rows;
+  const rows = table.getRowModel()?.rows || [];
 
   const renderTableBody = () => {
     if (isLoadingSpinner) {

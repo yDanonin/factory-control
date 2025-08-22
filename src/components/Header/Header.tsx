@@ -20,7 +20,8 @@ const Header: React.FC<HeaderProps> = ({ title, backTo }) => {
           size="icon"
           className="h-7 w-7"
           onClick={() => {
-            router.push(backTo);
+            window.history.back();
+            // router.push(backTo);
           }}
         >
           <ChevronLeft className="h-4 w-4" />

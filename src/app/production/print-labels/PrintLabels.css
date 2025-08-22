@@ -1,0 +1,40 @@
+.fullscreen-spinner {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+/* Hide elements in print like action buttons */
+@media print {
+  .no-print { display: none !important; }
+  nav.aside-layout { display: none !important; }
+  header, .aside-layout, .DropdownMenu, .Dialog, .page-actions { display: none !important; }
+  .page-layout { display: block !important; }
+  .print-container { padding: 0 !important; margin: 0 !important; }
+  .print-area { width: 100% !important; margin: 0 auto !important; box-shadow: none !important; }
+  .print-area, .print-content { overflow: visible !important; max-height: none !important; }
+  .print-content { transform: scale(1.0); transform-origin: top center; }
+  .print-content .p-6 { padding: 16px !important; }
+  .print-content .text-sm { font-size: 1rem !important; }
+  .print-logo { display: none; }
+}
+
+.print-header { display: none; }
+.print-brand { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.print-brand__icon { height: 28px; filter: grayscale(1) contrast(1.2); }
+.print-brand__text { font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+@media print {
+  .print-header { display: block; margin-bottom: 8px; }
+}
+
+/* Fit entire page on one sheet by reducing margins and scaling */
+@page {
+  size: auto;
+  margin: 8mm;
+}
+
+
