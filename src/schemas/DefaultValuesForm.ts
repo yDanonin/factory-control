@@ -219,3 +219,17 @@ export const labelPrintDefaultValues = {
   created_by: undefined,
   updated_by: undefined,
 };
+
+export const expenseDefaultValues = {
+  amount: "",
+  classification: "",
+  description: "",
+  justification: "",
+  requires_reimbursement: false,
+  applies_all_products: false,
+  applies_all_machines: false,
+  expense_date: new Date(),
+  expense_actor_id: 0,
+  created_by: undefined,
+  updated_by: undefined,
+};

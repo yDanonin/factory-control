@@ -414,6 +414,20 @@ export const formLabelPrintSchema = z.object({
   updated_by: z.string().optional(),
 });
 
+export const formExpenseSchema = z.object({
+  amount: z.string().min(1, { message: "Informe o valor da despesa." }),
+  classification: z.string().optional(),
+  description: z.string().optional(),
+  justification: z.string().min(1, { message: "Informe a justificativa." }),
+  requires_reimbursement: z.boolean(),
+  applies_all_products: z.boolean(),
+  applies_all_machines: z.boolean(),
+  expense_date: z.date({ required_error: "Informe a data da despesa." }),
+  expense_actor_id: z.number({ coerce: true }).positive({ message: "Informe o ID do responsável." }),
+  created_by: z.string().optional(),
+  updated_by: z.string().optional(),
+});
+
 function validaCep(cep: string) {
   return /^\d{8}$/.test(cep.replace(/[^\d]+/g, ""));
 }

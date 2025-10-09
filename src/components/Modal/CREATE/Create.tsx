@@ -60,7 +60,8 @@ import {
   formStockSchema,
   formProductionControlSchema,
   formSalesForecastSchema,
-  formLabelPrintSchema
+  formLabelPrintSchema,
+  formExpenseSchema
 } from "@/schemas/FormSchemas";
 import {
   customerDefaultValues,
@@ -85,7 +86,8 @@ import {
   stockDefaultValues,
   productionControlDefaultValues,
   salesForecastDefaultValues,
-  labelPrintDefaultValues
+  labelPrintDefaultValues,
+  expenseDefaultValues
 } from "@/schemas/DefaultValuesForm";
 import {
   DialogContent,
@@ -108,6 +110,7 @@ import { FormFieldsStock } from "../FormFieldsObjectsCreate/FormFieldsStock";
 import { FormFieldsProductionControl } from "../FormFieldsObjectsCreate/FormFieldsProductionControl";
 import { FormFieldsSalesForecast } from "../FormFieldsObjectsCreate/FormFieldsSalesForecast";
 import { FormFieldsLabelPrint } from "../FormFieldsObjectsCreate/FormFieldsLabelPrint";
+import { FormFieldsExpense } from "../FormFieldsObjectsCreate/FormFieldsExpense";
 
 interface ModalEditProps {
   nameModal: string;
@@ -116,7 +119,7 @@ interface ModalEditProps {
   triggerLabel?: string;
 }
 
-type TypeRegister = "Customer" | "Employee" | "Machine" | "Procedure" | "Product" | "Vendor" | "Vacation" | "Order" | "MaterialOrder" | "ProductReturn" | "Payment" | "User" | "Price" | "MessageConfig" | "Invoice" | "Packaging" | "Delivery" | "DeliveryPackaging" | "CustomerPackaging" | "Stock" | "ProductionControl" | "SalesForecast" | "LabelPrint";
+type TypeRegister = "Customer" | "Employee" | "Machine" | "Procedure" | "Product" | "Vendor" | "Vacation" | "Order" | "MaterialOrder" | "ProductReturn" | "Payment" | "User" | "Price" | "MessageConfig" | "Invoice" | "Packaging" | "Delivery" | "DeliveryPackaging" | "CustomerPackaging" | "Stock" | "ProductionControl" | "SalesForecast" | "LabelPrint" | "Expense";
 
 type FormData = z.infer<typeof formCustomerSchema> |
   z.infer<typeof formEmployeeSchema> |
@@ -274,6 +277,11 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister, rowD
       objDefaultValues = customerPackagingDefaultValues;
       apiCallByType = "customer-packaging";
       break;
+    case "Expense":
+      typeSchema = formExpenseSchema;
+      objDefaultValues = expenseDefaultValues;
+      apiCallByType = "expenses";
+      break;
     default:
       throw new Error(`Invalid typeRegister: ${typeRegister}`);
   }
@@ -354,6 +362,9 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister, rowD
     case "CustomerPackaging":
       // Reutilizaremos um novo form field específico
       formFields1 = <FormFieldsCustomerPackaging form={form} packagingId={rowData?.packaging_id} />;
+      break;
+    case "Expense":
+      formFields1 = <FormFieldsExpense form={form} />;
       break;
     default:
       formFields1 = <div>erro</div>;

@@ -15,6 +15,7 @@ import { Product } from "@/types/product.types";
 import { Customer } from "@/types/customer.types";
 import { Employee } from "@/types/employee.types";
 import { Procedure } from "@/types/procedure.types";
+import { Expense } from "@/types/expense.types";
 import { DataRow, TableColumn } from "@/models/TableColumn";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import {
@@ -46,7 +47,8 @@ interface TableProps<T extends DataRow> {
     | Partial<Machine>[]
     | Partial<Procedure>[]
     | Partial<Product>[]
-    | Partial<Vendor>[];
+    | Partial<Vendor>[]
+    | Partial<Expense>[];
   filterFields?: TableColumn<T>[];
   typeRegister?: string;
   isLoadingSpinner?: boolean;
