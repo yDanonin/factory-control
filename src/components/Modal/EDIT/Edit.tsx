@@ -55,7 +55,8 @@ import {
   formStockSchema,
   formProductionControlSchema,
   formSalesForecastSchema,
-  formLabelPrintSchema
+  formLabelPrintSchema,
+  formExpenseSchema
 } from "@/schemas/FormSchemas";
 import {
   Dialog,
@@ -103,6 +104,7 @@ import { FormFieldsStock } from "../FormFieldsObjectsEdit/FormFieldsStock";
 import { FormFieldsProductionControl } from "../FormFieldsObjectsEdit/FormFieldsProductionControl";
 import { FormFieldsSalesForecast } from "../FormFieldsObjectsEdit/FormFieldsSalesForecast";
 import { FormFieldsLabelPrint } from "../FormFieldsObjectsEdit/FormFieldsLabelPrint";
+import { FormFieldsExpense } from "../FormFieldsObjectsEdit/FormFieldsExpense";
 import { invoiceDefaultValues, packagingDefaultValues, deliveryDefaultValues, deliveryPackagingDefaultValues } from "@/schemas/DefaultValuesForm";
 import { SalesForecastStatusLabel } from "@/types/sales-forecast.types";
 
@@ -130,7 +132,7 @@ interface ModalEditProps {
   idRowData?: number | string;
 }
 
-type TypeRegister = "Customer" | "Employee" | "Machine" | "Procedure" | "Product" | "Vendor" | "Vacation" | "TimeConfiguration" | "Order" | "MaterialOrder" | "ProductReturn" | "Payment" | "User" | "Price" | "MessageConfig" | "Invoice" | "Packaging" | "Delivery" | "DeliveryPackaging" | "CustomerPackaging" | "Stock" | "ProductionControl" | "SalesForecast" | "LabelPrint";
+type TypeRegister = "Customer" | "Employee" | "Machine" | "Procedure" | "Product" | "Vendor" | "Vacation" | "TimeConfiguration" | "Order" | "MaterialOrder" | "ProductReturn" | "Payment" | "User" | "Price" | "MessageConfig" | "Invoice" | "Packaging" | "Delivery" | "DeliveryPackaging" | "CustomerPackaging" | "Stock" | "ProductionControl" | "SalesForecast" | "LabelPrint" | "Expense";
 
 export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditProps) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -234,6 +236,10 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
       typeSchema = formLabelPrintSchema;
       apiCallByType = "label-prints";
       break;
+    case "Expense":
+      typeSchema = formExpenseSchema;
+      apiCallByType = "expenses";
+      break;
     case "Delivery":
       typeSchema = formDeliverySchema;
       apiCallByType = "delivery";
@@ -306,6 +312,11 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
           product_id: defaults?.product?.id,
           status: normalizeSalesForecastStatus(defaults?.status),
           next_estimated_date: defaults?.next_estimated_date ? new Date(defaults.next_estimated_date) : undefined,
+        };
+      case "Expense":
+        return {
+          ...defaults,
+          expense_date: defaults?.expense_date ? new Date(defaults.expense_date) : new Date()
         };
       default:
         return defaults;
@@ -432,6 +443,9 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
       break;
     case "LabelPrint":
       formFields = <FormFieldsLabelPrint form={form} />;
+      break;
+    case "Expense":
+      formFields = <FormFieldsExpense form={form} />;
       break;
     case "CustomerPackaging":
       formFields = <FormFieldsCustomerPackaging form={form} />;

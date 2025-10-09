@@ -1,0 +1,211 @@
+"use client";
+
+import React from "react";
+
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { Input } from "@/components/ui/input";
+import { UseFormReturn } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+
+interface FormFieldsExpense {
+  form: UseFormReturn;
+}
+
+export const FormFieldsExpense: React.FC<FormFieldsExpense> = ({ form }) => {
+  return (
+    <>
+      <FormField
+        key="amount"
+        control={form.control}
+        name="amount"
+        render={({ field }) => {
+          return (
+            <FormItem>
+              <FormLabel htmlFor="amount">Valor</FormLabel>
+              <FormControl>
+                <div className="relative ml-auto flex-1">
+                  <span className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground">R$</span>
+                  <Input
+                    id="amount"
+                    type="text"
+                    {...field}
+                    className="w-full rounded-lg bg-background pl-8 pt-2.5"
+                    placeholder="0.00"
+                  />
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          );
+        }}
+      />
+
+      <FormField
+        key="classification"
+        control={form.control}
+        name="classification"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel htmlFor="classification">Classificação</FormLabel>
+            <FormControl>
+              <Input id="classification" {...field} placeholder="Classificação (opcional)" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        key="description"
+        control={form.control}
+        name="description"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel htmlFor="description">Descrição</FormLabel>
+            <FormControl>
+              <Input id="description" {...field} placeholder="Descrição (opcional)" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        key="justification"
+        control={form.control}
+        name="justification"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel htmlFor="justification">Justificativa</FormLabel>
+            <FormControl>
+              <Input id="justification" {...field} placeholder="Justificativa da despesa" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        key="expense_date"
+        control={form.control}
+        name="expense_date"
+        render={({ field }) => (
+          <FormItem className="flex flex-col justify-between">
+            <FormLabel htmlFor="expense_date">Data da Despesa</FormLabel>
+            <Popover>
+              <PopoverTrigger asChild>
+                <FormControl>
+                  <Button
+                    variant={"outline"}
+                    className={cn("pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
+                  >
+                    {field.value ? format(field.value, "PPP") : <span>Escolha uma data</span>}
+                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                  </Button>
+                </FormControl>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
+              </PopoverContent>
+            </Popover>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        key="expense_actor_id"
+        control={form.control}
+        name="expense_actor_id"
+        render={({ field }) => {
+          return (
+            <FormItem>
+              <FormLabel htmlFor="expense_actor_id">ID do Responsável</FormLabel>
+              <FormControl>
+                <Input
+                  id="expense_actor_id"
+                  type="number"
+                  {...field}
+                  {...form.register("expense_actor_id", {
+                    valueAsNumber: true
+                  })}
+                  placeholder="ID do responsável pela despesa"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          );
+        }}
+      />
+
+      <FormField
+        key="requires_reimbursement"
+        control={form.control}
+        name="requires_reimbursement"
+        render={({ field }) => (
+          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+            <FormControl>
+              <Checkbox
+                checked={field.value}
+                onCheckedChange={field.onChange}
+              />
+            </FormControl>
+            <div className="space-y-1 leading-none">
+              <FormLabel htmlFor="requires_reimbursement">
+                Requer Reembolso
+              </FormLabel>
+            </div>
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        key="applies_all_products"
+        control={form.control}
+        name="applies_all_products"
+        render={({ field }) => (
+          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+            <FormControl>
+              <Checkbox
+                checked={field.value}
+                onCheckedChange={field.onChange}
+              />
+            </FormControl>
+            <div className="space-y-1 leading-none">
+              <FormLabel htmlFor="applies_all_products">
+                Aplica a Todos os Produtos
+              </FormLabel>
+            </div>
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        key="applies_all_machines"
+        control={form.control}
+        name="applies_all_machines"
+        render={({ field }) => (
+          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+            <FormControl>
+              <Checkbox
+                checked={field.value}
+                onCheckedChange={field.onChange}
+              />
+            </FormControl>
+            <div className="space-y-1 leading-none">
+              <FormLabel htmlFor="applies_all_machines">
+                Aplica a Todas as Máquinas
+              </FormLabel>
+            </div>
+          </FormItem>
+        )}
+      />
+    </>
+  );
+};
