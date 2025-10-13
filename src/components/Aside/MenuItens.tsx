@@ -142,11 +142,11 @@ export const menuItensGastos = [
   {
     id: 0,
     item: "Controle de gastos",
-    route: "/blabla"
+    route: "/spent/expenses"
   },
   {
     id: 1,
     item: "Previsão e Emissão de ordem de compra",
-    route: "/blabla"
+    route: "/spent/purchase-order"
   }
 ];

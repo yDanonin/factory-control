@@ -16,8 +16,10 @@ import { Stock } from "@/types/stock.types";
 import { ProductionControl } from "@/types/production-control.types";
 import { SalesForecast } from "@/types/sales-forecast.types";
 import { LabelPrint } from "@/types/label-print.types";
+import { PurchaseForecastSummary, MaterialForecast, ProductionControlForecast } from "@/types/purchase-forecast.types";
+import { Expense } from "@/types/expense.types";
 
-export type DataRow = Customer | Employee | Machine | Procedure | Product | Vendor | Vacation | TimeConfiguration | Schedule | User | Invoice | Packaging | Delivery | Stock | ProductionControl | SalesForecast | LabelPrint;
+export type DataRow = Customer | Employee | Machine | Procedure | Product | Vendor | Vacation | TimeConfiguration | Schedule | User | Invoice | Packaging | Delivery | Stock | ProductionControl | SalesForecast | LabelPrint | PurchaseForecastSummary | MaterialForecast | ProductionControlForecast | Expense;
 
 export type TableColumn<T> = {
   id?: string;
