@@ -36,6 +36,7 @@ import { FormFieldsPayment } from "../FormFieldsObjectsCreate/FormFieldsPayment"
 import { FormFieldsUser } from "../FormFieldsObjectsCreate/FormFieldsUser";
 import { User } from "@/types/user.types";
 import { Price } from "@/types/price.types";
+import { Expense } from "@/types/expense.types";
 import { FormFieldsPrice } from "../FormFieldsObjectsCreate/FormFieldsPrice";
 import {
   formCustomerSchema,
@@ -60,6 +61,7 @@ import {
   formStockSchema,
   formProductionControlSchema,
   formSalesForecastSchema,
+  formExpenseSchema,
   formLabelPrintSchema
 } from "@/schemas/FormSchemas";
 import {
@@ -85,6 +87,7 @@ import {
   stockDefaultValues,
   productionControlDefaultValues,
   salesForecastDefaultValues,
+  expenseDefaultValues,
   labelPrintDefaultValues
 } from "@/schemas/DefaultValuesForm";
 import {
@@ -107,6 +110,7 @@ import { FormFieldsCustomerPackaging } from "../FormFieldsObjectsCreate/FormFiel
 import { FormFieldsStock } from "../FormFieldsObjectsCreate/FormFieldsStock";
 import { FormFieldsProductionControl } from "../FormFieldsObjectsCreate/FormFieldsProductionControl";
 import { FormFieldsSalesForecast } from "../FormFieldsObjectsCreate/FormFieldsSalesForecast";
+import { FormFieldsExpense } from "../FormFieldsObjectsCreate/FormFieldsExpense";
 import { FormFieldsLabelPrint } from "../FormFieldsObjectsCreate/FormFieldsLabelPrint";
 
 interface ModalEditProps {
@@ -116,7 +120,7 @@ interface ModalEditProps {
   triggerLabel?: string;
 }
 
-type TypeRegister = "Customer" | "Employee" | "Machine" | "Procedure" | "Product" | "Vendor" | "Vacation" | "Order" | "MaterialOrder" | "ProductReturn" | "Payment" | "User" | "Price" | "MessageConfig" | "Invoice" | "Packaging" | "Delivery" | "DeliveryPackaging" | "CustomerPackaging" | "Stock" | "ProductionControl" | "SalesForecast" | "LabelPrint";
+type TypeRegister = "Customer" | "Employee" | "Machine" | "Procedure" | "Product" | "Vendor" | "Vacation" | "Order" | "MaterialOrder" | "ProductReturn" | "Payment" | "User" | "Price" | "MessageConfig" | "Invoice" | "Packaging" | "Delivery" | "DeliveryPackaging" | "CustomerPackaging" | "Stock" | "ProductionControl" | "SalesForecast" | "Expense" | "LabelPrint";
 
 type FormData = z.infer<typeof formCustomerSchema> |
   z.infer<typeof formEmployeeSchema> |
@@ -139,7 +143,8 @@ type FormData = z.infer<typeof formCustomerSchema> |
   z.infer<typeof formCustomerPackagingSchema> |
   z.infer<typeof formStockSchema> |
   z.infer<typeof formProductionControlSchema> |
-  z.infer<typeof formSalesForecastSchema>;
+  z.infer<typeof formSalesForecastSchema> |
+  z.infer<typeof formExpenseSchema>;
 
 export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister, rowData, triggerLabel }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -254,6 +259,11 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister, rowD
       objDefaultValues = salesForecastDefaultValues;
       apiCallByType = "sales-forecasts";
       break;
+    case "Expense":
+      typeSchema = formExpenseSchema;
+      objDefaultValues = expenseDefaultValues;
+      apiCallByType = "expenses";
+      break;
     case "LabelPrint":
       typeSchema = formLabelPrintSchema as any;
       objDefaultValues = labelPrintDefaultValues;
@@ -344,6 +354,9 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister, rowD
       break;
     case "SalesForecast":
       formFields1 = <FormFieldsSalesForecast form={form} />;
+      break;
+    case "Expense":
+      formFields1 = <FormFieldsExpense form={form} />;
       break;
     case "LabelPrint":
       formFields1 = <FormFieldsLabelPrint form={form} />;

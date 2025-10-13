@@ -15,6 +15,8 @@ import { Product } from "@/types/product.types";
 import { Customer } from "@/types/customer.types";
 import { Employee } from "@/types/employee.types";
 import { Procedure } from "@/types/procedure.types";
+import { PurchaseForecastSummary, MaterialForecast, ProductionControlForecast } from "@/types/purchase-forecast.types";
+import { Expense } from "@/types/expense.types";
 import { DataRow, TableColumn } from "@/models/TableColumn";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import {
@@ -46,13 +48,18 @@ interface TableProps<T extends DataRow> {
     | Partial<Machine>[]
     | Partial<Procedure>[]
     | Partial<Product>[]
-    | Partial<Vendor>[];
+    | Partial<Vendor>[]
+    | Partial<PurchaseForecastSummary>[]
+    | Partial<MaterialForecast>[]
+    | Partial<ProductionControlForecast>[]
+    | Partial<Expense>[];
   filterFields?: TableColumn<T>[];
   typeRegister?: string;
   isLoadingSpinner?: boolean;
+  onRowClick?: (rowData: any, rowIndex: number) => void;
 }
 
-function DynamicTable<T extends DataRow>({ columns, data, isLoadingSpinner, filterFields = [], typeRegister }: TableProps<T>) {
+function DynamicTable<T extends DataRow>({ columns, data, isLoadingSpinner, filterFields = [], typeRegister, onRowClick }: TableProps<T>) {
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -61,9 +68,11 @@ function DynamicTable<T extends DataRow>({ columns, data, isLoadingSpinner, filt
   // Garantir que data seja sempre um array
   const safeData = data || [];
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const table = useReactTable({
-    data: safeData,
-    columns,
+    data: safeData as any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    columns: columns as any,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -103,11 +112,12 @@ function DynamicTable<T extends DataRow>({ columns, data, isLoadingSpinner, filt
       );
     }
 
-    return rows.map((row) => (
+    return rows.map((row, index) => (
       <TableRow
         key={row.id}
         data-state={row.getIsSelected() && "selected"}
-        className={row.getValue("status") === "Suspenso" ? "bg-red-100" : ""}
+        className={`${row.getValue("status") === "Suspenso" ? "bg-red-100" : ""} ${onRowClick ? "cursor-pointer hover:bg-muted/50" : ""}`}
+        onClick={() => onRowClick && onRowClick(row.original, index)}
       >
         {row.getVisibleCells().map((cell) => (
           <TableCell key={cell.id}>

@@ -16,5 +16,3 @@ export type ProductionControlRegister = Omit<ProductionControl, "id" | "created_
 export type ProductionControlRequest = Partial<ProductionControl> & { page?: number; perPage?: number };
 
 export type UpdatePartialProductionControl = Partial<ProductionControl>;
-
-
