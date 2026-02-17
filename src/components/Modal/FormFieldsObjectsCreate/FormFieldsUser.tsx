@@ -10,10 +10,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 
 interface FormFieldsUserProps {
   form: UseFormReturn<any>;
 }
+
+const help = fieldHelpTexts.user;
 
 export const FormFieldsUser: React.FC<FormFieldsUserProps> = ({ form }) => {
   return (
@@ -23,7 +27,7 @@ export const FormFieldsUser: React.FC<FormFieldsUserProps> = ({ form }) => {
         name="name"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Nome</FormLabel>
+            <FormLabelWithHelp label="Nome" helpText={help.name} />
             <FormControl>
               <Input placeholder="Nome do usuário" {...field} />
             </FormControl>
@@ -37,7 +41,7 @@ export const FormFieldsUser: React.FC<FormFieldsUserProps> = ({ form }) => {
         name="email"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Email</FormLabel>
+            <FormLabelWithHelp label="Email" helpText={help.email} />
             <FormControl>
               <Input type="email" placeholder="Email do usuário" {...field} />
             </FormControl>
@@ -51,7 +55,7 @@ export const FormFieldsUser: React.FC<FormFieldsUserProps> = ({ form }) => {
         name="password"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Senha</FormLabel>
+            <FormLabelWithHelp label="Senha" helpText={help.password} />
             <FormControl>
               <Input type="password" placeholder="Senha" {...field} />
             </FormControl>
@@ -72,9 +76,7 @@ export const FormFieldsUser: React.FC<FormFieldsUserProps> = ({ form }) => {
               />
             </FormControl>
             <div className="space-y-1 leading-none">
-              <FormLabel>
-                Administrador
-              </FormLabel>
+              <FormLabelWithHelp label="Administrador" helpText={help.isAdmin} />
             </div>
           </FormItem>
         )}

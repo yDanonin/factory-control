@@ -10,7 +10,6 @@ import { useRouter } from "next/navigation";
 import DataList from "@/components/DataList";
 import Modal from "@/components/Modal/Modal";
 import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -66,29 +65,25 @@ export default function Page({ params }: { params: { id: string } }) {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
-                          <Dialog>
-                            <Modal
-                              typeModal="EDIT"
-                              typeRegister="ProductReturn"
-                              nameModal="pedido"
-                              rowData={productReturn}
-                              idRowData={productReturn.id}
-                            />
-                          </Dialog>
+                          <Modal
+                            typeModal="EDIT"
+                            typeRegister="ProductReturn"
+                            nameModal="pedido"
+                            rowData={productReturn}
+                            idRowData={productReturn.id}
+                          />
                         </DropdownMenuItem>
                         <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
-                          <Dialog>
-                            <Modal
-                              typeModal="DELETE"
-                              typeRegister="ProductReturn"
-                              nameModal="pedido"
-                              rowData={productReturn}
-                              idRowData={productReturn.id}
-                              onDelete={() => {
-                                router.push("/receive/product-returns");
-                              }}
-                            />
-                          </Dialog>
+                          <Modal
+                            typeModal="DELETE"
+                            typeRegister="ProductReturn"
+                            nameModal="pedido"
+                            rowData={productReturn}
+                            idRowData={productReturn.id}
+                            onDelete={() => {
+                              router.push("/receive/product-returns");
+                            }}
+                          />
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

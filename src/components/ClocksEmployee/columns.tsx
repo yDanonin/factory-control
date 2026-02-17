@@ -51,7 +51,8 @@ export const getColumns = (id: string | undefined): ColumnDef<EmployeeWorkHour>[
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const dateFormated = moment(row.getValue("primeiroPonto")).format("DD-MM-YYYY");
+      const dateDisplay = moment(row.getValue("primeiroPonto")).format("DD/MM/YYYY");
+      const dateForApi = moment(row.getValue("primeiroPonto")).format("YYYY-MM-DD");
       return (
         <div className="text-center">
           <Sheet>
@@ -65,17 +66,17 @@ export const getColumns = (id: string | undefined): ColumnDef<EmployeeWorkHour>[
                   </TooltipTrigger>
                 </SheetTrigger>
                 <TooltipContent>
-                  <p>Ver Histórico de descanso do dia</p>
+                  <p>Ver Histórico do dia</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
             <SheetContent className="max-w-[400px] sm:max-w-[540px]">
               <SheetHeader>
-                <SheetTitle>Histórico de descanso</SheetTitle>
+                <SheetTitle>Histórico do dia</SheetTitle>
               </SheetHeader>
-              <SheetDescription>{dateFormated}</SheetDescription>
+              <SheetDescription>{dateDisplay}</SheetDescription>
               <div>
-                <ClocksEmployeeByDay dateFormated={dateFormated} idEmployee={id} />
+                <ClocksEmployeeByDay dateForApi={dateForApi} idEmployee={id} />
               </div>
             </SheetContent>
           </Sheet>

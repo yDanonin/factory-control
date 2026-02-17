@@ -2,6 +2,7 @@ import { Employee } from "@/types/employee.types"
 
 export type Vacation = {
   id: number,
+  employee_id: number,
   employee: Employee,
   start_date: Date,
   end_date: Date,

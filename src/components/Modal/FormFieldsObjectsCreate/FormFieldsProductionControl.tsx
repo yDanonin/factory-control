@@ -5,10 +5,14 @@ import React from "react";
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 
 interface FormFieldsProductionControlProps {
   form: UseFormReturn;
 }
+
+const help = fieldHelpTexts.productionControl;
 
 export const FormFieldsProductionControl: React.FC<FormFieldsProductionControlProps> = ({ form }) => {
   return (
@@ -19,7 +23,7 @@ export const FormFieldsProductionControl: React.FC<FormFieldsProductionControlPr
         name="order_id"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="order_id">ID do Pedido</FormLabel>
+            <FormLabelWithHelp htmlFor="order_id" label="ID do Pedido" helpText={help.orderId} />
             <FormControl>
               <Input id="order_id" type="number" {...field} {...form.register("order_id", { valueAsNumber: true })} placeholder="Insira o ID do pedido" />
             </FormControl>
@@ -33,7 +37,7 @@ export const FormFieldsProductionControl: React.FC<FormFieldsProductionControlPr
         name="status"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="status">Status</FormLabel>
+            <FormLabelWithHelp htmlFor="status" label="Status" helpText={help.status} />
             <FormControl>
               <Input id="status" type="number" {...field} {...form.register("status", { valueAsNumber: true })} placeholder="Insira o status" />
             </FormControl>
@@ -47,7 +51,7 @@ export const FormFieldsProductionControl: React.FC<FormFieldsProductionControlPr
         name="material_disponibility"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="material_disponibility">Disponibilidade de Material</FormLabel>
+            <FormLabelWithHelp htmlFor="material_disponibility" label="Disponibilidade de Material" helpText={help.materialDisponibility} />
             <FormControl>
               <Input id="material_disponibility" type="number" {...field} {...form.register("material_disponibility", { valueAsNumber: true })} placeholder="Insira a disponibilidade de material" />
             </FormControl>

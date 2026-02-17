@@ -6,12 +6,16 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { UseFormReturn } from "react-hook-form";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 
 interface FormFieldsCustomerPackagingProps {
   form: UseFormReturn;
   packagingId?: number;
   customerId?: number;
 }
+
+const help = fieldHelpTexts.customerPackaging;
 
 export const FormFieldsCustomerPackaging: React.FC<FormFieldsCustomerPackagingProps> = ({ form, packagingId, customerId }) => {
   useEffect(() => {
@@ -31,7 +35,7 @@ export const FormFieldsCustomerPackaging: React.FC<FormFieldsCustomerPackagingPr
         name="customer_id"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="customer_id">ID do Cliente</FormLabel>
+            <FormLabelWithHelp htmlFor="customer_id" label="ID do Cliente" helpText={help.customerId} />
             <FormControl>
               <Input id="customer_id" type="number" {...field} {...form.register("customer_id", { valueAsNumber: true })} placeholder="Insira o ID do cliente" />
             </FormControl>
@@ -50,7 +54,7 @@ export const FormFieldsCustomerPackaging: React.FC<FormFieldsCustomerPackagingPr
             <FormControl>
               <Checkbox id="pontalti_brand" checked={!!field.value} onCheckedChange={(checked) => field.onChange(!!checked)} />
             </FormControl>
-            <FormLabel htmlFor="pontalti_brand" className="leading-none">Marca Pontalti?</FormLabel>
+            <FormLabelWithHelp htmlFor="pontalti_brand" label="Marca Pontalti?" helpText={help.pontaltiBrand} className="leading-none" />
             <FormMessage />
           </FormItem>
         )}

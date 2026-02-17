@@ -5,11 +5,15 @@ import React, { useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 
 interface FormFieldsDeliveryPackaging {
   form: UseFormReturn;
   deliveryId?: number;
 }
+
+const help = fieldHelpTexts.deliveryPackaging;
 
 export const FormFieldsDeliveryPackaging: React.FC<FormFieldsDeliveryPackaging> = ({ form, deliveryId }) => {
   // Preencher delivery_id automaticamente se fornecido
@@ -28,7 +32,7 @@ export const FormFieldsDeliveryPackaging: React.FC<FormFieldsDeliveryPackaging> 
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="packaging_id">ID da Embalagem</FormLabel>
+              <FormLabelWithHelp htmlFor="packaging_id" label="ID da Embalagem" helpText={help.packagingId} />
               <FormControl>
                 <Input
                   id="packaging_id"
@@ -52,7 +56,7 @@ export const FormFieldsDeliveryPackaging: React.FC<FormFieldsDeliveryPackaging> 
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="quantity">Quantidade</FormLabel>
+              <FormLabelWithHelp htmlFor="quantity" label="Quantidade" helpText={help.quantity} />
               <FormControl>
                 <Input
                   id="quantity"

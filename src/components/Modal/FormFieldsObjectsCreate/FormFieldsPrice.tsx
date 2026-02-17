@@ -10,10 +10,14 @@ import { Input } from "@/components/ui/input";
 // Keeping form prop untyped to be reusable across contexts
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Status } from "@/types/common.types";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 
 interface FormFieldsPriceProps {
   form: UseFormReturn<any>;
 }
+
+const help = fieldHelpTexts.price;
 
 export function FormFieldsPrice({ form }: FormFieldsPriceProps) {
   return (
@@ -23,7 +27,7 @@ export function FormFieldsPrice({ form }: FormFieldsPriceProps) {
         name="product_id"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>ID do Produto</FormLabel>
+            <FormLabelWithHelp label="ID do Produto" helpText={help.productId} />
             <FormControl>
               <Input type="number" {...field} onChange={e => field.onChange(Number(e.target.value))} />
             </FormControl>
@@ -37,7 +41,7 @@ export function FormFieldsPrice({ form }: FormFieldsPriceProps) {
         name="customer_id"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>ID do Cliente (opcional)</FormLabel>
+            <FormLabelWithHelp label="ID do Cliente" helpText={help.customerId} optional />
             <FormControl>
               <Input type="number" {...field} onChange={e => field.onChange(e.target.value ? Number(e.target.value) : undefined)} />
             </FormControl>
@@ -51,7 +55,7 @@ export function FormFieldsPrice({ form }: FormFieldsPriceProps) {
         name="production_cost"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Custo de Produção</FormLabel>
+            <FormLabelWithHelp label="Custo de Produção" helpText={help.productionCost} />
             <FormControl>
               <Input type="number" step="0.01" placeholder="0.00" {...field} onChange={e => field.onChange(Number(e.target.value))} />
             </FormControl>
@@ -65,7 +69,7 @@ export function FormFieldsPrice({ form }: FormFieldsPriceProps) {
         name="operational_margin"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Margem Operacional (%)</FormLabel>
+            <FormLabelWithHelp label="Margem Operacional (%)" helpText={help.operationalMargin} />
             <FormControl>
               <Input type="number" step="0.01" placeholder="0.00" {...field} onChange={e => field.onChange(Number(e.target.value))} />
             </FormControl>
@@ -79,7 +83,7 @@ export function FormFieldsPrice({ form }: FormFieldsPriceProps) {
         name="final_price"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Preço Final</FormLabel>
+            <FormLabelWithHelp label="Preço Final" helpText={help.finalPrice} />
             <FormControl>
               <Input type="number" step="0.01" placeholder="0.00" {...field} onChange={e => field.onChange(Number(e.target.value))} />
             </FormControl>
@@ -93,7 +97,7 @@ export function FormFieldsPrice({ form }: FormFieldsPriceProps) {
         name="second_line_price"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Preço Segunda Linha (opcional)</FormLabel>
+            <FormLabelWithHelp label="Preço Segunda Linha" helpText={help.secondLinePrice} optional />
             <FormControl>
               <Input type="number" step="0.01" placeholder="0.00" {...field} onChange={e => field.onChange(e.target.value ? Number(e.target.value) : undefined)} />
             </FormControl>
@@ -107,11 +111,11 @@ export function FormFieldsPrice({ form }: FormFieldsPriceProps) {
         name="frozen_until"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Congelado até (opcional)</FormLabel>
+            <FormLabelWithHelp label="Congelado até" helpText={help.frozenUntil} optional />
             <FormControl>
-              <Input 
-                type="date" 
-                value={field.value ? new Date(field.value).toISOString().split('T')[0] : ''} 
+              <Input
+                type="date"
+                value={field.value ? new Date(field.value).toISOString().split('T')[0] : ''}
                 onChange={(e) => field.onChange(e.target.value ? new Date(e.target.value) : undefined)}
               />
             </FormControl>
@@ -125,7 +129,7 @@ export function FormFieldsPrice({ form }: FormFieldsPriceProps) {
         name="status"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Status</FormLabel>
+            <FormLabelWithHelp label="Status" helpText={help.status} />
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger>

@@ -11,9 +11,11 @@ import { UseFormReturn } from "react-hook-form";
 import { Calendar } from "@/components/ui/calendar";
 import { Classification } from "@/types/employee.types";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { withMask } from "use-mask-input";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 
 interface FormFieldsEmployee {
   form: UseFormReturn;
@@ -31,6 +33,8 @@ function mapEnumToSelectItems<T extends string>(enumObj: EnumType<T>): JSX.Eleme
   ));
 }
 
+const help = fieldHelpTexts.employee;
+
 export const FormFieldsEmployee: React.FC<FormFieldsEmployee> = ({ form }) => {
   return (
     <>
@@ -40,7 +44,7 @@ export const FormFieldsEmployee: React.FC<FormFieldsEmployee> = ({ form }) => {
         name="name"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="nome">Nome</FormLabel>
+            <FormLabelWithHelp htmlFor="name" label="Nome" helpText={help.name} />
             <FormControl>
               <Input id="name" {...field} placeholder="Insira o nome" />
             </FormControl>
@@ -54,12 +58,7 @@ export const FormFieldsEmployee: React.FC<FormFieldsEmployee> = ({ form }) => {
         name="phone"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="telefone">
-              Número de Telefone
-              <span className="ml-1 text-sm font-normal text-muted-foreground">
-                (Opcional)
-              </span>
-            </FormLabel>
+            <FormLabelWithHelp htmlFor="phone" label="Número de Telefone" helpText={help.phone} optional />
             <FormControl>
               <Input id="phone" {...field} ref={withMask("(99) 9999-9999")} placeholder="ex. (99) 99999-9999" />
             </FormControl>
@@ -73,7 +72,7 @@ export const FormFieldsEmployee: React.FC<FormFieldsEmployee> = ({ form }) => {
         name="cel_number"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="numero_celular">Número de Celular</FormLabel>
+            <FormLabelWithHelp htmlFor="cel_number" label="Número de Celular" helpText={help.cel_number} />
             <FormControl>
               <Input id="cel_number" {...field} ref={withMask("(99) 99999-9999")} placeholder="ex. (99) 9999-9999" />
             </FormControl>
@@ -87,7 +86,7 @@ export const FormFieldsEmployee: React.FC<FormFieldsEmployee> = ({ form }) => {
         name="cpf"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="cpf">Cpf</FormLabel>
+            <FormLabelWithHelp htmlFor="cpf" label="CPF" helpText={help.cpf} />
             <FormControl>
               <Input id="cpf" {...field} ref={withMask("999.999.999-99")} placeholder="999.999.999-99" />
             </FormControl>
@@ -101,7 +100,7 @@ export const FormFieldsEmployee: React.FC<FormFieldsEmployee> = ({ form }) => {
         name="classification"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="classification">Classification</FormLabel>
+            <FormLabelWithHelp htmlFor="classification" label="Classificação" helpText={help.classification} />
             <Select onValueChange={field.onChange} value={field.value}>
               <FormControl>
                 <SelectTrigger>
@@ -121,11 +120,7 @@ export const FormFieldsEmployee: React.FC<FormFieldsEmployee> = ({ form }) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="salario">Salário
-                <span className="ml-1 text-sm font-normal text-muted-foreground">
-                  (Opcional)
-                </span>
-              </FormLabel>
+              <FormLabelWithHelp htmlFor="salary" label="Salário" helpText={help.salary} optional />
               <FormControl>
                 <div className="relative ml-auto flex-1">
                   <span className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground">R$</span>
@@ -143,7 +138,7 @@ export const FormFieldsEmployee: React.FC<FormFieldsEmployee> = ({ form }) => {
         name="admission"
         render={({ field }) => (
           <FormItem className="flex flex-col justify-between">
-            <FormLabel htmlFor="admission">Data de Admissão</FormLabel>
+            <FormLabelWithHelp htmlFor="admission" label="Data de Admissão" helpText={help.admission} />
             <Popover>
               <PopoverTrigger asChild>
                 <FormControl>
@@ -170,12 +165,7 @@ export const FormFieldsEmployee: React.FC<FormFieldsEmployee> = ({ form }) => {
         name="dismissal_date"
         render={({ field }) => (
           <FormItem className="flex flex-col justify-between">
-            <FormLabel htmlFor="dismissal_date">
-              Data de Demissão
-                <span className="ml-1 text-sm font-normal text-muted-foreground">
-                  (Opcional)
-                </span>
-              </FormLabel>
+            <FormLabelWithHelp htmlFor="dismissal_date" label="Data de Demissão" helpText={help.dismissal_date} optional />
             <Popover>
               <PopoverTrigger asChild>
                 <FormControl>

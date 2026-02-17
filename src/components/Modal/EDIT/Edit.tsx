@@ -5,7 +5,7 @@ import React, { memo, useState, useEffect } from "react";
 import { z } from "zod";
 import { Loader2 } from "lucide-react";
 import axios, { AxiosError } from "axios";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { useRouter } from 'next/navigation';
 import { Form } from "@/components/ui/form";
 import { Status } from "@/types/common.types";
@@ -56,7 +56,8 @@ import {
   formProductionControlSchema,
   formSalesForecastSchema,
   formLabelPrintSchema,
-  formExpenseSchema
+  formExpenseSchema,
+  formLocationSchema
 } from "@/schemas/FormSchemas";
 import {
   Dialog,
@@ -105,6 +106,7 @@ import { FormFieldsProductionControl } from "../FormFieldsObjectsEdit/FormFields
 import { FormFieldsSalesForecast } from "../FormFieldsObjectsEdit/FormFieldsSalesForecast";
 import { FormFieldsLabelPrint } from "../FormFieldsObjectsEdit/FormFieldsLabelPrint";
 import { FormFieldsExpense } from "../FormFieldsObjectsEdit/FormFieldsExpense";
+import { FormFieldsLocation } from "../FormFieldsObjectsEdit/FormFieldsLocation";
 import { invoiceDefaultValues, packagingDefaultValues, deliveryDefaultValues, deliveryPackagingDefaultValues } from "@/schemas/DefaultValuesForm";
 import { SalesForecastStatusLabel } from "@/types/sales-forecast.types";
 
@@ -133,7 +135,7 @@ interface ModalEditProps {
   idRowData?: number | string;
 }
 
-type TypeRegister = "Customer" | "Employee" | "Machine" | "Procedure" | "Product" | "Vendor" | "Vacation" | "TimeConfiguration" | "Order" | "MaterialOrder" | "ProductReturn" | "Payment" | "User" | "Price" | "MessageConfig" | "Invoice" | "Packaging" | "Delivery" | "DeliveryPackaging" | "CustomerPackaging" | "Stock" | "ProductionControl" | "SalesForecast" | "LabelPrint" | "Expense";
+type TypeRegister = "Customer" | "Employee" | "Machine" | "Procedure" | "Product" | "Vendor" | "Vacation" | "TimeConfiguration" | "Order" | "MaterialOrder" | "ProductReturn" | "Payment" | "User" | "Price" | "MessageConfig" | "Invoice" | "Packaging" | "Delivery" | "DeliveryPackaging" | "CustomerPackaging" | "Stock" | "ProductionControl" | "SalesForecast" | "LabelPrint" | "Expense" | "Location";
 
 export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditProps) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -253,6 +255,10 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
       typeSchema = formExpenseSchema;
       apiCallByType = "expenses";
       break;
+    case "Location":
+      typeSchema = formLocationSchema;
+      apiCallByType = "locations";
+      break;
     default:
       throw new Error(`Invalid typeRegister: ${typeRegister}`);
   }
@@ -371,7 +377,7 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
-              Name
+              Nome
             </Label>
             <Input
               id="name"
@@ -392,23 +398,31 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="password" className="text-right">
-              Password
+              Senha (deixe vazio para manter)
             </Label>
             <Input
               id="password"
               type="password"
               className="col-span-3"
+              placeholder="Nova senha (opcional)"
               {...form.register("password")}
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="isAdmin" className="text-right">
-              Admin
+              Administrador
             </Label>
             <div className="col-span-3">
-              <Checkbox
-                id="isAdmin"
-                {...form.register("isAdmin")}
+              <Controller
+                name="isAdmin"
+                control={form.control}
+                render={({ field }) => (
+                  <Checkbox
+                    id="isAdmin"
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                )}
               />
             </div>
           </div>
@@ -451,6 +465,9 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
     case "Expense":
       formFields = <FormFieldsExpense form={form} />;
       break;
+    case "Location":
+      formFields = <FormFieldsLocation form={form} />;
+      break;
     default:
       formFields = <div>erro</div>;
       break;
@@ -464,12 +481,13 @@ export const Edit = ({ nameModal, rowData, idRowData, typeRegister }: ModalEditP
       await axios.patch(`/api/${apiCallByType}/${idRowData}`, formattedData);
       setIsLoading(false);
       form.reset();
-      router.refresh();
+      setOpen(false);
       toast({
         title: "Registro",
         description: `${nameModal} foi editado com sucesso.`
       });
-      setOpen(false);
+      // Reload page to refresh data since we use client-side fetching
+      window.location.reload();
     } catch (err) {
       const error = err as AxiosError;
       console.error(error);

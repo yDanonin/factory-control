@@ -17,6 +17,8 @@ import { Status } from "@/types/common.types";
 import { OrderItem } from "@/types/order-item.types";
 import axios from "axios";
 import Spinner from "@/components/Spinner";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 
 interface FormFieldsOrder {
   form: UseFormReturn;
@@ -33,6 +35,8 @@ function mapEnumToSelectItems<T extends string>(enumObj: EnumType<T>): JSX.Eleme
     </SelectItem>
   ));
 }
+
+const help = fieldHelpTexts.order;
 
 export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -114,7 +118,7 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
             name="final_price"
             render={({ field }) => (
             <FormItem>
-                <FormLabel htmlFor="final_price">Preço Final</FormLabel>
+                <FormLabelWithHelp htmlFor="final_price" label="Preço Final" helpText={help.final_price} />
                 <FormControl>
                     <div className="relative ml-auto flex-1">
                     <span className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground">R$</span>
@@ -136,7 +140,7 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
             name="date"
             render={({ field }) => (
             <FormItem className="flex flex-col justify-between">
-                <FormLabel htmlFor="date">Data do Pedido</FormLabel>
+                <FormLabelWithHelp htmlFor="date" label="Data do Pedido" helpText={help.date} />
                 <Popover>
                 <PopoverTrigger asChild>
                     <FormControl>
@@ -165,7 +169,7 @@ export const FormFieldsOrder: React.FC<FormFieldsOrder> = ({ form }) => {
             <FormItem>
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <FormLabel>Produtos</FormLabel>
+                  <FormLabelWithHelp htmlFor="products" label="Produtos" helpText={help.products} />
                   <Button type="button" onClick={addProduct}>
                     Adicionar Produto
                   </Button>

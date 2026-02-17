@@ -98,9 +98,7 @@ export const formMachineSchema = z.object({
     message: "Informe o modelo."
   }),
   machine_number: z.number({ coerce: true, invalid_type_error: "Informe o número da máquina." }),
-  location: z.string().min(1, {
-    message: "Informe a localização."
-  }),
+  location_id: z.number({ coerce: true }).positive({ message: "Selecione uma localização." }).optional(),
   status: z.nativeEnum(Status),
   location_status: z.nativeEnum(Status)
 });
@@ -203,6 +201,20 @@ export const formUserSchema = z.object({
   email: z.string().email({
     message: "Informe um email válido."
   }),
+  password: z.string().optional().refine(
+    (val) => !val || val.length >= 6,
+    { message: "A senha deve ter no mínimo 6 caracteres." }
+  ),
+  isAdmin: z.boolean().default(false)
+});
+
+export const formUserCreateSchema = z.object({
+  name: z.string().min(2, {
+    message: "Informe o nome."
+  }),
+  email: z.string().email({
+    message: "Informe um email válido."
+  }),
   password: z.string().min(6, {
     message: "A senha deve ter no mínimo 6 caracteres."
   }),
@@ -221,9 +233,9 @@ export const formVacationSchema = z.object({
 });
 
 export const formTimeConfigurationSchema = z.object({
-  work_start: z.string(),
-  work_end: z.string(),
-  late_limit_in_minutes: z.number({ coerce: true })
+  work_start: z.string().regex(/^\d{2}:\d{2}(:\d{2})?$/, "Formato inválido. Use HH:mm"),
+  work_end: z.string().regex(/^\d{2}:\d{2}(:\d{2})?$/, "Formato inválido. Use HH:mm"),
+  late_limit_in_minutes: z.number({ coerce: true }).min(0, "Deve ser um valor positivo")
 });
 
 export const formOrderSchema = z.object({
@@ -386,7 +398,7 @@ export const formCustomerPackagingSchema = z.object({
 
 export const formStockSchema = z.object({
   amount: z.number({ coerce: true }).min(0, { message: "Informe a quantidade (>= 0)." }),
-  location: z.string().min(1, { message: "Informe o local." }),
+  location_id: z.number({ coerce: true }).positive({ message: "Selecione uma localização." }).optional(),
   product_id: z.number({ coerce: true }).positive({ message: "Informe o ID do produto." })
 });
 
@@ -426,6 +438,32 @@ export const formExpenseSchema = z.object({
   expense_actor_id: z.number({ coerce: true }).positive({ message: "Informe o ID do ator." }),
   created_by: z.string().optional(),
   updated_by: z.string().optional(),
+});
+
+export const formLocationSchema = z.object({
+  name: z.string().min(2, { message: "Informe o nome da localização." }),
+  code: z.string().min(1, { message: "Informe o código." }),
+  status: z.nativeEnum(Status),
+  position_x: z.number({ coerce: true }).default(0),
+  position_y: z.number({ coerce: true }).default(0),
+  width: z.number({ coerce: true }).min(50, { message: "Largura mínima 50px" }).default(100),
+  height: z.number({ coerce: true }).min(50, { message: "Altura mínima 50px" }).default(100),
+  color: z.string().default("#3b82f6")
+});
+
+// Time Adjustment Request schemas
+export const formTimeAdjustmentRequestSchema = z.object({
+  work_hour_id: z.number({ required_error: "Selecione um registro de ponto." }),
+  proposed_clock_in: z.string().optional(),
+  proposed_clock_out: z.string().optional(),
+  reason: z.string().optional()
+}).refine(
+  (data) => data.proposed_clock_in || data.proposed_clock_out,
+  { message: "Informe pelo menos uma alteração (entrada ou saída)." }
+);
+
+export const formTimeAdjustmentReviewSchema = z.object({
+  admin_comment: z.string().optional()
 });
 
 function validaCep(cep: string) {

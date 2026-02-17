@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 import { Row } from "@tanstack/react-table";
 import Modal from "@/components/Modal/Modal";
 import { MoreHorizontal } from "lucide-react";
-import { Dialog } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { MaterialOrder } from "@/types/material-order.types";
 import DynamicTable from "@/components/DynamicTable";
@@ -127,9 +126,7 @@ export default function Page() {
                 onPointerLeave={(event) => event.preventDefault()}
                 onPointerMove={(event) => event.preventDefault()}
               >
-                <Dialog>
-                  <Modal typeModal="EDIT" typeRegister="MaterialOrder" nameModal="material produtivo" rowData={row.original} />
-                </Dialog>
+                <Modal typeModal="EDIT" typeRegister="MaterialOrder" nameModal="material produtivo" rowData={row.original} idRowData={row.original.id} />
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="cursor-pointer"
@@ -137,9 +134,7 @@ export default function Page() {
                 onPointerLeave={(event) => event.preventDefault()}
                 onPointerMove={(event) => event.preventDefault()}
               >
-                <Dialog>
-                  <Modal typeModal="DELETE" typeRegister="MaterialOrder" nameModal="material produtivo" idRowData={row.original.id} />
-                </Dialog>
+                <Modal typeModal="DELETE" typeRegister="MaterialOrder" nameModal="material produtivo" idRowData={row.original.id} />
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

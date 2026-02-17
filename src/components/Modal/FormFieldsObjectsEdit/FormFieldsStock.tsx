@@ -1,16 +1,37 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 import { Input } from "@/components/ui/input";
+import { Location } from "@/types/location.types";
 import { UseFormReturn } from "react-hook-form";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 
 interface FormFieldsStockProps {
   form: UseFormReturn;
 }
 
+const help = fieldHelpTexts.stock;
+
 export const FormFieldsStock: React.FC<FormFieldsStockProps> = ({ form }) => {
+  const [locations, setLocations] = useState<Location[]>([]);
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const resp = await axios.get("/api/locations");
+        setLocations(resp.data.data || []);
+      } catch (err) {
+        console.error("Error fetching locations:", err);
+      }
+    };
+    fetchLocations();
+  }, []);
+
   return (
     <>
       <input type="hidden" {...form.register("product_id", { valueAsNumber: true })} />
@@ -20,7 +41,7 @@ export const FormFieldsStock: React.FC<FormFieldsStockProps> = ({ form }) => {
         name="amount"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="amount">Quantidade</FormLabel>
+            <FormLabelWithHelp htmlFor="amount" label="Quantidade" helpText={help.amount} />
             <FormControl>
               <Input id="amount" type="number" {...field} {...form.register("amount", { valueAsNumber: true })} placeholder="Insira a quantidade" />
             </FormControl>
@@ -29,15 +50,29 @@ export const FormFieldsStock: React.FC<FormFieldsStockProps> = ({ form }) => {
         )}
       />
       <FormField
-        key="location"
+        key="location_id"
         control={form.control}
-        name="location"
+        name="location_id"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="location">Local</FormLabel>
-            <FormControl>
-              <Input id="location" {...field} placeholder="Insira o local" />
-            </FormControl>
+            <FormLabelWithHelp htmlFor="location_id" label="Localização" helpText={help.location_id} />
+            <Select
+              onValueChange={(value) => field.onChange(value ? Number(value) : undefined)}
+              value={field.value?.toString() ?? ""}
+            >
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione a localização" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {locations.map((location) => (
+                  <SelectItem key={location.id} value={location.id.toString()}>
+                    {location.code} - {location.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <FormMessage />
           </FormItem>
         )}
@@ -45,5 +80,3 @@ export const FormFieldsStock: React.FC<FormFieldsStockProps> = ({ form }) => {
     </>
   );
 };
-
-

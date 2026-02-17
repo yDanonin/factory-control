@@ -6,8 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Status } from "@/types/common.types";
 import { UseFormReturn } from "react-hook-form";
 import { Textarea } from "@/components/ui/textarea";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 
 interface FormFieldsProduct {
   form: UseFormReturn;
@@ -25,6 +27,8 @@ function mapEnumToSelectItems<T extends string>(enumObj: EnumType<T>): JSX.Eleme
   ));
 }
 
+const help = fieldHelpTexts.product;
+
 export const FormFieldsProduct: React.FC<FormFieldsProduct> = ({ form }) => {
   return (
     <>
@@ -34,7 +38,7 @@ export const FormFieldsProduct: React.FC<FormFieldsProduct> = ({ form }) => {
         name="name"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="nome">Nome</FormLabel>
+            <FormLabelWithHelp htmlFor="name" label="Nome" helpText={help.name} />
             <FormControl>
               <Input id="name" {...field} placeholder="Insira o nome" />
             </FormControl>
@@ -48,7 +52,7 @@ export const FormFieldsProduct: React.FC<FormFieldsProduct> = ({ form }) => {
         name="model"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="nome">Modelo</FormLabel>
+            <FormLabelWithHelp htmlFor="model" label="Modelo" helpText={help.model} />
             <FormControl>
               <Input id="model" {...field} placeholder="Insira o modelo" />
             </FormControl>
@@ -62,7 +66,7 @@ export const FormFieldsProduct: React.FC<FormFieldsProduct> = ({ form }) => {
         name="size"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="size">Tamanho</FormLabel>
+            <FormLabelWithHelp htmlFor="size" label="Tamanho" helpText={help.size} />
             <FormControl>
               <Input id="name" {...field} placeholder="Insira o tamanho" />
             </FormControl>
@@ -77,7 +81,7 @@ export const FormFieldsProduct: React.FC<FormFieldsProduct> = ({ form }) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="sales">Número de vendas</FormLabel>
+              <FormLabelWithHelp htmlFor="sales" label="Número de vendas" helpText={help.sales} />
               <FormControl>
                 <Input
                   id="sales"
@@ -101,7 +105,7 @@ export const FormFieldsProduct: React.FC<FormFieldsProduct> = ({ form }) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="volume_sales">Número do volume de vendas</FormLabel>
+              <FormLabelWithHelp htmlFor="volume_sales" label="Número do volume de vendas" helpText={help.volume_sales} />
               <FormControl>
                 <Input
                   id="volume_sales"
@@ -125,7 +129,7 @@ export const FormFieldsProduct: React.FC<FormFieldsProduct> = ({ form }) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="invoicing">Faturamento</FormLabel>
+              <FormLabelWithHelp htmlFor="invoicing" label="Faturamento" helpText={help.invoicing} />
               <FormControl>
                 <div className="relative ml-auto flex-1">
                   <span className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground">R$</span>
@@ -149,7 +153,7 @@ export const FormFieldsProduct: React.FC<FormFieldsProduct> = ({ form }) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="moldes">Quantidade de moldes</FormLabel>
+              <FormLabelWithHelp htmlFor="moldes" label="Quantidade de moldes" helpText={help.moldes} />
               <FormControl>
                 <Input
                   id="moldes"
@@ -173,7 +177,7 @@ export const FormFieldsProduct: React.FC<FormFieldsProduct> = ({ form }) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="equivalency">Equivalência</FormLabel>
+              <FormLabelWithHelp htmlFor="equivalency" label="Equivalência" helpText={help.equivalency} />
               <FormControl>
                 <Input
                   id="equivalency"
@@ -196,7 +200,7 @@ export const FormFieldsProduct: React.FC<FormFieldsProduct> = ({ form }) => {
         name="status"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="status">Status</FormLabel>
+            <FormLabelWithHelp htmlFor="status" label="Status" helpText={help.status} />
             <Select onValueChange={field.onChange} value={field.value}>
               <FormControl>
                 <SelectTrigger>
@@ -215,7 +219,7 @@ export const FormFieldsProduct: React.FC<FormFieldsProduct> = ({ form }) => {
         name="character"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="character">Característica</FormLabel>
+            <FormLabelWithHelp htmlFor="character" label="Característica" helpText={help.character} />
             <FormControl>
               <Textarea id="name" {...field} placeholder="Insira a característica" />
             </FormControl>

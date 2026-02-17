@@ -4,11 +4,15 @@ import React from "react";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { UseFormReturn } from "react-hook-form";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 
 interface FormFieldsCustomerPackagingProps {
   form: UseFormReturn;
 }
+
+const help = fieldHelpTexts.customerPackaging;
 
 export const FormFieldsCustomerPackaging: React.FC<FormFieldsCustomerPackagingProps> = ({ form }) => {
   return (
@@ -24,7 +28,7 @@ export const FormFieldsCustomerPackaging: React.FC<FormFieldsCustomerPackagingPr
             <FormControl>
               <Checkbox id="pontalti_brand" checked={!!field.value} onCheckedChange={(checked) => field.onChange(!!checked)} />
             </FormControl>
-            <FormLabel htmlFor="pontalti_brand" className="leading-none">Marca Pontalti?</FormLabel>
+            <FormLabelWithHelp htmlFor="pontalti_brand" label="Marca Pontalti?" helpText={help.pontalti_brand} />
             <FormMessage />
           </FormItem>
         )}
@@ -32,5 +36,3 @@ export const FormFieldsCustomerPackaging: React.FC<FormFieldsCustomerPackagingPr
     </>
   );
 };
-
-

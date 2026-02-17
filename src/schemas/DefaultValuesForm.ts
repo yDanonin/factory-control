@@ -40,7 +40,7 @@ export const customerDefaultValues = {
 export const machineDefaultValues = {
   model: "",
   machine_number: "",
-  location: "",
+  location_id: undefined,
   status: Status.operacional,
   location_status: Status.operacional
 };
@@ -192,7 +192,7 @@ export const customerPackagingDefaultValues = {
 
 export const stockDefaultValues = {
   amount: 0,
-  location: "",
+  location_id: undefined,
   product_id: 0
 };
 
@@ -232,4 +232,26 @@ export const expenseDefaultValues = {
   expense_actor_id: 0,
   created_by: undefined,
   updated_by: undefined,
+};
+
+export const locationDefaultValues = {
+  name: "",
+  code: "",
+  status: Status.operacional,
+  position_x: 0,
+  position_y: 0,
+  width: 150,
+  height: 120,
+  color: "#3b82f6"
+};
+
+export const timeAdjustmentRequestDefaultValues = {
+  work_hour_id: 0,
+  proposed_clock_in: "",
+  proposed_clock_out: "",
+  reason: ""
+};
+
+export const timeAdjustmentReviewDefaultValues = {
+  admin_comment: ""
 };

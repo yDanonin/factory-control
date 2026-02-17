@@ -76,9 +76,25 @@ const handler = async (req: NextRequest) => {
           statusText: error.response?.statusText
         });
       }
+    case "PUT":
+      try {
+        const bodyNotParsed = await req.json();
+        const response = await axios.put(url, bodyNotParsed, { headers: headers });
+        return NextResponse.json(response.data, {
+          status: response.status || 200,
+          statusText: response.statusText,
+          headers: headers
+        });
+      } catch (err) {
+        const error = err as AxiosError;
+        return NextResponse.json(error.response?.data || "", {
+          status: error.response?.status,
+          statusText: error.response?.statusText
+        });
+      }
   }
 };
 
 export const dynamic = "force-dynamic";
 
-export { handler as GET, handler as POST, handler as PATCH, handler as DELETE };
+export { handler as GET, handler as POST, handler as PATCH, handler as DELETE, handler as PUT };

@@ -11,10 +11,14 @@ import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 
 interface FormFieldsVacation {
   form: UseFormReturn;
 }
+
+const help = fieldHelpTexts.vacation;
 
 export const FormFieldsVacation: React.FC<FormFieldsVacation> = ({ form }) => {
   return (
@@ -26,7 +30,7 @@ export const FormFieldsVacation: React.FC<FormFieldsVacation> = ({ form }) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="employee_id">Id do funcionário</FormLabel>
+              <FormLabelWithHelp htmlFor="employee_id" label="Id do funcionário" helpText={help.employeeId} />
               <FormControl>
                 <div className="relative ml-auto flex-1">
                   <span className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground"></span>
@@ -51,7 +55,7 @@ export const FormFieldsVacation: React.FC<FormFieldsVacation> = ({ form }) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="sold_days">Quantidade de dias vendidos</FormLabel>
+              <FormLabelWithHelp htmlFor="sold_days" label="Quantidade de dias vendidos" helpText={help.soldDays} />
               <FormControl>
                 <div className="relative ml-auto flex-1">
                   <span className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground"></span>
@@ -75,7 +79,7 @@ export const FormFieldsVacation: React.FC<FormFieldsVacation> = ({ form }) => {
         name="start_date"
         render={({ field }) => (
           <FormItem className="flex flex-col justify-between">
-            <FormLabel htmlFor="start_date">Data de inicio</FormLabel>
+            <FormLabelWithHelp htmlFor="start_date" label="Data de inicio" helpText={help.startDate} />
             <Popover>
               <PopoverTrigger asChild>
                 <FormControl>
@@ -103,7 +107,7 @@ export const FormFieldsVacation: React.FC<FormFieldsVacation> = ({ form }) => {
         name="end_date"
         render={({ field }) => (
           <FormItem className="flex flex-col justify-between">
-            <FormLabel htmlFor="end_date">Data final</FormLabel>
+            <FormLabelWithHelp htmlFor="end_date" label="Data final" helpText={help.endDate} />
             <Popover>
               <PopoverTrigger asChild>
                 <FormControl>

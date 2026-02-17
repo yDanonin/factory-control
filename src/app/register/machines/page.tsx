@@ -10,7 +10,6 @@ import { Row } from "@tanstack/react-table";
 import Modal from "@/components/Modal/Modal";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
 import { Machine } from "@/types/machine.types";
 import DynamicTable from "@/components/DynamicTable";
 import { DataRow, TableColumn } from "@/models/TableColumn";
@@ -65,11 +64,35 @@ export default function Page() {
       header: "Localização",
       accessorKey: "location",
       sortable: true,
+      cell: ({ row }: { row: Row<DataRow> }) => {
+        const location = row.original.location as { code?: string; name?: string } | null;
+        return location ? `${location.code} - ${location.name}` : "-";
+      }
     },
     {
       header: "Status da localização",
       accessorKey: "location_status",
       sortable: true,
+      cell: ({ row }: { row: Row<DataRow> }) => {
+        const machine = row.original as Machine;
+        // Se tiver location com status, usa o status da location
+        if (machine.location?.status) {
+          const locStatus = machine.location.status;
+          if (typeof locStatus === "string") return locStatus;
+          if (locStatus === 0) return "Suspenso";
+          if (locStatus === 1) return "Operacional";
+          return String(locStatus);
+        }
+        // Fallback para location_status
+        const status = machine.location_status;
+        if (status === "Operacional" || status === "Suspenso") {
+          return status;
+        }
+        // Converte número para texto (enum: 0=Suspenso, 1=Operacional)
+        if (status === 0 || status === "0") return "Suspenso";
+        if (status === 1 || status === "1") return "Operacional";
+        return status !== undefined && status !== null ? String(status) : "-";
+      }
     },
     {
       id: "actions",
@@ -100,15 +123,13 @@ export default function Page() {
                 onPointerLeave={(event) => event.preventDefault()}
                 onPointerMove={(event) => event.preventDefault()}
               >
-                <Dialog>
-                  <Modal
-                    typeModal="EDIT"
-                    typeRegister="Machine"
-                    nameModal="máquina"
-                    rowData={row.original}
-                    idRowData={row.original.id}
-                  />
-                </Dialog>
+                <Modal
+                  typeModal="EDIT"
+                  typeRegister="Machine"
+                  nameModal="máquina"
+                  rowData={row.original}
+                  idRowData={row.original.id}
+                />
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="cursor-pointer"
@@ -116,15 +137,13 @@ export default function Page() {
                 onPointerLeave={(event) => event.preventDefault()}
                 onPointerMove={(event) => event.preventDefault()}
               >
-                <Dialog>
-                  <Modal
-                    typeModal="DELETE"
-                    typeRegister="Machine"
-                    nameModal="máquina"
-                    rowData={row.original}
-                    idRowData={row.original.id}
-                  />
-                </Dialog>
+                <Modal
+                  typeModal="DELETE"
+                  typeRegister="Machine"
+                  nameModal="máquina"
+                  rowData={row.original}
+                  idRowData={row.original.id}
+                />
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

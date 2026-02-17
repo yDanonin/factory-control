@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 import DataList from "@/components/DataList";
 import Modal from "@/components/Modal/Modal";
 import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -65,29 +64,25 @@ export default function Page({ params }: { params: { id: string } }) {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
-                          <Dialog>
-                            <Modal
-                              typeModal="EDIT"
-                              typeRegister="Payment"
-                              nameModal="pedido"
-                              rowData={payment}
-                              idRowData={payment.id}
-                            />
-                          </Dialog>
+                          <Modal
+                            typeModal="EDIT"
+                            typeRegister="Payment"
+                            nameModal="pedido"
+                            rowData={payment}
+                            idRowData={payment.id}
+                          />
                         </DropdownMenuItem>
                         <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
-                          <Dialog>
-                            <Modal
-                              typeModal="DELETE"
-                              typeRegister="Payment"
-                              nameModal="pedido"
-                              rowData={payment}
-                              idRowData={payment.id}
-                              onDelete={() => {
-                                router.push("/receive/payments");
-                              }}
-                            />
-                          </Dialog>
+                          <Modal
+                            typeModal="DELETE"
+                            typeRegister="Payment"
+                            nameModal="pedido"
+                            rowData={payment}
+                            idRowData={payment.id}
+                            onDelete={() => {
+                              router.push("/receive/payments");
+                            }}
+                          />
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

@@ -40,7 +40,7 @@ interface ModalDeleteProps {
   onDelete?: () => void;
 }
 
-type TypeRegister = "Customer" | "Employee" | "Machine" | "Procedure" | "Product" | "Vendor" | "Vacation" | "TimeConfiguration" | "Order" | "MaterialOrder" | "ProductReturn" | "Payment" | "User" | "Price" | "MessageConfig" | "Invoice" | "Packaging" | "Delivery" | "DeliveryPackaging" | "CustomerPackaging" | "Stock" | "ProductionControl" | "SalesForecast" | "LabelPrint" | "Expense";
+type TypeRegister = "Customer" | "Employee" | "Machine" | "Procedure" | "Product" | "Vendor" | "Vacation" | "TimeConfiguration" | "Order" | "MaterialOrder" | "ProductReturn" | "Payment" | "User" | "Price" | "MessageConfig" | "Invoice" | "Packaging" | "Delivery" | "DeliveryPackaging" | "CustomerPackaging" | "Stock" | "ProductionControl" | "SalesForecast" | "LabelPrint" | "Expense" | "Location";
 
 export const Delete = ({ nameModal, typeRegister, idRowData, onDelete }: ModalDeleteProps) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -130,6 +130,9 @@ export const Delete = ({ nameModal, typeRegister, idRowData, onDelete }: ModalDe
     case "Expense":
       apiCallByType = "expenses";
       break;
+    case "Location":
+      apiCallByType = "locations";
+      break;
     default:
       throw new Error(`Invalid typeRegister: ${typeRegister}`);
   }
@@ -139,14 +142,16 @@ export const Delete = ({ nameModal, typeRegister, idRowData, onDelete }: ModalDe
     try {
       await axios.delete(`/api/${apiCallByType}/${idRowData}`);
       setIsLoading(false);
-      router.refresh();
+      setOpen(false);
       toast({
         title: "Excluir",
         description: `${nameModal} foi excluído com sucesso.`
       });
-      setOpen(false);
       if (onDelete) {
         onDelete();
+      } else {
+        // Reload page to refresh data since we use client-side fetching
+        window.location.reload();
       }
     } catch (err) {
       const error = err as AxiosError;

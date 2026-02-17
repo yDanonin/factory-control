@@ -12,7 +12,6 @@ import DataList from "@/components/DataList";
 import { MoreVertical } from "lucide-react";
 import Modal from "@/components/Modal/Modal";
 import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
 import { Employee } from "@/types/employee.types";
 import { formatDate } from "@/services/formatDate";
 import { Separator } from "@/components/ui/separator";
@@ -28,7 +27,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import DynamicTable from "@/components/DynamicTable";
 import { MoreHorizontal } from "lucide-react";
-import { AlertDialog } from "@/components/ui/alert-dialog";
 import { DataRow, TableColumn } from "@/models/TableColumn";
 import { Row } from "@tanstack/react-table";
 import { Schedule } from "@/types/schedule.types";
@@ -49,7 +47,6 @@ export default function Page({ params }: { params: { id: string } }) {
     const fetchEmployeeSchedules = async () => {
       const response = await fetch(`/api/employees/schedules/?employee_id=${params.id}`);
       const resp = await response.json();
-      console.log("------------------------------ AQUI ------------------------------", resp)
       setData(resp);
     }
 
@@ -106,15 +103,13 @@ export default function Page({ params }: { params: { id: string } }) {
               <DropdownMenuLabel>Ações</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
-                <AlertDialog>
-                  <Modal
-                    typeModal="EDIT"
-                    typeRegister="TimeConfiguration"
-                    nameModal="Tempo"
-                    rowData={row.original}
-                    idRowData={row.original.id}
-                  />
-                </AlertDialog>
+                <Modal
+                  typeModal="EDIT"
+                  typeRegister="TimeConfiguration"
+                  nameModal="Tempo"
+                  rowData={row.original}
+                  idRowData={row.original.id}
+                />
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -159,15 +154,13 @@ export default function Page({ params }: { params: { id: string } }) {
                             onPointerLeave={(event) => event.preventDefault()}
                             onPointerMove={(event) => event.preventDefault()}
                           >
-                            <Dialog>
-                              <Modal
-                                typeModal="EDIT"
-                                typeRegister="Employee"
-                                nameModal="empregado"
-                                rowData={employee}
-                                idRowData={employee.id}
-                              />
-                            </Dialog>
+                            <Modal
+                              typeModal="EDIT"
+                              typeRegister="Employee"
+                              nameModal="empregado"
+                              rowData={employee}
+                              idRowData={employee.id}
+                            />
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             className="cursor-pointer"
@@ -175,18 +168,16 @@ export default function Page({ params }: { params: { id: string } }) {
                             onPointerLeave={(event) => event.preventDefault()}
                             onPointerMove={(event) => event.preventDefault()}
                           >
-                            <Dialog>
-                              <Modal
-                                typeModal="DELETE"
-                                typeRegister="Employee"
-                                nameModal="empregado"
-                                rowData={employee}
-                                idRowData={employee.id}
-                                onDelete={() => {
-                                  router.push("/register/employees");
-                                }}
-                              />
-                            </Dialog>
+                            <Modal
+                              typeModal="DELETE"
+                              typeRegister="Employee"
+                              nameModal="empregado"
+                              rowData={employee}
+                              idRowData={employee.id}
+                              onDelete={() => {
+                                router.push("/register/employees");
+                              }}
+                            />
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -267,7 +258,7 @@ export default function Page({ params }: { params: { id: string } }) {
             )}
             <div className="w-1/2">
               <div className="text-muted-foreground text-center font-semibold mb-2">Histórico de Horas Trabalhadas</div>
-              <ClocksEmployee data={workHours} id={employee?.id.toString()}/>
+              <ClocksEmployee data={workHours} id={params.id}/>
             </div>
           </div>
 

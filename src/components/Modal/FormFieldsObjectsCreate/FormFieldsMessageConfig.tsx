@@ -8,11 +8,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 // Intentionally left generic to accept any form
 
 interface FormFieldsMessageConfigProps {
   form: UseFormReturn<any>;
 }
+
+const help = fieldHelpTexts.messageConfig;
 
 export function FormFieldsMessageConfig({ form }: FormFieldsMessageConfigProps) {
   return (
@@ -22,7 +26,7 @@ export function FormFieldsMessageConfig({ form }: FormFieldsMessageConfigProps) 
         name="customer_id"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>ID do Cliente</FormLabel>
+            <FormLabelWithHelp label="ID do Cliente" helpText={help.customerId} />
             <FormControl>
               <Input type="number" {...field} onChange={e => field.onChange(Number(e.target.value))} />
             </FormControl>
@@ -42,7 +46,7 @@ export function FormFieldsMessageConfig({ form }: FormFieldsMessageConfigProps) 
                 onCheckedChange={field.onChange}
               />
             </FormControl>
-            <FormLabel>Permitir WhatsApp</FormLabel>
+            <FormLabelWithHelp label="Permitir WhatsApp" helpText={help.canWhatsapp} />
             <FormMessage />
           </FormItem>
         )}
@@ -59,7 +63,7 @@ export function FormFieldsMessageConfig({ form }: FormFieldsMessageConfigProps) 
                 onCheckedChange={field.onChange}
               />
             </FormControl>
-            <FormLabel>Permitir Anexos no WhatsApp</FormLabel>
+            <FormLabelWithHelp label="Permitir Anexos no WhatsApp" helpText={help.canWhatsappAttachments} />
             <FormMessage />
           </FormItem>
         )}
@@ -76,7 +80,7 @@ export function FormFieldsMessageConfig({ form }: FormFieldsMessageConfigProps) 
                 onCheckedChange={field.onChange}
               />
             </FormControl>
-            <FormLabel>Permitir Telegram</FormLabel>
+            <FormLabelWithHelp label="Permitir Telegram" helpText={help.canTelegram} />
             <FormMessage />
           </FormItem>
         )}
@@ -93,7 +97,7 @@ export function FormFieldsMessageConfig({ form }: FormFieldsMessageConfigProps) 
                 onCheckedChange={field.onChange}
               />
             </FormControl>
-            <FormLabel>Permitir Anexos no Telegram</FormLabel>
+            <FormLabelWithHelp label="Permitir Anexos no Telegram" helpText={help.canTelegramAttachments} />
             <FormMessage />
           </FormItem>
         )}
@@ -110,7 +114,7 @@ export function FormFieldsMessageConfig({ form }: FormFieldsMessageConfigProps) 
                 onCheckedChange={field.onChange}
               />
             </FormControl>
-            <FormLabel>Permitir Email</FormLabel>
+            <FormLabelWithHelp label="Permitir Email" helpText={help.canEmail} />
             <FormMessage />
           </FormItem>
         )}
@@ -127,7 +131,7 @@ export function FormFieldsMessageConfig({ form }: FormFieldsMessageConfigProps) 
                 onCheckedChange={field.onChange}
               />
             </FormControl>
-            <FormLabel>Permitir Anexos no Email</FormLabel>
+            <FormLabelWithHelp label="Permitir Anexos no Email" helpText={help.canEmailAttachments} />
             <FormMessage />
           </FormItem>
         )}

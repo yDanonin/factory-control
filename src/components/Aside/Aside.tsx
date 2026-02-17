@@ -20,6 +20,8 @@ import { Skeleton } from "../ui/skeleton";
 
 const Aside: React.FC = () => {
   const session = useSession();
+  const isAdmin = session.data?.user?.isAdmin;
+
   return (
     <div className="h-screen p-5">
       <div className="h-full py-5 rounded-lg flex flex-col items-center gap-4 bg-white">
@@ -35,7 +37,7 @@ const Aside: React.FC = () => {
           <MenuHoverButton name={"Recebimento"} menuItens={menuItensRecebimento}>
             <Inbox color="#64748b" />
           </MenuHoverButton>
-          <MenuHoverButton name={"Funcionarios"} menuItens={menuItensFuncionarios}>
+          <MenuHoverButton name={isAdmin ? "Funcionarios" : "Horas e Ferias"} menuItens={menuItensFuncionarios}>
             <Users color="#64748b" />
           </MenuHoverButton>
           <MenuHoverButton name={"Controle"} menuItens={menuItensControle}>

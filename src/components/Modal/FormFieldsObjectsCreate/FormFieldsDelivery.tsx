@@ -7,10 +7,14 @@ import { UseFormReturn } from "react-hook-form";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DeliveryStatus, DeliveryStatusLabel } from "@/types/delivery.types";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 
 interface FormFieldsDelivery {
   form: UseFormReturn;
 }
+
+const help = fieldHelpTexts.delivery;
 
 export const FormFieldsDelivery: React.FC<FormFieldsDelivery> = ({ form }) => {
   return (
@@ -22,7 +26,7 @@ export const FormFieldsDelivery: React.FC<FormFieldsDelivery> = ({ form }) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="order_id">ID do Pedido</FormLabel>
+              <FormLabelWithHelp htmlFor="order_id" label="ID do Pedido" helpText={help.orderId} />
               <FormControl>
                 <Input
                   id="order_id"
@@ -45,7 +49,7 @@ export const FormFieldsDelivery: React.FC<FormFieldsDelivery> = ({ form }) => {
         name="status"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="status">Status da Entrega</FormLabel>
+            <FormLabelWithHelp htmlFor="status" label="Status da Entrega" helpText={help.status} />
             <Select onValueChange={(value) => field.onChange(parseInt(value))} value={field.value?.toString()}>
               <FormControl>
                 <SelectTrigger>
@@ -70,7 +74,7 @@ export const FormFieldsDelivery: React.FC<FormFieldsDelivery> = ({ form }) => {
         name="delivery_date"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="delivery_date">Data de Entrega</FormLabel>
+            <FormLabelWithHelp htmlFor="delivery_date" label="Data de Entrega" helpText={help.deliveryDate} />
             <FormControl>
               <Input
                 id="delivery_date"

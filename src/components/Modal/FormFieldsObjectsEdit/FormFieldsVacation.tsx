@@ -10,11 +10,15 @@ import { Button } from "@/components/ui/button";
 import { UseFormReturn } from "react-hook-form";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 
 interface FormFieldsVacation {
   form: UseFormReturn;
 }
+
+const help = fieldHelpTexts.vacation;
 
 export const FormFieldsVacation: React.FC<FormFieldsVacation> = ({ form }) => {
   return (
@@ -26,7 +30,7 @@ export const FormFieldsVacation: React.FC<FormFieldsVacation> = ({ form }) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="salario">Id do funcionário</FormLabel>
+              <FormLabelWithHelp htmlFor="employee_id" label="Id do funcionário" helpText={help.employee_id} />
               <FormControl>
                 <div className="relative ml-auto flex-1">
                   <span className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground"></span>
@@ -38,7 +42,7 @@ export const FormFieldsVacation: React.FC<FormFieldsVacation> = ({ form }) => {
           );
         }}
       />
-      
+
       <FormField
         key="sold_days"
         control={form.control}
@@ -46,7 +50,7 @@ export const FormFieldsVacation: React.FC<FormFieldsVacation> = ({ form }) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="salario">Quantidade de dias vendidos</FormLabel>
+              <FormLabelWithHelp htmlFor="sold_days" label="Quantidade de dias vendidos" helpText={help.sold_days} />
               <FormControl>
                 <div className="relative ml-auto flex-1">
                   <span className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground"></span>
@@ -65,7 +69,7 @@ export const FormFieldsVacation: React.FC<FormFieldsVacation> = ({ form }) => {
         name="start_date"
         render={({ field }) => (
           <FormItem className="flex flex-col justify-between">
-            <FormLabel htmlFor="start_date">Data Inicio</FormLabel>
+            <FormLabelWithHelp htmlFor="start_date" label="Data Inicio" helpText={help.start_date} />
             <Popover>
               <PopoverTrigger asChild>
                 <FormControl>
@@ -93,7 +97,7 @@ export const FormFieldsVacation: React.FC<FormFieldsVacation> = ({ form }) => {
         name="end_date"
         render={({ field }) => (
           <FormItem className="flex flex-col justify-between">
-            <FormLabel htmlFor="end_date">Data Final</FormLabel>
+            <FormLabelWithHelp htmlFor="end_date" label="Data Final" helpText={help.end_date} />
             <Popover>
               <PopoverTrigger asChild>
                 <FormControl>

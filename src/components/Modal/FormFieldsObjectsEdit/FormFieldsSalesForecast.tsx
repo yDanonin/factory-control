@@ -4,13 +4,17 @@ import React from "react";
 
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SalesForecastStatusLabel } from "@/types/sales-forecast.types";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 
 interface FormFieldsSalesForecastProps {
   form: UseFormReturn;
 }
+
+const help = fieldHelpTexts.salesForecast;
 
 export const FormFieldsSalesForecast: React.FC<FormFieldsSalesForecastProps> = ({ form }) => {
   return (
@@ -23,7 +27,7 @@ export const FormFieldsSalesForecast: React.FC<FormFieldsSalesForecastProps> = (
         name="status"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="status">Status</FormLabel>
+            <FormLabelWithHelp htmlFor="status" label="Status" helpText={help.status} />
             <Select onValueChange={(value) => field.onChange(parseInt(value))} value={field.value?.toString()}>
               <FormControl>
                 <SelectTrigger>
@@ -49,7 +53,7 @@ export const FormFieldsSalesForecast: React.FC<FormFieldsSalesForecastProps> = (
         name="reason"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="reason">Motivo</FormLabel>
+            <FormLabelWithHelp htmlFor="reason" label="Motivo" helpText={help.reason} optional />
             <FormControl>
               <Input id="reason" {...field} placeholder="Motivo (opcional)" />
             </FormControl>
@@ -63,7 +67,7 @@ export const FormFieldsSalesForecast: React.FC<FormFieldsSalesForecastProps> = (
         name="next_estimated_date"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="next_estimated_date">Próxima data estimada</FormLabel>
+            <FormLabelWithHelp htmlFor="next_estimated_date" label="Próxima data estimada" helpText={help.next_estimated_date} optional />
             <FormControl>
               <Input
                 id="next_estimated_date"
@@ -83,7 +87,7 @@ export const FormFieldsSalesForecast: React.FC<FormFieldsSalesForecastProps> = (
         name="frequency_days"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="frequency_days">Frequência (dias)</FormLabel>
+            <FormLabelWithHelp htmlFor="frequency_days" label="Frequência (dias)" helpText={help.frequency_days} optional />
             <FormControl>
               <Input id="frequency_days" type="number" {...field} {...form.register("frequency_days", { valueAsNumber: true })} placeholder="Intervalo em dias (opcional)" />
             </FormControl>
@@ -97,7 +101,7 @@ export const FormFieldsSalesForecast: React.FC<FormFieldsSalesForecastProps> = (
         name="quantity"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="quantity">Quantidade</FormLabel>
+            <FormLabelWithHelp htmlFor="quantity" label="Quantidade" helpText={help.quantity} />
             <FormControl>
               <Input id="quantity" {...field} placeholder="Quantidade (decimal como string)" />
             </FormControl>
@@ -105,9 +109,7 @@ export const FormFieldsSalesForecast: React.FC<FormFieldsSalesForecastProps> = (
           </FormItem>
         )}
       />
-      
+
     </>
   );
 };
-
-

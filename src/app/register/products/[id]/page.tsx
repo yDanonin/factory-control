@@ -10,7 +10,6 @@ import DataList from "@/components/DataList";
 import Modal from "@/components/Modal/Modal";
 import { Product } from "@/types/product.types";
 import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -70,15 +69,13 @@ export default function Page({ params }: { params: { id: string } }) {
                           onPointerLeave={(event) => event.preventDefault()}
                           onPointerMove={(event) => event.preventDefault()}
                         >
-                          <Dialog>
-                            <Modal
-                              typeModal="EDIT"
-                              typeRegister="Product"
-                              nameModal="produto"
-                              rowData={product}
-                              idRowData={product.id}
-                            />
-                          </Dialog>
+                          <Modal
+                            typeModal="EDIT"
+                            typeRegister="Product"
+                            nameModal="produto"
+                            rowData={product}
+                            idRowData={product.id}
+                          />
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="cursor-pointer"
@@ -86,18 +83,16 @@ export default function Page({ params }: { params: { id: string } }) {
                           onPointerLeave={(event) => event.preventDefault()}
                           onPointerMove={(event) => event.preventDefault()}
                         >
-                          <Dialog>
-                            <Modal
-                              typeModal="DELETE"
-                              typeRegister="Product"
-                              nameModal="produto"
-                              rowData={product}
-                              idRowData={product.id}
-                              onDelete={() => {
-                                router.push("/register/products");
-                              }}
-                            />
-                          </Dialog>
+                          <Modal
+                            typeModal="DELETE"
+                            typeRegister="Product"
+                            nameModal="produto"
+                            rowData={product}
+                            idRowData={product.id}
+                            onDelete={() => {
+                              router.push("/register/products");
+                            }}
+                          />
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

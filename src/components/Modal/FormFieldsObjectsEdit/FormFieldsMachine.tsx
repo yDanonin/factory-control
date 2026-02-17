@@ -1,12 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 import { Input } from "@/components/ui/input";
 import { Status } from "@/types/common.types";
+import { Location } from "@/types/location.types";
 import { UseFormReturn } from "react-hook-form";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 
 interface FormFieldsMachine {
   form: UseFormReturn;
@@ -24,7 +28,23 @@ function mapEnumToSelectItems<T extends string>(enumObj: EnumType<T>): JSX.Eleme
   ));
 }
 
+const help = fieldHelpTexts.machine;
+
 export const FormFieldsMachine: React.FC<FormFieldsMachine> = ({ form }) => {
+  const [locations, setLocations] = useState<Location[]>([]);
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const resp = await axios.get("/api/locations");
+        setLocations(resp.data.data || []);
+      } catch (err) {
+        console.error("Error fetching locations:", err);
+      }
+    };
+    fetchLocations();
+  }, []);
+
   return (
     <>
       <FormField
@@ -33,7 +53,7 @@ export const FormFieldsMachine: React.FC<FormFieldsMachine> = ({ form }) => {
         name="model"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="model">Modelo</FormLabel>
+            <FormLabelWithHelp htmlFor="model" label="Modelo" helpText={help.model} />
             <FormControl>
               <Input id="model" {...field} placeholder="Insira o modelo" />
             </FormControl>
@@ -42,15 +62,29 @@ export const FormFieldsMachine: React.FC<FormFieldsMachine> = ({ form }) => {
         )}
       />
       <FormField
-        key="location"
+        key="location_id"
         control={form.control}
-        name="location"
+        name="location_id"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="location">Localização</FormLabel>
-            <FormControl>
-              <Input id="location" {...field} placeholder="Insira a localização" />
-            </FormControl>
+            <FormLabelWithHelp htmlFor="location_id" label="Localização" helpText={help.location_id} />
+            <Select
+              onValueChange={(value) => field.onChange(value ? Number(value) : undefined)}
+              value={field.value?.toString() ?? ""}
+            >
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione a localização" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {locations.map((location) => (
+                  <SelectItem key={location.id} value={location.id.toString()}>
+                    {location.code} - {location.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <FormMessage />
           </FormItem>
         )}
@@ -62,7 +96,7 @@ export const FormFieldsMachine: React.FC<FormFieldsMachine> = ({ form }) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="machine_number">Número da máquina</FormLabel>
+              <FormLabelWithHelp htmlFor="machine_number" label="Número da máquina" helpText={help.machine_number} />
               <FormControl>
                 <Input
                   id="machine_number"
@@ -85,7 +119,7 @@ export const FormFieldsMachine: React.FC<FormFieldsMachine> = ({ form }) => {
         name="status"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="status">Status</FormLabel>
+            <FormLabelWithHelp htmlFor="status" label="Status" helpText={help.status} />
             <Select onValueChange={field.onChange} value={field.value}>
               <FormControl>
                 <SelectTrigger>
@@ -110,7 +144,7 @@ export const FormFieldsMachine: React.FC<FormFieldsMachine> = ({ form }) => {
           const selectedStatusKey = numericToStatusKey[field.value];
           return (
           <FormItem>
-            <FormLabel htmlFor="location_status">Status de Localização</FormLabel>
+            <FormLabelWithHelp htmlFor="location_status" label="Status de Localização" helpText={help.location_status} />
             <Select onValueChange={field.onChange} value={Status[selectedStatusKey]}>
               <FormControl>
                 <SelectTrigger>

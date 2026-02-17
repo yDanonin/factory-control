@@ -10,7 +10,6 @@ import DataList from "@/components/DataList";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { MoreVertical } from "lucide-react";
 import Modal from "@/components/Modal/Modal";
@@ -81,23 +80,19 @@ export default function Page({ params }: { params: { id: string } }) {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem className="cursor-pointer" onSelect={(e) => e.preventDefault()}>
-                            <Dialog>
-                              <Modal typeModal="EDIT" typeRegister="LabelPrint" nameModal="impressão de etiqueta" rowData={labelPrint} idRowData={labelPrint.id} />
-                            </Dialog>
+                            <Modal typeModal="EDIT" typeRegister="LabelPrint" nameModal="impressão de etiqueta" rowData={labelPrint} idRowData={labelPrint.id} />
                           </DropdownMenuItem>
                           <DropdownMenuItem className="cursor-pointer" onSelect={(e) => e.preventDefault()}>
-                            <Dialog>
-                              <Modal
-                                typeModal="DELETE"
-                                typeRegister="LabelPrint"
-                                nameModal="impressão de etiqueta"
-                                rowData={labelPrint}
-                                idRowData={labelPrint.id}
-                                onDelete={() => {
-                                  router.push("/production/print-labels");
-                                }}
-                              />
-                            </Dialog>
+                            <Modal
+                              typeModal="DELETE"
+                              typeRegister="LabelPrint"
+                              nameModal="impressão de etiqueta"
+                              rowData={labelPrint}
+                              idRowData={labelPrint.id}
+                              onDelete={() => {
+                                router.push("/production/print-labels");
+                              }}
+                            />
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>

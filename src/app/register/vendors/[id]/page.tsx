@@ -10,7 +10,6 @@ import { MoreVertical } from "lucide-react";
 import DataList from "@/components/DataList";
 import Modal from "@/components/Modal/Modal";
 import { Vendor } from "@/types/vendor.types";
-import { Dialog } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -73,15 +72,13 @@ export default function Page({ params }: { params: { id: string } }) {
                           onPointerLeave={(event) => event.preventDefault()}
                           onPointerMove={(event) => event.preventDefault()}
                         >
-                          <Dialog>
-                            <Modal
-                              typeModal="EDIT"
-                              typeRegister="Vendor"
-                              nameModal="fornecedor"
-                              rowData={vendor}
-                              idRowData={vendor.id}
-                            />
-                          </Dialog>
+                          <Modal
+                            typeModal="EDIT"
+                            typeRegister="Vendor"
+                            nameModal="fornecedor"
+                            rowData={vendor}
+                            idRowData={vendor.id}
+                          />
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="cursor-pointer"
@@ -89,18 +86,16 @@ export default function Page({ params }: { params: { id: string } }) {
                           onPointerLeave={(event) => event.preventDefault()}
                           onPointerMove={(event) => event.preventDefault()}
                         >
-                          <Dialog>
-                            <Modal
-                              typeModal="DELETE"
-                              typeRegister="Vendor"
-                              nameModal="fornecedor"
-                              rowData={vendor}
-                              idRowData={vendor.id}
-                              onDelete={() => {
-                                router.push("/register/vendors");
-                              }}
-                            />
-                          </Dialog>
+                          <Modal
+                            typeModal="DELETE"
+                            typeRegister="Vendor"
+                            nameModal="fornecedor"
+                            rowData={vendor}
+                            idRowData={vendor.id}
+                            onDelete={() => {
+                              router.push("/register/vendors");
+                            }}
+                          />
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

@@ -10,7 +10,6 @@ import { useRouter } from "next/navigation";
 import DataList from "@/components/DataList";
 import Modal from "@/components/Modal/Modal";
 import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
 import { Order } from "@/types/order.types";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -66,29 +65,25 @@ export default function Page({ params }: { params: { id: string } }) {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
-                          <Dialog>
-                            <Modal
-                              typeModal="EDIT"
-                              typeRegister="Order"
-                              nameModal="pedido"
-                              rowData={order}
-                              idRowData={order.id}
-                            />
-                          </Dialog>
+                          <Modal
+                            typeModal="EDIT"
+                            typeRegister="Order"
+                            nameModal="pedido"
+                            rowData={order}
+                            idRowData={order.id}
+                          />
                         </DropdownMenuItem>
                         <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
-                          <Dialog>
-                            <Modal
-                              typeModal="DELETE"
-                              typeRegister="Order"
-                              nameModal="pedido"
-                              rowData={order}
-                              idRowData={order.id}
-                              onDelete={() => {
-                                router.push("/receive/orders");
-                              }}
-                            />
-                          </Dialog>
+                          <Modal
+                            typeModal="DELETE"
+                            typeRegister="Order"
+                            nameModal="pedido"
+                            rowData={order}
+                            idRowData={order.id}
+                            onDelete={() => {
+                              router.push("/receive/orders");
+                            }}
+                          />
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

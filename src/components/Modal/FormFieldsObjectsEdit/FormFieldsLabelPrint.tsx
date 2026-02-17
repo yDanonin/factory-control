@@ -4,7 +4,7 @@ import React from "react";
 
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 
 interface FormFieldsLabelPrintProps {
   form: UseFormReturn;
@@ -17,5 +17,3 @@ export const FormFieldsLabelPrint: React.FC<FormFieldsLabelPrintProps> = ({ form
     </>
   );
 };
-
-

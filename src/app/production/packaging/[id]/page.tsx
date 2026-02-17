@@ -72,15 +72,13 @@ export default function Page({ params }: { params: { id: string } }) {
                           onPointerLeave={(event) => event.preventDefault()}
                           onPointerMove={(event) => event.preventDefault()}
                         >
-                          <Dialog>
-                            <Modal
-                              typeModal="EDIT"
-                              typeRegister="Packaging"
-                              nameModal="embalagem"
-                              rowData={packaging}
-                              idRowData={packaging.id}
-                            />
-                          </Dialog>
+                          <Modal
+                            typeModal="EDIT"
+                            typeRegister="Packaging"
+                            nameModal="embalagem"
+                            rowData={packaging}
+                            idRowData={packaging.id}
+                          />
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="cursor-pointer"
@@ -88,18 +86,16 @@ export default function Page({ params }: { params: { id: string } }) {
                           onPointerLeave={(event) => event.preventDefault()}
                           onPointerMove={(event) => event.preventDefault()}
                         >
-                          <Dialog>
-                            <Modal
-                              typeModal="DELETE"
-                              typeRegister="Packaging"
-                              nameModal="embalagem"
-                              rowData={packaging}
-                              idRowData={packaging.id}
-                              onDelete={() => {
-                                router.push("/production/packaging");
-                              }}
-                            />
-                          </Dialog>
+                          <Modal
+                            typeModal="DELETE"
+                            typeRegister="Packaging"
+                            nameModal="embalagem"
+                            rowData={packaging}
+                            idRowData={packaging.id}
+                            onDelete={() => {
+                              router.push("/production/packaging");
+                            }}
+                          />
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -123,15 +119,13 @@ export default function Page({ params }: { params: { id: string } }) {
                   <div className="grid gap-3">
                     <div className="font-semibold flex justify-between items-center">
                       <span>Clientes associados</span>
-                      <Dialog>
-                        <Modal
-                          typeModal="CREATE"
-                          typeRegister="CustomerPackaging"
-                          nameModal="cliente associado"
-                          rowData={{ packaging_id: parseInt(params.id) }}
-                          triggerLabel="Adicionar cliente"
-                        />
-                      </Dialog>
+                      <Modal
+                        typeModal="CREATE"
+                        typeRegister="CustomerPackaging"
+                        nameModal="cliente associado"
+                        rowData={{ packaging_id: parseInt(params.id) }}
+                        triggerLabel="Adicionar cliente"
+                      />
                     </div>
                     {packaging && packaging.customers && packaging.customers.length > 0 ? (
                       <div className="space-y-2">
@@ -187,15 +181,13 @@ export default function Page({ params }: { params: { id: string } }) {
                                       onPointerLeave={(event) => event.preventDefault()}
                                       onPointerMove={(event) => event.preventDefault()}
                                     >
-                                      <Dialog>
-                                        <Modal
-                                          typeModal="EDIT"
-                                          typeRegister="CustomerPackaging"
-                                          nameModal="cliente associado"
-                                          rowData={customerRelation}
-                                          idRowData={customerRelation.id}
-                                        />
-                                      </Dialog>
+                                      <Modal
+                                        typeModal="EDIT"
+                                        typeRegister="CustomerPackaging"
+                                        nameModal="cliente associado"
+                                        rowData={customerRelation}
+                                        idRowData={customerRelation.id}
+                                      />
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
                                       className="cursor-pointer"
@@ -203,22 +195,20 @@ export default function Page({ params }: { params: { id: string } }) {
                                       onPointerLeave={(event) => event.preventDefault()}
                                       onPointerMove={(event) => event.preventDefault()}
                                     >
-                                      <Dialog>
-                                        <Modal
-                                          typeModal="DELETE"
-                                          typeRegister="CustomerPackaging"
-                                          nameModal="cliente associado"
-                                          idRowData={customerRelation.id}
-                                          onDelete={() => {
-                                            const fetchPackaging = async () => {
-                                              const response = await fetch(`/api/packaging/${params.id}`);
-                                              const data = await response.json();
-                                              setPackaging(data);
-                                            };
-                                            fetchPackaging();
-                                          }}
-                                        />
-                                      </Dialog>
+                                      <Modal
+                                        typeModal="DELETE"
+                                        typeRegister="CustomerPackaging"
+                                        nameModal="cliente associado"
+                                        idRowData={customerRelation.id}
+                                        onDelete={() => {
+                                          const fetchPackaging = async () => {
+                                            const response = await fetch(`/api/packaging/${params.id}`);
+                                            const data = await response.json();
+                                            setPackaging(data);
+                                          };
+                                          fetchPackaging();
+                                        }}
+                                      />
                                     </DropdownMenuItem>
                                   </DropdownMenuContent>
                                 </DropdownMenu>

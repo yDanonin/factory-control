@@ -32,8 +32,6 @@ export const Employee = ({ idUser }: { idUser: string | undefined }) => {
   const seconds = time.seconds();
 
   useEffect(() => {
-    console.log("entrou aq y times")
-    console.log("isLoading", isLoading)
     const fetchWorkHours = async () => {
       const endDate = moment().format("YYYY-MM-DD");
       const startDate = moment().subtract(3, "months").format("YYYY-MM-DD");
@@ -50,7 +48,6 @@ export const Employee = ({ idUser }: { idUser: string | undefined }) => {
         console.error("Error fetching work hours:", error);
       } finally {
         setIsLoading(false);
-        console.log("isLoading", isLoading)
       }
     };
 
@@ -58,8 +55,7 @@ export const Employee = ({ idUser }: { idUser: string | undefined }) => {
   }, [idUser]);
 
   async function timeClick() {
-    const res = await axios.post("/api/employees/work-hours", {});
-    console.log(res);
+    await axios.post("/api/employees/work-hours", {});
   }
   return (
     <>

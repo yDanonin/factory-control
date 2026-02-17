@@ -18,7 +18,7 @@ function Page() {
         </nav>
         <main className="main-layout">
           <Header title="Controle de Horários" />
-          {session.user.isAdmin === true ? <Admin /> : <Employee idUser={session.user.idToken} />}
+          {session.user.isAdmin ? <Admin /> : <Employee idUser={session.user.idToken} />}
         </main>
       </div>
     );

@@ -11,6 +11,8 @@ import { getBooleanLabel } from "@/services/formatInputs";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 
 interface FormFieldsVendor {
   form: UseFormReturn;
@@ -27,6 +29,8 @@ function mapEnumToSelectItems<T extends string>(enumObj: EnumType<T>): JSX.Eleme
     </SelectItem>
   ));
 }
+
+const help = fieldHelpTexts.vendor;
 
 export const FormFieldsVendor: React.FC<FormFieldsVendor> = ({ form }) => {
   function cleanFieldsAddress(): void {
@@ -66,7 +70,7 @@ export const FormFieldsVendor: React.FC<FormFieldsVendor> = ({ form }) => {
         name="name"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="nome">Nome</FormLabel>
+            <FormLabelWithHelp htmlFor="nome" label="Nome" helpText={help.name} />
             <FormControl>
               <Input id="name" {...field} placeholder="Insira o nome" />
             </FormControl>
@@ -80,7 +84,7 @@ export const FormFieldsVendor: React.FC<FormFieldsVendor> = ({ form }) => {
         name="store_name"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="nome_loja">Nome da Loja</FormLabel>
+            <FormLabelWithHelp htmlFor="nome_loja" label="Nome da Loja" helpText={help.storeName} />
             <FormControl>
               <Input id="store_name" {...field} placeholder="Insira o nome da loja" />
             </FormControl>
@@ -94,7 +98,7 @@ export const FormFieldsVendor: React.FC<FormFieldsVendor> = ({ form }) => {
         name="cnpj"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="cnpj">Cnpj</FormLabel>
+            <FormLabelWithHelp htmlFor="cnpj" label="Cnpj" helpText={help.cnpj} />
             <FormControl>
               <Input id="cnpj" {...field} ref={withMask("99.999.999/9999-99")} placeholder="99.999.999/9999-99" />
             </FormControl>
@@ -108,7 +112,7 @@ export const FormFieldsVendor: React.FC<FormFieldsVendor> = ({ form }) => {
         name="phone"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="telefone">Número de Telefone</FormLabel>
+            <FormLabelWithHelp htmlFor="telefone" label="Número de Telefone" helpText={help.phone} />
             <FormControl>
               <Input id="phone" {...field} ref={withMask("(99) 9999-9999")} placeholder="ex. (99) 99999-9999" />
             </FormControl>
@@ -122,7 +126,7 @@ export const FormFieldsVendor: React.FC<FormFieldsVendor> = ({ form }) => {
         name="cel_number"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="numero_celular">Número de Celular</FormLabel>
+            <FormLabelWithHelp htmlFor="numero_celular" label="Número de Celular" helpText={help.celNumber} />
             <FormControl>
               <Input id="cel_number" {...field} ref={withMask("(99) 99999-9999")} placeholder="ex. (99) 9999-9999" />
             </FormControl>
@@ -136,7 +140,7 @@ export const FormFieldsVendor: React.FC<FormFieldsVendor> = ({ form }) => {
         name="deliver"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="deliver">Entrega ou Retirada?</FormLabel>
+            <FormLabelWithHelp htmlFor="deliver" label="Entrega ou Retirada?" helpText={help.deliver} />
             <FormControl>
               <RadioGroup onValueChange={field.onChange}>
                 <FormItem className="flex items-center space-x-3 space-y-0">
@@ -164,7 +168,7 @@ export const FormFieldsVendor: React.FC<FormFieldsVendor> = ({ form }) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="invoicing">Faturamento</FormLabel>
+              <FormLabelWithHelp htmlFor="invoicing" label="Faturamento" helpText={help.invoicing} />
               <FormControl>
                 <div className="relative ml-auto flex-1">
                   <span className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground">R$</span>
@@ -188,7 +192,7 @@ export const FormFieldsVendor: React.FC<FormFieldsVendor> = ({ form }) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="purchases">Compras</FormLabel>
+              <FormLabelWithHelp htmlFor="purchases" label="Compras" helpText={help.purchases} />
               <FormControl>
                 <div className="relative ml-auto flex-1">
                   <span className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground">R$</span>
@@ -212,7 +216,7 @@ export const FormFieldsVendor: React.FC<FormFieldsVendor> = ({ form }) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="volume_purchases">Volume das Compras</FormLabel>
+              <FormLabelWithHelp htmlFor="volume_purchases" label="Volume das Compras" helpText={help.volumePurchases} />
               <FormControl>
                 <Input
                   id="volume_purchases"
@@ -235,7 +239,7 @@ export const FormFieldsVendor: React.FC<FormFieldsVendor> = ({ form }) => {
         name="status"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="status">Status</FormLabel>
+            <FormLabelWithHelp htmlFor="status" label="Status" helpText={help.status} />
             <Select onValueChange={field.onChange} value={field.value}>
               <FormControl>
                 <SelectTrigger>
@@ -254,7 +258,7 @@ export const FormFieldsVendor: React.FC<FormFieldsVendor> = ({ form }) => {
         name="address.zip_code"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="cep">CEP</FormLabel>
+            <FormLabelWithHelp htmlFor="cep" label="CEP" helpText={help.zipCode} />
             <FormControl onChange={captureCep}>
               <Input {...field} ref={withMask("99999-999")} id="zip_code" placeholder="99999-999" />
             </FormControl>
@@ -268,7 +272,7 @@ export const FormFieldsVendor: React.FC<FormFieldsVendor> = ({ form }) => {
         name="address.public_place"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="public_place">Logradouro</FormLabel>
+            <FormLabelWithHelp htmlFor="public_place" label="Logradouro" helpText={help.publicPlace} />
             <FormControl>
               <Input id="public_place" {...field} value={field.value} placeholder="ex. Avenida Brasil" />
             </FormControl>
@@ -282,7 +286,7 @@ export const FormFieldsVendor: React.FC<FormFieldsVendor> = ({ form }) => {
         name="address.neighborhood"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="neighborhood">Bairro</FormLabel>
+            <FormLabelWithHelp htmlFor="neighborhood" label="Bairro" helpText={help.neighborhood} />
             <FormControl>
               <Input id="neighborhood" {...field} value={field.value} placeholder="ex. Vila Madalena" />
             </FormControl>
@@ -296,7 +300,7 @@ export const FormFieldsVendor: React.FC<FormFieldsVendor> = ({ form }) => {
         name="address.city"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="city">Cidade</FormLabel>
+            <FormLabelWithHelp htmlFor="city" label="Cidade" helpText={help.city} />
             <FormControl>
               <Input id="city" {...field} value={field.value} placeholder="ex. São Paulo" />
             </FormControl>
@@ -310,7 +314,7 @@ export const FormFieldsVendor: React.FC<FormFieldsVendor> = ({ form }) => {
         name="address.state"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="state">Estado</FormLabel>
+            <FormLabelWithHelp htmlFor="state" label="Estado" helpText={help.state} />
             <FormControl>
               <Input id="state" {...field} value={field.value} placeholder="ex. SP" />
             </FormControl>
@@ -325,7 +329,7 @@ export const FormFieldsVendor: React.FC<FormFieldsVendor> = ({ form }) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="debitos">Número</FormLabel>
+              <FormLabelWithHelp htmlFor="debitos" label="Número" helpText={help.addressNumber} />
               <FormControl>
                 <Input id="address_number" type="number" {...field} placeholder="Insira o número do endereço"/>
               </FormControl>
@@ -340,11 +344,7 @@ export const FormFieldsVendor: React.FC<FormFieldsVendor> = ({ form }) => {
         name="address.complement"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="complement">Complemento
-              <span className="ml-1 text-sm font-normal text-muted-foreground">
-                (Opcional)
-              </span>
-            </FormLabel>
+            <FormLabelWithHelp htmlFor="complement" label="Complemento" helpText={help.complement} optional />
             <FormControl>
               <Input id="complement" {...field} placeholder="ex. Bloco A, Apto 99" />
             </FormControl>

@@ -9,8 +9,6 @@ import { useRouter } from "next/navigation";
 import { Row } from "@tanstack/react-table";
 import Modal from "@/components/Modal/Modal";
 import { MoreHorizontal } from "lucide-react";
-import { AlertDialog } from "@/components/ui/alert-dialog";
-import { Dialog } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Employee } from "@/types/employee.types";
 import DynamicTable from "@/components/DynamicTable";
@@ -117,15 +115,13 @@ export default function Page() {
                 onPointerLeave={(event) => event.preventDefault()}
                 onPointerMove={(event) => event.preventDefault()}
               >
-                <AlertDialog>
-                  <Modal
-                    typeModal="EDIT"
-                    typeRegister="Employee"
-                    nameModal="funcionario"
-                    rowData={row.original}
-                    idRowData={row.original.id}
-                  />
-                </AlertDialog>
+                <Modal
+                  typeModal="EDIT"
+                  typeRegister="Employee"
+                  nameModal="funcionario"
+                  rowData={row.original}
+                  idRowData={row.original.id}
+                />
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="cursor-pointer"
@@ -133,15 +129,13 @@ export default function Page() {
                 onPointerLeave={(event) => event.preventDefault()}
                 onPointerMove={(event) => event.preventDefault()}
               >
-                <Dialog>
-                  <Modal
-                    typeModal="DELETE"
-                    typeRegister="Employee"
-                    nameModal="funcionario"
-                    rowData={row.original}
-                    idRowData={row.original.id}
-                  />
-                </Dialog>
+                <Modal
+                  typeModal="DELETE"
+                  typeRegister="Employee"
+                  nameModal="funcionario"
+                  rowData={row.original}
+                  idRowData={row.original.id}
+                />
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

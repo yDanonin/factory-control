@@ -10,7 +10,6 @@ import { Row } from "@tanstack/react-table";
 import Modal from "@/components/Modal/Modal";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
 import { Procedure } from "@/types/procedure.types";
 import DynamicTable from "@/components/DynamicTable";
 import { DataRow, TableColumn } from "@/models/TableColumn";
@@ -90,15 +89,13 @@ export default function Page() {
                 onPointerLeave={(event) => event.preventDefault()}
                 onPointerMove={(event) => event.preventDefault()}
               >
-                <Dialog>
-                  <Modal
-                    typeModal="EDIT"
-                    typeRegister="Procedure"
-                    nameModal="processo"
-                    rowData={row.original}
-                    idRowData={row.original.id}
-                  />
-                </Dialog>
+                <Modal
+                  typeModal="EDIT"
+                  typeRegister="Procedure"
+                  nameModal="processo"
+                  rowData={row.original}
+                  idRowData={row.original.id}
+                />
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="cursor-pointer"
@@ -106,15 +103,13 @@ export default function Page() {
                 onPointerLeave={(event) => event.preventDefault()}
                 onPointerMove={(event) => event.preventDefault()}
               >
-                <Dialog>
-                  <Modal
-                    typeModal="DELETE"
-                    typeRegister="Procedure"
-                    nameModal="processo"
-                    rowData={row.original}
-                    idRowData={row.original.id}
-                  />
-                </Dialog>
+                <Modal
+                  typeModal="DELETE"
+                  typeRegister="Procedure"
+                  nameModal="processo"
+                  rowData={row.original}
+                  idRowData={row.original.id}
+                />
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

@@ -6,6 +6,7 @@ import "./DynamicTable.css";
 import { ArrowUpDown, ChevronDown } from "lucide-react";
 import { Spinner } from "@nextui-org/react";
 import Modal from "@/components/Modal/Modal";
+import { getTypeRegisterTranslation } from "@/config/type-register-translations";
 import { Vendor } from "@/types/vendor.types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -151,9 +152,7 @@ function DynamicTable<T extends DataRow>({ columns, data, isLoadingSpinner, filt
             </div>
           )}
           <div className="w-1/2 flex justify-between">
-            <Dialog>
-              <Modal typeModal="CREATE" nameModal={typeRegister} typeRegister={typeRegister} />
-            </Dialog>
+            <Modal typeModal="CREATE" nameModal={getTypeRegisterTranslation(typeRegister)} typeRegister={typeRegister} />
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild className="px-3">

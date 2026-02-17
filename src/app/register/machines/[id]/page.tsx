@@ -10,7 +10,6 @@ import DataList from "@/components/DataList";
 import Modal from "@/components/Modal/Modal";
 import { Machine } from "@/types/machine.types";
 import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   DropdownMenu,
@@ -71,15 +70,13 @@ export default function Page({ params }: { params: { id: string } }) {
                           onPointerLeave={(event) => event.preventDefault()}
                           onPointerMove={(event) => event.preventDefault()}
                         >
-                          <Dialog>
-                            <Modal
-                              typeModal="EDIT"
-                              typeRegister="Machine"
-                              nameModal="maquina"
-                              rowData={machine}
-                              idRowData={machine.id}
-                            />
-                          </Dialog>
+                          <Modal
+                            typeModal="EDIT"
+                            typeRegister="Machine"
+                            nameModal="maquina"
+                            rowData={machine}
+                            idRowData={machine.id}
+                          />
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="cursor-pointer"
@@ -87,18 +84,16 @@ export default function Page({ params }: { params: { id: string } }) {
                           onPointerLeave={(event) => event.preventDefault()}
                           onPointerMove={(event) => event.preventDefault()}
                         >
-                          <Dialog>
-                            <Modal
-                              typeModal="DELETE"
-                              typeRegister="Machine"
-                              nameModal="maquina"
-                              rowData={machine}
-                              idRowData={machine.id}
-                              onDelete={() => {
-                                router.push("/register/machines");
-                              }}
-                            />
-                          </Dialog>
+                          <Modal
+                            typeModal="DELETE"
+                            typeRegister="Machine"
+                            nameModal="maquina"
+                            rowData={machine}
+                            idRowData={machine.id}
+                            onDelete={() => {
+                              router.push("/register/machines");
+                            }}
+                          />
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -111,9 +106,24 @@ export default function Page({ params }: { params: { id: string } }) {
                       <DataList
                         items={[
                           { title: "Identificador", data: machine.id.toString() },
-                          { title: "Status", data: machine.status },
-                          { title: "Localização", data: machine.location },
-                          { title: "status da localização", data: machine.location_status }
+                          { title: "Status", data: machine.status === 0 || machine.status === "Suspenso" ? "Suspenso" : "Operacional" },
+                          { title: "Localização", data: machine.location?.name || "Não definido" },
+                          { title: "Status da localização", data: (() => {
+                            // Se tiver location com status, usa o status da location
+                            if (machine.location?.status) {
+                              const locStatus = machine.location.status;
+                              if (typeof locStatus === "string") return locStatus;
+                              if (locStatus === 0) return "Suspenso";
+                              if (locStatus === 1) return "Operacional";
+                              return String(locStatus);
+                            }
+                            // Converte número para texto (enum: 0=Suspenso, 1=Operacional)
+                            const status = machine.location_status;
+                            if (status === "Operacional" || status === "Suspenso") return status;
+                            if (status === 0 || status === "0") return "Suspenso";
+                            if (status === 1 || status === "1") return "Operacional";
+                            return status !== undefined && status !== null ? String(status) : "-";
+                          })() }
                         ]}
                       />
                     )}

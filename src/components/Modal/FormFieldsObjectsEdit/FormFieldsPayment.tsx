@@ -11,10 +11,14 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 
 interface FormFieldsPayment {
   form: UseFormReturn;
 }
+
+const help = fieldHelpTexts.payment;
 
 export const FormFieldsPayment: React.FC<FormFieldsPayment> = ({ form }) => {
   return (
@@ -26,7 +30,7 @@ export const FormFieldsPayment: React.FC<FormFieldsPayment> = ({ form }) => {
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel htmlFor="amount_paid">Total pago</FormLabel>
+                <FormLabelWithHelp htmlFor="amount_paid" label="Total pago" helpText={help.amount_paid} />
                 <FormControl>
                   <div className="relative ml-auto flex-1">
                     <span className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground">R$</span>
@@ -49,7 +53,7 @@ export const FormFieldsPayment: React.FC<FormFieldsPayment> = ({ form }) => {
             name="date"
             render={({ field }) => (
             <FormItem className="flex flex-col justify-between">
-                <FormLabel htmlFor="date">Data do Pedido</FormLabel>
+                <FormLabelWithHelp htmlFor="date" label="Data do Pedido" helpText={help.date} />
                 <Popover>
                 <PopoverTrigger asChild>
                     <FormControl>
@@ -77,7 +81,7 @@ export const FormFieldsPayment: React.FC<FormFieldsPayment> = ({ form }) => {
           name="payment_method"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="payment_method">Método de pagamento</FormLabel>
+              <FormLabelWithHelp htmlFor="payment_method" label="Método de pagamento" helpText={help.payment_method} />
               <FormControl>
                 <Input id="payment_method" {...field} placeholder="Insira o metodo de pagamento"/>
               </FormControl>
@@ -93,7 +97,7 @@ export const FormFieldsPayment: React.FC<FormFieldsPayment> = ({ form }) => {
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel htmlFor="order_id">ID do pedido</FormLabel>
+                <FormLabelWithHelp htmlFor="order_id" label="ID do pedido" helpText={help.order_id} />
                 <FormControl>
                   <Input
                     id="order_id"

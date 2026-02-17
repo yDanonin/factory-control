@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 
 interface FormFieldsProcedure {
   form: UseFormReturn;
@@ -24,6 +26,8 @@ function mapEnumToSelectItems<T extends string>(enumObj: EnumType<T>): JSX.Eleme
   ));
 }
 
+const help = fieldHelpTexts.procedure;
+
 export const FormFieldsProcedure: React.FC<FormFieldsProcedure> = ({ form }) => {
   return (
     <>
@@ -33,7 +37,7 @@ export const FormFieldsProcedure: React.FC<FormFieldsProcedure> = ({ form }) => 
         name="process_name"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="process_name">Nome do Processo</FormLabel>
+            <FormLabelWithHelp htmlFor="process_name" label="Nome do Processo" helpText={help.processName} />
             <FormControl>
               <Input id="process_name" {...field} placeholder="Insira o nome do processo" />
             </FormControl>
@@ -48,7 +52,7 @@ export const FormFieldsProcedure: React.FC<FormFieldsProcedure> = ({ form }) => 
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="workers">Número de trabalhadores</FormLabel>
+              <FormLabelWithHelp htmlFor="workers" label="Número de trabalhadores" helpText={help.workers} />
               <FormControl>
                 <Input
                   id="workers"
@@ -71,7 +75,7 @@ export const FormFieldsProcedure: React.FC<FormFieldsProcedure> = ({ form }) => 
         name="status"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="status">Status</FormLabel>
+            <FormLabelWithHelp htmlFor="status" label="Status" helpText={help.status} />
             <Select onValueChange={field.onChange} value={field.value}>
               <FormControl>
                 <SelectTrigger>

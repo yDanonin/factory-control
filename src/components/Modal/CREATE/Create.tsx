@@ -51,6 +51,7 @@ import {
   formProductReturnSchema,
   formPaymentSchema,
   formUserSchema,
+  formUserCreateSchema,
   formPriceSchema,
   formMessageConfigSchema,
   formInvoiceSchema,
@@ -62,7 +63,8 @@ import {
   formProductionControlSchema,
   formSalesForecastSchema,
   formExpenseSchema,
-  formLabelPrintSchema
+  formLabelPrintSchema,
+  formLocationSchema
 } from "@/schemas/FormSchemas";
 import {
   customerDefaultValues,
@@ -88,11 +90,12 @@ import {
   productionControlDefaultValues,
   salesForecastDefaultValues,
   expenseDefaultValues,
-  labelPrintDefaultValues
+  labelPrintDefaultValues,
+  locationDefaultValues
 } from "@/schemas/DefaultValuesForm";
 import {
+  Dialog,
   DialogContent,
-  DialogClose,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -112,6 +115,7 @@ import { FormFieldsProductionControl } from "../FormFieldsObjectsCreate/FormFiel
 import { FormFieldsSalesForecast } from "../FormFieldsObjectsCreate/FormFieldsSalesForecast";
 import { FormFieldsExpense } from "../FormFieldsObjectsCreate/FormFieldsExpense";
 import { FormFieldsLabelPrint } from "../FormFieldsObjectsCreate/FormFieldsLabelPrint";
+import { FormFieldsLocation } from "../FormFieldsObjectsCreate/FormFieldsLocation";
 
 interface ModalEditProps {
   nameModal: string;
@@ -120,7 +124,7 @@ interface ModalEditProps {
   triggerLabel?: string;
 }
 
-type TypeRegister = "Customer" | "Employee" | "Machine" | "Procedure" | "Product" | "Vendor" | "Vacation" | "Order" | "MaterialOrder" | "ProductReturn" | "Payment" | "User" | "Price" | "MessageConfig" | "Invoice" | "Packaging" | "Delivery" | "DeliveryPackaging" | "CustomerPackaging" | "Stock" | "ProductionControl" | "SalesForecast" | "Expense" | "LabelPrint";
+type TypeRegister = "Customer" | "Employee" | "Machine" | "Procedure" | "Product" | "Vendor" | "Vacation" | "Order" | "MaterialOrder" | "ProductReturn" | "Payment" | "User" | "Price" | "MessageConfig" | "Invoice" | "Packaging" | "Delivery" | "DeliveryPackaging" | "CustomerPackaging" | "Stock" | "ProductionControl" | "SalesForecast" | "Expense" | "LabelPrint" | "Location";
 
 type FormData = z.infer<typeof formCustomerSchema> |
   z.infer<typeof formEmployeeSchema> |
@@ -220,7 +224,7 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister, rowD
       apiCallByType = "payments";
       break;
     case "User":
-      typeSchema = formUserSchema;
+      typeSchema = formUserCreateSchema;
       objDefaultValues = userDefaultValues;
       apiCallByType = "users";
       break;
@@ -283,6 +287,11 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister, rowD
       typeSchema = formCustomerPackagingSchema;
       objDefaultValues = customerPackagingDefaultValues;
       apiCallByType = "customer-packaging";
+      break;
+    case "Location":
+      typeSchema = formLocationSchema;
+      objDefaultValues = locationDefaultValues;
+      apiCallByType = "locations";
       break;
     default:
       throw new Error(`Invalid typeRegister: ${typeRegister}`);
@@ -368,6 +377,9 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister, rowD
       // Reutilizaremos um novo form field específico
       formFields1 = <FormFieldsCustomerPackaging form={form} packagingId={rowData?.packaging_id} />;
       break;
+    case "Location":
+      formFields1 = <FormFieldsLocation form={form} />;
+      break;
     default:
       formFields1 = <div>erro</div>;
       break;
@@ -381,11 +393,13 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister, rowD
       await axios.post(`/api/${apiCallByType}`, formattedData);
       setIsLoading(false);
       form.reset();
-      router.refresh();
+      setOpen(false);
       toast({
         title: "Registro",
         description: `${nameModal} foi criado com sucesso.`
       });
+      // Reload page to refresh data since we use client-side fetching
+      window.location.reload();
     } catch (err) {
       const error = err as AxiosError;
       console.error(error);
@@ -399,7 +413,7 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister, rowD
   }
 
   return (
-    <>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="default">{triggerLabel ?? `Criar ${nameModal}`}</Button>
       </DialogTrigger>
@@ -411,11 +425,9 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister, rowD
             </DialogHeader>
             <div className="pt-4 grid grid-cols-3 gap-4">{formFields1}</div>
             <DialogFooter className="absolute bottom-0 right-0 p-10">
-              <DialogClose asChild>
-                <Button type="button" variant="secondary" disabled={isLoading} onClick={handleDialogClose}>
-                  Fechar
-                </Button>
-              </DialogClose>
+              <Button type="button" variant="secondary" disabled={isLoading} onClick={handleDialogClose}>
+                Fechar
+              </Button>
               {isLoading ? (
                 <Button disabled>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -428,6 +440,6 @@ export const Create: React.FC<ModalEditProps> = ({ nameModal, typeRegister, rowD
           </form>
         </DialogContent>
       </Form>
-    </>
+    </Dialog>
   );
 };

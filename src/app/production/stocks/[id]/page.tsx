@@ -8,7 +8,6 @@ import { MoreVertical, MoreHorizontal } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/Modal/Modal";
 import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -66,23 +65,19 @@ export default function Page({ params }: { params: { id: string } }) {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem className="cursor-pointer" onSelect={(e) => e.preventDefault()}>
-                          <Dialog>
-                            <Modal typeModal="EDIT" typeRegister="Stock" nameModal="estoque" rowData={stock} idRowData={stock.id} />
-                          </Dialog>
+                          <Modal typeModal="EDIT" typeRegister="Stock" nameModal="estoque" rowData={stock} idRowData={stock.id} />
                         </DropdownMenuItem>
                         <DropdownMenuItem className="cursor-pointer" onSelect={(e) => e.preventDefault()}>
-                          <Dialog>
-                            <Modal
-                              typeModal="DELETE"
-                              typeRegister="Stock"
-                              nameModal="estoque"
-                              rowData={stock}
-                              idRowData={stock.id}
-                              onDelete={() => {
-                                router.push("/production/stocks");
-                              }}
-                            />
-                          </Dialog>
+                          <Modal
+                            typeModal="DELETE"
+                            typeRegister="Stock"
+                            nameModal="estoque"
+                            rowData={stock}
+                            idRowData={stock.id}
+                            onDelete={() => {
+                              router.push("/production/stocks");
+                            }}
+                          />
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -93,7 +88,7 @@ export default function Page({ params }: { params: { id: string } }) {
                     <div className="font-semibold">Informações gerais</div>
                     <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
                       <div>Quantidade: {stock.amount}</div>
-                      <div>Local: {stock.location}</div>
+                      <div>Local: {stock.location?.name || "Não definido"}</div>
                       <div>Produto: {stock.product?.name}</div>
                     </div>
                   </div>

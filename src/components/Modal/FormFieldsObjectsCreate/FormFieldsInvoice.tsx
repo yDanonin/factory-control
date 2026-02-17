@@ -2,11 +2,15 @@ import React from "react";
 import { UseFormReturn } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { FormField, FormItem, FormMessage, FormControl } from "@/components/ui/form";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 // Keep form generic to avoid tight coupling in modal context
 interface Props {
   form: UseFormReturn<any>;
 }
+
+const help = fieldHelpTexts.invoice;
 
 export const FormFieldsInvoice: React.FC<Props> = ({ form }) => (
   <>
@@ -15,8 +19,10 @@ export const FormFieldsInvoice: React.FC<Props> = ({ form }) => (
       name="order_id"
       render={({ field }) => (
         <FormItem>
-          <Label htmlFor="order_id">ID do Pedido</Label>
-          <Input type="number" {...field} />
+          <FormLabelWithHelp htmlFor="order_id" label="ID do Pedido" helpText={help.orderId} />
+          <FormControl>
+            <Input type="number" {...field} />
+          </FormControl>
           <FormMessage />
         </FormItem>
       )}
@@ -26,8 +32,10 @@ export const FormFieldsInvoice: React.FC<Props> = ({ form }) => (
       name="number"
       render={({ field }) => (
         <FormItem>
-          <Label htmlFor="number">Número da Nota Fiscal</Label>
-          <Input {...field} />
+          <FormLabelWithHelp htmlFor="number" label="Número da Nota Fiscal" helpText={help.number} />
+          <FormControl>
+            <Input {...field} />
+          </FormControl>
           <FormMessage />
         </FormItem>
       )}
@@ -37,8 +45,10 @@ export const FormFieldsInvoice: React.FC<Props> = ({ form }) => (
       name="status"
       render={({ field }) => (
         <FormItem>
-          <Label htmlFor="status">Status</Label>
-          <Input {...field} />
+          <FormLabelWithHelp htmlFor="status" label="Status" helpText={help.status} />
+          <FormControl>
+            <Input {...field} />
+          </FormControl>
           <FormMessage />
         </FormItem>
       )}
@@ -48,8 +58,10 @@ export const FormFieldsInvoice: React.FC<Props> = ({ form }) => (
       name="type"
       render={({ field }) => (
         <FormItem>
-          <Label htmlFor="type">Tipo</Label>
-          <Input {...field} />
+          <FormLabelWithHelp htmlFor="type" label="Tipo" helpText={help.type} />
+          <FormControl>
+            <Input {...field} />
+          </FormControl>
           <FormMessage />
         </FormItem>
       )}
@@ -59,8 +71,10 @@ export const FormFieldsInvoice: React.FC<Props> = ({ form }) => (
       name="issue_date"
       render={({ field }) => (
         <FormItem>
-          <Label htmlFor="issue_date">Data de Emissão</Label>
-          <Input type="datetime-local" {...field} />
+          <FormLabelWithHelp htmlFor="issue_date" label="Data de Emissão" helpText={help.issueDate} />
+          <FormControl>
+            <Input type="datetime-local" {...field} />
+          </FormControl>
           <FormMessage />
         </FormItem>
       )}
@@ -70,8 +84,10 @@ export const FormFieldsInvoice: React.FC<Props> = ({ form }) => (
       name="recipient"
       render={({ field }) => (
         <FormItem>
-          <Label htmlFor="recipient">Destinatário</Label>
-          <Input {...field} />
+          <FormLabelWithHelp htmlFor="recipient" label="Destinatário" helpText={help.recipient} />
+          <FormControl>
+            <Input {...field} />
+          </FormControl>
           <FormMessage />
         </FormItem>
       )}
@@ -81,8 +97,10 @@ export const FormFieldsInvoice: React.FC<Props> = ({ form }) => (
       name="note"
       render={({ field }) => (
         <FormItem>
-          <Label htmlFor="note">Observação</Label>
-          <Input {...field} />
+          <FormLabelWithHelp htmlFor="note" label="Observação" helpText={help.note} optional />
+          <FormControl>
+            <Input {...field} />
+          </FormControl>
           <FormMessage />
         </FormItem>
       )}

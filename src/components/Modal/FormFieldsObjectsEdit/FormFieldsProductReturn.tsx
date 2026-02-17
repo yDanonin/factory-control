@@ -15,10 +15,14 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { getBooleanLabel } from "@/services/formatInputs";
 import { ReturnedLabel } from "@/types/returned_labels.types";
 import { Select, SelectContent, SelectTrigger, SelectValue } from "@radix-ui/react-select";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 
 interface FormFieldsProductReturn {
   form: UseFormReturn;
 }
+
+const help = fieldHelpTexts.productReturn;
 
 export const FormFieldsProductReturn: React.FC<FormFieldsProductReturn> = ({ form }) => {
   const [selectedLabels, setSelectedLabels] = useState<ReturnedLabel[]>([]);
@@ -42,7 +46,7 @@ export const FormFieldsProductReturn: React.FC<FormFieldsProductReturn> = ({ for
             name="product_return.date"
             render={({ field }) => (
             <FormItem className="flex flex-col justify-between">
-                <FormLabel htmlFor="date">Data do Pedido</FormLabel>
+                <FormLabelWithHelp htmlFor="date" label="Data do Pedido" helpText={help.date} />
                 <Popover>
                 <PopoverTrigger asChild>
                     <FormControl>
@@ -69,7 +73,7 @@ export const FormFieldsProductReturn: React.FC<FormFieldsProductReturn> = ({ for
           name="product_return.replacement_necessary"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="replacement_necessary">É necessário substituição?</FormLabel>
+              <FormLabelWithHelp htmlFor="replacement_necessary" label="É necessário substituição?" helpText={help.replacement_necessary} />
               <FormControl>
                 <RadioGroup onValueChange={field.onChange}>
                   <FormItem className="flex items-center space-x-3 space-y-0">
@@ -97,7 +101,7 @@ export const FormFieldsProductReturn: React.FC<FormFieldsProductReturn> = ({ for
           name="product_return.resold"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="resold">É revenda?</FormLabel>
+              <FormLabelWithHelp htmlFor="resold" label="É revenda?" helpText={help.resold} />
               <FormControl>
                 <RadioGroup onValueChange={field.onChange}>
                   <FormItem className="flex items-center space-x-3 space-y-0">
@@ -126,7 +130,7 @@ export const FormFieldsProductReturn: React.FC<FormFieldsProductReturn> = ({ for
           name="product_return.return_reason"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="return_reason">Motivo da devolução</FormLabel>
+              <FormLabelWithHelp htmlFor="return_reason" label="Motivo da devolução" helpText={help.return_reason} />
               <FormControl>
                 <Input id="return_reason" {...field} placeholder="Insira o motivo da devolução"/>
               </FormControl>
@@ -142,7 +146,7 @@ export const FormFieldsProductReturn: React.FC<FormFieldsProductReturn> = ({ for
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel htmlFor="product_return.order_id">ID do pedido</FormLabel>
+                <FormLabelWithHelp htmlFor="product_return.order_id" label="ID do pedido" helpText={help.order_id} />
                 <FormControl>
                   <Input
                     id="product_return.order_id"
@@ -167,7 +171,7 @@ export const FormFieldsProductReturn: React.FC<FormFieldsProductReturn> = ({ for
             <FormItem>
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <FormLabel>Produtos</FormLabel>
+                  <FormLabelWithHelp htmlFor="products" label="Produtos" helpText={help.products} />
                   <Button type="button" onClick={addLabel}>
                     Adicionar Produto
                   </Button>
@@ -184,7 +188,7 @@ export const FormFieldsProductReturn: React.FC<FormFieldsProductReturn> = ({ for
                       name="returned_labels.opened"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel htmlFor="opened">Foi aberto?</FormLabel>
+                          <FormLabelWithHelp htmlFor="opened" label="Foi aberto?" helpText={help.opened} />
                           <FormControl>
                             <RadioGroup onValueChange={field.onChange}>
                               <FormItem className="flex items-center space-x-3 space-y-0">

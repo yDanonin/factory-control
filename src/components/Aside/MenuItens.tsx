@@ -28,6 +28,11 @@ export const menuItensCadastro = [
     id: 5,
     item: "Processo",
     route: "/register/procedures"
+  },
+  {
+    id: 6,
+    item: "Localizações",
+    route: "/register/locations"
   }
 ];
 
@@ -57,17 +62,27 @@ export const menuItensRecebimento = [
 export const menuItensFuncionarios = [
   {
     id: 0,
-    item: "Dashboard",
+    item: "Ponto Online",
     route: "/timedashboard"
   },
   {
     id: 1,
-    item: "Horários",
-    route: "/controltime"
+    item: "Ajuste de Horas",
+    route: "/time-adjustment"
   },
   {
     id: 2,
-    item: "Controle de férias",
+    item: "Relatorio de Pontos",
+    route: "/time-report"
+  },
+  {
+    id: 3,
+    item: "Horarios Padrao",
+    route: "/controltime"
+  },
+  {
+    id: 4,
+    item: "Controle de ferias",
     route: "/controlvacation"
   }
 ];

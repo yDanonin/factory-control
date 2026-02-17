@@ -4,11 +4,15 @@ import React from "react";
 
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 
 interface FormFieldsDeliveryPackaging {
   form: UseFormReturn;
 }
+
+const help = fieldHelpTexts.deliveryPackaging;
 
 export const FormFieldsDeliveryPackaging: React.FC<FormFieldsDeliveryPackaging> = ({ form }) => {
   return (
@@ -24,7 +28,7 @@ export const FormFieldsDeliveryPackaging: React.FC<FormFieldsDeliveryPackaging> 
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="quantity">Quantidade</FormLabel>
+              <FormLabelWithHelp htmlFor="quantity" label="Quantidade" helpText={help.quantity} />
               <FormControl>
                 <Input
                   id="quantity"

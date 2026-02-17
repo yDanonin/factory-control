@@ -4,12 +4,15 @@ import React from "react";
 
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 
 interface FormFieldsTimeConfiguration {
   form: UseFormReturn;
 }
 
+const help = fieldHelpTexts.timeConfiguration;
 
 export const FormFieldsTimeConfiguration: React.FC<FormFieldsTimeConfiguration> = ({ form }) => {
   return (
@@ -20,9 +23,9 @@ export const FormFieldsTimeConfiguration: React.FC<FormFieldsTimeConfiguration> 
         name="work_start"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="work_start">Inicio da jornada</FormLabel>
+            <FormLabelWithHelp htmlFor="work_start" label="Horário de Entrada" helpText={help.work_start} />
             <FormControl>
-              <Input id="work_start" {...field} />
+              <Input id="work_start" type="time" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -35,9 +38,9 @@ export const FormFieldsTimeConfiguration: React.FC<FormFieldsTimeConfiguration> 
         name="work_end"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="work_end">Fim do dia</FormLabel>
+            <FormLabelWithHelp htmlFor="work_end" label="Horário de Saída" helpText={help.work_end} />
             <FormControl>
-              <Input id="work_end" {...field} />
+              <Input id="work_end" type="time" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -51,7 +54,7 @@ export const FormFieldsTimeConfiguration: React.FC<FormFieldsTimeConfiguration> 
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="late_limit_in_minutes">Tempo limite de tolerância em minutos</FormLabel>
+              <FormLabelWithHelp htmlFor="late_limit_in_minutes" label="Tempo limite de tolerância em minutos" helpText={help.late_limit_in_minutes} />
               <FormControl>
                 <div className="relative ml-auto flex-1">
                   <span className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground"></span>

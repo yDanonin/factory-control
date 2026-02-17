@@ -13,10 +13,14 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 
 interface FormFieldsExpense {
   form: UseFormReturn;
 }
+
+const help = fieldHelpTexts.expense;
 
 export const FormFieldsExpense: React.FC<FormFieldsExpense> = ({ form }) => {
   return (
@@ -28,7 +32,7 @@ export const FormFieldsExpense: React.FC<FormFieldsExpense> = ({ form }) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="amount">Valor</FormLabel>
+              <FormLabelWithHelp htmlFor="amount" label="Valor" helpText={help.amount} />
               <FormControl>
                 <div className="relative ml-auto flex-1">
                   <span className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground">R$</span>
@@ -53,7 +57,7 @@ export const FormFieldsExpense: React.FC<FormFieldsExpense> = ({ form }) => {
         name="classification"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="classification">Classificação</FormLabel>
+            <FormLabelWithHelp htmlFor="classification" label="Classificação" helpText={help.classification} />
             <FormControl>
               <Input id="classification" {...field} placeholder="Insira a classificação" />
             </FormControl>
@@ -68,7 +72,7 @@ export const FormFieldsExpense: React.FC<FormFieldsExpense> = ({ form }) => {
         name="description"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="description">Descrição</FormLabel>
+            <FormLabelWithHelp htmlFor="description" label="Descrição" helpText={help.description} />
             <FormControl>
               <Textarea id="description" {...field} placeholder="Insira a descrição" />
             </FormControl>
@@ -83,7 +87,7 @@ export const FormFieldsExpense: React.FC<FormFieldsExpense> = ({ form }) => {
         name="justification"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="justification">Justificativa</FormLabel>
+            <FormLabelWithHelp htmlFor="justification" label="Justificativa" helpText={help.justification} />
             <FormControl>
               <Textarea id="justification" {...field} placeholder="Insira a justificativa" />
             </FormControl>
@@ -98,7 +102,7 @@ export const FormFieldsExpense: React.FC<FormFieldsExpense> = ({ form }) => {
         name="expense_date"
         render={({ field }) => (
           <FormItem className="flex flex-col justify-between">
-            <FormLabel htmlFor="expense_date">Data da Despesa</FormLabel>
+            <FormLabelWithHelp htmlFor="expense_date" label="Data da Despesa" helpText={help.expense_date} />
             <Popover>
               <PopoverTrigger asChild>
                 <FormControl>
@@ -127,7 +131,7 @@ export const FormFieldsExpense: React.FC<FormFieldsExpense> = ({ form }) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel htmlFor="expense_actor_id">ID do Ator</FormLabel>
+              <FormLabelWithHelp htmlFor="expense_actor_id" label="ID do Ator" helpText={help.expense_actor_id} />
               <FormControl>
                 <Input
                   id="expense_actor_id"
@@ -158,9 +162,7 @@ export const FormFieldsExpense: React.FC<FormFieldsExpense> = ({ form }) => {
               />
             </FormControl>
             <div className="space-y-1 leading-none">
-              <FormLabel>
-                Requer Reembolso
-              </FormLabel>
+              <FormLabelWithHelp htmlFor="requires_reimbursement" label="Requer Reembolso" helpText={help.requires_reimbursement} />
             </div>
           </FormItem>
         )}
@@ -179,9 +181,7 @@ export const FormFieldsExpense: React.FC<FormFieldsExpense> = ({ form }) => {
               />
             </FormControl>
             <div className="space-y-1 leading-none">
-              <FormLabel>
-                Aplica a Todos os Produtos
-              </FormLabel>
+              <FormLabelWithHelp htmlFor="applies_all_products" label="Aplica a Todos os Produtos" helpText={help.applies_all_products} />
             </div>
           </FormItem>
         )}
@@ -200,9 +200,7 @@ export const FormFieldsExpense: React.FC<FormFieldsExpense> = ({ form }) => {
               />
             </FormControl>
             <div className="space-y-1 leading-none">
-              <FormLabel>
-                Aplica a Todas as Máquinas
-              </FormLabel>
+              <FormLabelWithHelp htmlFor="applies_all_machines" label="Aplica a Todas as Máquinas" helpText={help.applies_all_machines} />
             </div>
           </FormItem>
         )}

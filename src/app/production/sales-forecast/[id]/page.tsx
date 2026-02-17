@@ -9,7 +9,6 @@ import DataList from "@/components/DataList";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { MoreVertical } from "lucide-react";
 import Modal from "@/components/Modal/Modal";
@@ -70,23 +69,19 @@ export default function Page({ params }: { params: { id: string } }) {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem className="cursor-pointer" onSelect={(e) => e.preventDefault()}>
-                            <Dialog>
-                              <Modal typeModal="EDIT" typeRegister="SalesForecast" nameModal="previsão de venda" rowData={salesForecast} idRowData={salesForecast.id} />
-                            </Dialog>
+                            <Modal typeModal="EDIT" typeRegister="SalesForecast" nameModal="previsão de venda" rowData={salesForecast} idRowData={salesForecast.id} />
                           </DropdownMenuItem>
                           <DropdownMenuItem className="cursor-pointer" onSelect={(e) => e.preventDefault()}>
-                            <Dialog>
-                              <Modal
-                                typeModal="DELETE"
-                                typeRegister="SalesForecast"
-                                nameModal="previsão de venda"
-                                rowData={salesForecast}
-                                idRowData={salesForecast.id}
-                                onDelete={() => {
-                                  router.push("/production/sales-forecast");
-                                }}
-                              />
-                            </Dialog>
+                            <Modal
+                              typeModal="DELETE"
+                              typeRegister="SalesForecast"
+                              nameModal="previsão de venda"
+                              rowData={salesForecast}
+                              idRowData={salesForecast.id}
+                              onDelete={() => {
+                                router.push("/production/sales-forecast");
+                              }}
+                            />
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>

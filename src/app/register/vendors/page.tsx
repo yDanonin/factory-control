@@ -11,7 +11,6 @@ import Modal from "@/components/Modal/Modal";
 import { MoreHorizontal } from "lucide-react";
 import { Vendor } from "@/types/vendor.types";
 import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
 import DynamicTable from "@/components/DynamicTable";
 import { DataRow, TableColumn } from "@/models/TableColumn";
 import {
@@ -105,15 +104,13 @@ export default function Page() {
                 onPointerLeave={(event) => event.preventDefault()}
                 onPointerMove={(event) => event.preventDefault()}
               >
-                <Dialog>
-                  <Modal
-                    typeModal="EDIT"
-                    typeRegister="Vendor"
-                    nameModal="fornecedor"
-                    rowData={row.original}
-                    idRowData={row.original.id}
-                  />
-                </Dialog>
+                <Modal
+                  typeModal="EDIT"
+                  typeRegister="Vendor"
+                  nameModal="fornecedor"
+                  rowData={row.original}
+                  idRowData={row.original.id}
+                />
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="cursor-pointer"
@@ -121,15 +118,13 @@ export default function Page() {
                 onPointerLeave={(event) => event.preventDefault()}
                 onPointerMove={(event) => event.preventDefault()}
               >
-                <Dialog>
-                  <Modal
-                    typeModal="DELETE"
-                    typeRegister="Vendor"
-                    nameModal="fornecedor"
-                    rowData={row.original}
-                    idRowData={row.original.id}
-                  />
-                </Dialog>
+                <Modal
+                  typeModal="DELETE"
+                  typeRegister="Vendor"
+                  nameModal="fornecedor"
+                  rowData={row.original}
+                  idRowData={row.original.id}
+                />
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

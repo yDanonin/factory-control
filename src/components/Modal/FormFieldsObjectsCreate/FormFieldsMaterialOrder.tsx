@@ -11,10 +11,14 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormLabelWithHelp } from "@/components/ui/form-label-with-help";
+import { fieldHelpTexts } from "@/config/field-help-texts";
 
 interface FormFieldsMaterialOrder {
   form: UseFormReturn;
 }
+
+const help = fieldHelpTexts.materialOrder;
 
 export const FormFieldsMaterialOrder: React.FC<FormFieldsMaterialOrder> = ({ form }) => {
   return (
@@ -25,7 +29,7 @@ export const FormFieldsMaterialOrder: React.FC<FormFieldsMaterialOrder> = ({ for
             name="date"
             render={({ field }) => (
             <FormItem className="flex flex-col justify-between">
-                <FormLabel htmlFor="date">Data do Pedido</FormLabel>
+                <FormLabelWithHelp htmlFor="date" label="Data do Pedido" helpText={help.date} />
                 <Popover>
                 <PopoverTrigger asChild>
                     <FormControl>
@@ -52,7 +56,7 @@ export const FormFieldsMaterialOrder: React.FC<FormFieldsMaterialOrder> = ({ for
           name="amount"
           render={({ field }) => (
           <FormItem>
-              <FormLabel htmlFor="amount">Quantidade</FormLabel>
+              <FormLabelWithHelp htmlFor="amount" label="Quantidade" helpText={help.amount} />
               <FormControl>
                 <Input
                     id="amount"
@@ -72,7 +76,7 @@ export const FormFieldsMaterialOrder: React.FC<FormFieldsMaterialOrder> = ({ for
           name="unit"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="unit">Unidade de medida</FormLabel>
+              <FormLabelWithHelp htmlFor="unit" label="Unidade de medida" helpText={help.unit} />
               <FormControl>
                 <Input id="unit" {...field} placeholder="Insira a unidade de medida"/>
               </FormControl>
@@ -80,14 +84,14 @@ export const FormFieldsMaterialOrder: React.FC<FormFieldsMaterialOrder> = ({ for
             </FormItem>
           )}
         />
-        
+
         <FormField
           key="storage_location"
           control={form.control}
           name="storage_location"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="nome_loja">Local de armazenamento</FormLabel>
+              <FormLabelWithHelp htmlFor="nome_loja" label="Local de armazenamento" helpText={help.storageLocation} />
               <FormControl>
                 <Input id="storage_location" {...field} placeholder="Insira o local de armazenamento"/>
               </FormControl>
@@ -102,7 +106,7 @@ export const FormFieldsMaterialOrder: React.FC<FormFieldsMaterialOrder> = ({ for
           name="received_by"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="nome_loja">Recebido por</FormLabel>
+              <FormLabelWithHelp htmlFor="nome_loja" label="Recebido por" helpText={help.receivedBy} />
               <FormControl>
                 <Input id="received_by" {...field} placeholder="Insira o nome de quem recebeu"/>
               </FormControl>
@@ -118,7 +122,7 @@ export const FormFieldsMaterialOrder: React.FC<FormFieldsMaterialOrder> = ({ for
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel htmlFor="product_id">ID do produto</FormLabel>
+                <FormLabelWithHelp htmlFor="product_id" label="ID do produto" helpText={help.productId} />
                 <FormControl>
                   <Input
                     id="product_id"
@@ -144,7 +148,7 @@ export const FormFieldsMaterialOrder: React.FC<FormFieldsMaterialOrder> = ({ for
           render={({ field }) => {
             return (
               <FormItem>
-                <FormLabel htmlFor="vendor_id">ID do fornecedor</FormLabel>
+                <FormLabelWithHelp htmlFor="vendor_id" label="ID do fornecedor" helpText={help.vendorId} />
                 <FormControl>
                   <Input
                     id="vendor_id"

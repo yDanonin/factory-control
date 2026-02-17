@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { Row } from "@tanstack/react-table";
 import Modal from "@/components/Modal/Modal";
 import { MoreHorizontal } from "lucide-react";
-import { Dialog } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import Spinner from "@/components/Spinner";
 import { Vacation } from "@/types/vacation.types";
@@ -46,6 +45,14 @@ export const VacationPage = () => {
     {
       header: "Id do Funcionário",
       accessorKey: "employee_id"
+    },
+    {
+      header: "Nome do Funcionário",
+      accessorKey: "employee_name",
+      cell: ({ row }: { row: Row<DataRow> }) => {
+        const vacation = row.original as Vacation;
+        return <>{vacation.employee?.name || "-"}</>;
+      }
     },
     {
       header: "Data de inicio",
@@ -95,26 +102,22 @@ export const VacationPage = () => {
               <DropdownMenuLabel>Ver mais</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
-                <Dialog>
-                  <Modal
-                    typeModal="EDIT"
-                    typeRegister="Vacation"
-                    nameModal="férias"
-                    rowData={row.original}
-                    idRowData={row.original.id}
-                  />
-                </Dialog>
+                <Modal
+                  typeModal="EDIT"
+                  typeRegister="Vacation"
+                  nameModal="férias"
+                  rowData={row.original}
+                  idRowData={row.original.id}
+                />
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer" onSelect={(event) => event.preventDefault()}>
-                <Dialog>
-                  <Modal
-                    typeModal="DELETE"
-                    typeRegister="Vacation"
-                    nameModal="férias"
-                    rowData={row.original}
-                    idRowData={row.original.id}
-                  />
-                </Dialog>
+                <Modal
+                  typeModal="DELETE"
+                  typeRegister="Vacation"
+                  nameModal="férias"
+                  rowData={row.original}
+                  idRowData={row.original.id}
+                />
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
