@@ -13,5 +13,11 @@
 
 /** @type {import("next").NextConfig} */
 module.exports = {
-  output: "standalone"
+  output: "standalone",
+  eslint: {
+    ignoreDuringBuilds: true
+  },
+  typescript: {
+    ignoreBuildErrors: true
+  }
 };

@@ -8,10 +8,10 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 export const login = async (values: z.infer<typeof signInFormSchema>) => {
   const validateFields = signInFormSchema.safeParse(values);
-  const { email, password } = validateFields.data;
-  if (!validateFields) {
-    return { error: "Invalid fields " };
+  if (!validateFields.success) {
+    return { error: "Invalid fields" };
   }
+  const { email, password } = validateFields.data;
   try {
     await signIn("credentials", {
       email,
